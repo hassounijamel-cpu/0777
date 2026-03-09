@@ -24,7 +24,7 @@ local args = {
     Color3.fromRGB(20, 20, 20) -- ⚫ أسود غامق
 }
 game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
-local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/GUI/refs/heads/main/GUI.txt"))()
+local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/cubodegelo1116/ui/refs/heads/main/ui"))()
 workspace.FallenPartsDestroyHeight = -math.huge
 
 local Window = Libary:MakeWindow({
@@ -1688,4 +1688,2003 @@ ToolTab:AddButton({
 
         game:GetService("ReplicatedStorage").RE:FindFirstChild("1Playe1rTrigge1rEven1t"):FireServer(unpack(args))
     end
+})
+local TabSund = Window:MakeTab({ Title = " اغاني مجانية", Icon = "rbxassetid://10734931596" })
+TabSund:AddSection({ Name = "الاغاني متحتاح جيمباس والكل يسمعها          ", Icon = "rbxassetid://10734934132" })
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local musicList = {
+    ["ضحكة مال سوكونا"] = "116395665143666",
+    ["غوجو توسيع النطاق"] = "139787675170861",
+    ["صوت فايت مزعج شوي"] = "132639404905710",
+    ["صوت بنت انمي مشكوك فجد خالة عمتو"] = "109779146034241",
+    ["صوت بنت انمي ثاني"] = "102993326623397",
+    ["صوت اسد"] = "9126101636",
+    ["صوت بنت انمي 3"] = "103430674469051",
+    ["صوت انمي مزعج"] = "97551835622379",
+    ["صوت سلاح فري فاير"] = "6909650402",
+    ["جراني"] = "1591860354",
+    ["توجي"] = "132509237694639",
+    ["اوريتشيمارو "] = "135109036831389",
+    ["ضحكة سونيك"] = "7337298420",
+    ["ازعاج"] = "146563959",
+    ["اغنية فينوم"] = "8086734311",
+    ["صوت فينوم"] = "126497226413207",
+    ["صوت رعد"] = "6994934244",
+    ["جوجوتسو كايسن"] = "18985328962",
+    ["صوت ازعاج 2"] = "94692079812822",
+    ["صوت ازعاج 3"] = "89442290120460",
+}
+
+local musicOptions = {}
+for name,_ in pairs(musicList) do
+    table.insert(musicOptions,name)
+end
+table.sort(musicOptions)
+
+local selectedMusic = ""
+local soundSpeed = 1
+local soundVolume = 1
+local soundRange = 100
+local spamToggle = false
+local spamTask = nil
+
+TabSund:AddDropdown({
+    Name = "اختيار الصوت",
+    Options = musicOptions,
+    Default = musicOptions[1],
+    Callback = function(selected)
+        selectedMusic = musicList[selected]
+    end
+})
+
+TabSund:AddSlider({
+    Name = "سرعة الصوت",
+    Min = 0.5,
+    Max = 2,
+    Default = 1,
+    Increment = 0.05,
+    Callback = function(v)
+        soundSpeed = v
+    end
+})
+
+TabSund:AddSlider({
+    Name = "قوة الصوت",
+    Min = 0,
+    Max = 10,
+    Default = 1,
+    Increment = 0.1,
+    Callback = function(v)
+        soundVolume = v
+    end
+})
+
+TabSund:AddSlider({
+    Name = "مدى الصوت",
+    Min = 10,
+    Max = 300,
+    Default = 100,
+    Increment = 5,
+    Callback = function(v)
+        soundRange = v
+    end
+})
+
+local function playOnce()
+    if selectedMusic == "" then
+        if NotifyEnabled then
+            redzlib:MakeNotify({Title="LOC4T HUB",Text="اختار صوت اول شي",Time=2})
+        end
+        return
+    end
+
+    local audioID = selectedMusic
+    local GunSoundEvent = ReplicatedStorage:FindFirstChild("1Gu1nSound1s", true)
+    if GunSoundEvent then
+        GunSoundEvent:FireServer(workspace, audioID, 1)
+    end
+
+    task.wait(0.2)
+
+    local GuinRemote = ReplicatedStorage.RE:FindFirstChild("1Gu1n")
+    if not GuinRemote then return end
+
+    for _,player in ipairs(Players:GetPlayers()) do
+        local char = player.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            local hrp = char.HumanoidRootPart
+
+            task.spawn(function()
+                local Sound = Instance.new("Sound")
+                Sound.SoundId = "rbxassetid://"..audioID
+                Sound.Volume = soundVolume
+                Sound.PlaybackSpeed = soundSpeed
+                Sound.RollOffMaxDistance = soundRange
+                Sound.Looped = false
+                Sound.Parent = hrp
+                Sound:Play()
+                Sound.Ended:Connect(function()
+                    Sound:Destroy()
+                end)
+            end)
+
+            task.spawn(function()
+                pcall(function()
+                    firesignal(GuinRemote.OnClientEvent, table.unpack({
+                        [1]=player,
+                        [2]=hrp,
+                        [3]=hrp,
+                        [4]=Vector3.new(0,-1,0),
+                        [5]=Vector3.new(0,0,0),
+                        [6]=hrp,
+                        [7]=hrp,
+                        [8]=audioID,
+                        [9]=audioID,
+                        [10]={[1]=true},
+                        [11]={25,Vector3.new(0.25,0.25,soundRange),BrickColor.new("Bright yellow"),0.25,Enum.Material.SmoothPlastic,0.25},
+                        [12]=true,
+                        [13]=false
+                    }))
+                end)
+            end)
+
+            task.spawn(function()
+                pcall(function()
+                    GuinRemote:FireServer(table.unpack({
+                        [1]=hrp,
+                        [2]=hrp,
+                        [3]=Vector3.new(0,-1,0),
+                        [4]=Vector3.new(0,0,0),
+                        [5]=hrp,
+                        [6]=hrp,
+                        [7]=audioID,
+                        [8]=audioID,
+                        [9]={[1]=true},
+                        [10]={25,Vector3.new(0.25,0.25,soundRange),BrickColor.new("Bright yellow"),0.25,Enum.Material.SmoothPlastic,0.25},
+                        [11]=true,
+                        [12]=false
+                    }))
+                end)
+            end)
+        end
+    end
+
+    if NotifyEnabled then
+        redzlib:MakeNotify({Title="LOC4T HUB",Text="تم تشغيل الصوت",Time=2})
+    end
+end
+TabSund:AddButton({
+    Name = "تشغيل مرة وحدة",
+    Callback = function()
+        playOnce()
+    end
+})
+TabSund:AddToggle({
+    Name = "سبام تشغيل",
+    Default = false,
+    Callback = function(v)
+        spamToggle = v
+        if v then
+            spamTask = task.spawn(function()
+                while spamToggle do
+                    playOnce()
+                    task.wait(1)
+                end
+            end)
+        else
+            spamToggle = false
+            if spamTask then
+                task.cancel(spamTask)
+                spamTask = nil
+            end
+        end
+    end
+})
+local FunTab = Window:MakeTab({ Title = "تخريب", Icon = "rbxassetid://10723407498" })
+local Section = FunTab:AddSection({"كتابة على لوحات السيرفر          "})
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+local SelectedPoster = 1
+local PosterText = ""
+local PosterData = {
+    [1] = CFrame.new(359.589081, 57.149670, 581.226135),
+    [2] = CFrame.new(-634.203247, 25.374739, 361.505646),
+    [3] = CFrame.new(-238.497910, 88.514732, -549.373962)
+}
+local Dropdown = FunTab:AddDropdown({
+    Name = "اختيار رقم اللوحة",
+    Description = "",
+    Options = {"لوحة 1", "لوحة 2", "لوحة 3"},
+    Default = "لوحة 1",
+    Flag = "poster_dropdown",
+    Callback = function(Value)
+        if Value == "لوحة 1" then
+            SelectedPoster = 1
+        elseif Value == "لوحة 2" then
+            SelectedPoster = 2
+        elseif Value == "لوحة 3" then
+            SelectedPoster = 3
+        end
+    end
+})
+FunTab:AddTextBox({
+    Name = "اكتب هنا شتريد",
+    Description = "",
+    PlaceholderText = "LOC4T",
+    Callback = function(Value)
+        PosterText = Value
+    end
+})
+FunTab:AddButton({
+    Name = "تطبيق الكتابة",
+    Callback = function()
+        if not PosterText or PosterText == "" then
+            warn("LOC4T")
+            return
+        end
+        local char = LocalPlayer.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+        local humanoidRootPart = char.HumanoidRootPart
+        local originalPos = humanoidRootPart.CFrame
+        humanoidRootPart.CFrame = PosterData[SelectedPoster]
+        task.wait(0.8)
+        local args = {
+            [1] = "ReturningCommercialWords",
+            [2] = SelectedPoster,
+            [4] = PosterText
+        }
+        ReplicatedStorage.RE:FindFirstChild("1Cemeter1y"):FireServer(unpack(args))
+        task.wait(0.5)
+        humanoidRootPart.CFrame = originalPos
+    end
+})
+FunTab:AddSection({ "هالة كرة تجريبي          " })
+OrbitSettings = {
+    Speed = 2,
+    Distance = 6,
+    Height = 0,
+    Fling = false
+}
+FunTab:AddSlider({
+    Name = "سرعة دوران الكرة",
+    Min = 1,
+    Max = 20,
+    Default = 2,
+    Callback = function(Value)
+        OrbitSettings.Speed = Value
+    end
+})
+FunTab:AddSlider({
+    Name = "بعد الكرة",
+    Min = 1,
+    Max = 20,
+    Default = 6,
+    Callback = function(Value)
+        OrbitSettings.Distance = Value
+    end
+})
+FunTab:AddSlider({
+    Name = "ارتفاع الكرة",
+    Min = -10,
+    Max = 10,
+    Default = 0,
+    Callback = function(Value)
+        OrbitSettings.Height = Value
+    end
+})
+FunTab:AddToggle({
+    Name = "فعل ميزة الفلنق من يقربو عليك",
+    Default = false,
+    Callback = function(state)
+        OrbitSettings.Fling = state
+    end
+})
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local localPlayer = Players.LocalPlayer
+local orbitLoop
+local orbitBallInstance
+local orbitEnabledTouch = false
+local function DestroyOrbit()
+	if orbitLoop then
+		orbitLoop:Disconnect()
+		orbitLoop = nil
+	end
+	if orbitBallInstance then
+		orbitBallInstance:Destroy()
+		orbitBallInstance = nil
+	end
+end
+function orbitBall(targetChar, modeName)
+	if not targetChar or not targetChar:FindFirstChild("HumanoidRootPart") then return end
+	local player = game:GetService("Players").LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local backpack = player:WaitForChild("Backpack")
+	local serverBalls = workspace:WaitForChild("WorkspaceCom"):WaitForChild("001_SoccerBalls")
+	if not backpack:FindFirstChild("SoccerBall") and not character:FindFirstChild("SoccerBall") then
+		game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer("PickingTools", "SoccerBall")
+	end
+	repeat task.wait() until backpack:FindFirstChild("SoccerBall") or character:FindFirstChild("SoccerBall")
+	local ballTool = backpack:FindFirstChild("SoccerBall")
+	if ballTool then ballTool.Parent = character end
+	repeat task.wait() until serverBalls:FindFirstChild("Soccer"..player.Name)
+	local orb = serverBalls:FindFirstChild("Soccer"..player.Name)
+	if not orb then return end
+	orb.Name = modeName
+	orb.CanCollide = false
+	orb.Massless = true
+	orb.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0, 0)
+	if orb:FindFirstChild("FlingPower") then orb.FlingPower:Destroy() end
+	if OrbitSettings.Fling then
+		local bv = Instance.new("BodyVelocity")
+		bv.Name = "FlingPower"
+		bv.Velocity = Vector3.new(9e8, 9e8, 9e8)
+		bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+		bv.P = 9e900
+		bv.Parent = orb
+	end
+	local loop = Instance.new("BindableEvent")
+	loop.Name = modeName.."Loop"
+	loop.Parent = character
+	task.spawn(function()
+		while loop.Parent and orb and orb.Parent and targetChar and targetChar.Parent do
+			local angle = tick() * OrbitSettings.Speed
+			local offset = CFrame.new(
+				math.cos(angle) * OrbitSettings.Distance,
+				OrbitSettings.Height,
+				math.sin(angle) * OrbitSettings.Distance
+			)
+			orb.CFrame = targetChar.HumanoidRootPart.CFrame * offset
+			task.wait(1/60)
+		end
+	end)
+end
+local function StartOrbitTouch(targetCharacter)
+	if not orbitEnabledTouch then return end
+	DestroyOrbit()
+	if not targetCharacter or not targetCharacter:FindFirstChild("HumanoidRootPart") then return end
+	local ballTemplate = Workspace.WorkspaceCom["001_SoccerBalls"]:FindFirstChild("OrbitTarget")
+	if not ballTemplate then return end
+	orbitBallInstance = ballTemplate:Clone()
+	orbitBallInstance.Name = "OrbitTargetLoop"
+	orbitBallInstance.Parent = Workspace
+	local angle = 0
+	local radius = OrbitSettings.Distance
+	local speed = OrbitSettings.Speed
+	local height = OrbitSettings.Height
+	orbitLoop = game:GetService("RunService").Heartbeat:Connect(function(dt)
+		angle = angle + speed * dt
+		local root = targetCharacter:FindFirstChild("HumanoidRootPart")
+		if root then
+			orbitBallInstance.Position = root.Position + Vector3.new(math.cos(angle)*radius, height, math.sin(angle)*radius)
+		end
+	end)
+end
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if orbitEnabledTouch and input.UserInputType == Enum.UserInputType.Touch then
+		local touchPos = input.Position
+		local camera = Workspace.CurrentCamera
+		local ray = camera:ScreenPointToRay(touchPos.X, touchPos.Y)
+		local hitPart, hitPos = Workspace:FindPartOnRayWithIgnoreList(ray, {localPlayer.Character})
+		if hitPart and hitPart.Parent then
+			for _, player in ipairs(Players:GetPlayers()) do
+				if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+					if hitPart:IsDescendantOf(player.Character) then
+						StartOrbitTouch(player.Character)
+						break
+					end
+				end
+			end
+		end
+	end
+end)
+FunTab:AddToggle({
+	Name = "تفعيل هالة الكرة دون فلنق",
+	Default = false,
+	Callback = function(state)
+		local char = localPlayer.Character
+		local loop = char and char:FindFirstChild("OrbitBallLoop")
+		if state then
+			orbitBall(char, "OrbitBall")
+		elseif loop then
+			loop:Destroy()
+			local orb = workspace.WorkspaceCom["001_SoccerBalls"]:FindFirstChild("OrbitBall")
+			if orb then orb:Destroy() end
+		end
+	end
+})
+FunTab:AddToggle({
+	Name = "المس اي لاعب لتفعيل هالة الكرة عليه",
+	Default = false,
+	Callback = function(state)
+		orbitEnabledTouch = state
+		if not state then
+			DestroyOrbit()
+		end
+	end
+})
+FunTab:AddSection({ Name = "كشف اللاعبين          ", Icon = "rbxassetid://10723346959" })
+local ToggleESP = false
+local ESPFolder = Instance.new("Folder", workspace)
+ESPFolder.Name = "BloodESP"
+
+local function GetAccountAgeString(player)
+    local days = player.AccountAge
+    if days >= 365 then
+        return math.floor(days / 365) .. " سنة"
+    else
+        return days .. " يوم"
+    end
+end
+
+local function CreateBillboard(player)
+    if not player.Character or not player.Character:FindFirstChild("Head") then return end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "ESPTag"
+    billboard.AlwaysOnTop = true
+    billboard.Size = UDim2.new(0, 200, 0, 50)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.Adornee = player.Character.Head
+    billboard.Parent = ESPFolder
+
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, 0, 0.33, 0)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Text = player.Name
+    nameLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    nameLabel.TextStrokeColor3 = Color3.fromRGB(139, 0, 0)
+    nameLabel.TextStrokeTransparency = 0
+    nameLabel.Font = Enum.Font.GothamBold
+    nameLabel.TextScaled = true
+    nameLabel.Parent = billboard
+
+    local ageLabel = Instance.new("TextLabel")
+    ageLabel.Size = UDim2.new(1, 0, 0.33, 0)
+    ageLabel.Position = UDim2.new(0, 0, 0.33, 0)
+    ageLabel.BackgroundTransparency = 1
+    ageLabel.Text = "عمر: " .. GetAccountAgeString(player)
+    ageLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    ageLabel.TextStrokeColor3 = Color3.fromRGB(139, 0, 0)
+    ageLabel.TextStrokeTransparency = 0
+    ageLabel.Font = Enum.Font.Gotham
+    ageLabel.TextScaled = true
+    ageLabel.Parent = billboard
+
+    local distLabel = Instance.new("TextLabel")
+    distLabel.Size = UDim2.new(1, 0, 0.33, 0)
+    distLabel.Position = UDim2.new(0, 0, 0.66, 0)
+    distLabel.BackgroundTransparency = 1
+    distLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    distLabel.TextStrokeColor3 = Color3.fromRGB(139, 0, 0)
+    distLabel.TextStrokeTransparency = 0
+    distLabel.Font = Enum.Font.Gotham
+    distLabel.TextScaled = true
+    distLabel.Parent = billboard
+
+    task.spawn(function()
+        while billboard.Parent and ToggleESP and player.Character and player.Character:FindFirstChild("Head") do
+            local distance = (game.Players.LocalPlayer.Character.Head.Position - player.Character.Head.Position).Magnitude
+            distLabel.Text = "البعد: " .. math.floor(distance) .. "m"
+
+            local glow = 0.5 + 0.5 * math.sin(tick() * 5)
+            nameLabel.TextTransparency = glow * 0.5
+            ageLabel.TextTransparency = glow * 0.5
+            distLabel.TextTransparency = glow * 0.5
+            
+            nameLabel.TextStrokeTransparency = glow * 0.2
+            
+            task.wait(0.05)
+        end
+        billboard:Destroy()
+    end)
+end
+
+local function EnableESP()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            CreateBillboard(player)
+        end
+    end
+
+    game.Players.PlayerAdded:Connect(function(player)
+        task.wait(2)
+        if ToggleESP then
+            CreateBillboard(player)
+        end
+    end)
+end
+
+local function DisableESP()
+    for _, tag in ipairs(ESPFolder:GetChildren()) do
+        tag:Destroy()
+    end
+end
+
+FunTab:AddToggle({
+    Name = "كشف اللاعبين",
+    Default = false,
+    Callback = function(state)
+        ToggleESP = state
+        if state then
+            EnableESP()
+        else
+            DisableESP()
+        end
+    end
+})
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local ToggleHitbox = false
+
+local HitboxFolder = Instance.new("Folder", workspace)
+HitboxFolder.Name = "BloodHitboxESP"
+
+local function CreateHitbox(character)
+	if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+
+	local box = Instance.new("SelectionBox")
+	box.Name = "HitboxESP"
+	box.Adornee = character
+	box.LineThickness = 0.15
+	box.Color3 = Color3.fromRGB(255, 0, 0)
+	box.SurfaceColor3 = Color3.fromRGB(255, 0, 0)
+	box.SurfaceTransparency = 0.7
+	box.Parent = HitboxFolder
+
+	task.spawn(function()
+		while box.Parent and ToggleHitbox and character.Parent do
+			local pulse = 0.4 + 0.4 * math.sin(tick() * 8)
+			box.SurfaceTransparency = pulse
+			box.LineTransparency = pulse * 0.5
+			task.wait(0.03)
+		end
+		box:Destroy()
+	end)
+end
+
+local function EnableHitbox()
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character then
+			CreateHitbox(player.Character)
+		end
+	end
+
+	Players.PlayerAdded:Connect(function(player)
+		player.CharacterAdded:Connect(function(char)
+			task.wait(1)
+			if ToggleHitbox then
+				CreateHitbox(char)
+			end
+		end)
+	end)
+end
+
+local function DisableHitbox()
+	for _, v in ipairs(HitboxFolder:GetChildren()) do
+		v:Destroy()
+	end
+end
+
+FunTab:AddToggle({
+	Name = "V2 كشف ",
+	Default = false,
+	Callback = function(state)
+		ToggleHitbox = state
+		if state then
+			EnableHitbox()
+		else
+			DisableHitbox()
+		end
+	end
+})
+
+FunTab:AddSection({ Name = "سبام قوارب في البداية          ", Icon = "rbxassetid://10734941354" })
+FunTab:AddToggle({
+    Name = "سبام قوارب في البداية",
+    Default = false,
+    Callback = function(state)
+        getgenv().Toggle = state
+
+        if state then
+            local Players = game:GetService("Players")
+            local Player = Players.LocalPlayer
+            local Character = Player.Character or Player.CharacterAdded:Wait()
+            local RootPart = Character:WaitForChild("HumanoidRootPart")
+            local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+            local molestado1 = workspace:WaitForChild("WorkspaceCom"):WaitForChild("001_CanoeCloneButton").Button
+
+            task.spawn(function()
+                while getgenv().Toggle do
+                    task.wait()
+                    RootPart.CFrame = molestado1.CFrame
+                    task.wait(0.1)
+                    fireclickdetector(molestado1:FindFirstChild("ClickDetector"))
+                    task.wait(0.5)
+
+                    local molestado2 = workspace.WorkspaceCom["001_CanoeStorage"]:FindFirstChild("Canoe")
+                    if molestado2 and molestado2:FindFirstChild("VehicleSeat") then
+                        repeat
+                            RootPart.CFrame = molestado2.VehicleSeat.CFrame + Vector3.new(0, math.random(-1, 1), 0)
+                            task.wait()
+                        until Humanoid.Sit
+
+                        task.wait(0.2)
+                        RootPart.CFrame = CFrame.new(math.random(-40, 40), 4.549, math.random(-40, 40))
+                        task.wait(0.2)
+                        Humanoid.Sit = false
+                        molestado2.Name = "CanoeMolestaHavens"
+                    end
+                end
+            end)
+        end
+    end
+})
+FunTab:AddSection({ Name = "سبام قنابل          ", Icon = "rbxassetid://10709781460" })
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local WorkspaceService = game:GetService("Workspace")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local BombFolder = nil
+pcall(function()
+    BombFolder = WorkspaceService.WorkspaceCom["001_CriminalWeapons"].GiveTools
+end)
+local ExplodeRemote = nil
+pcall(function()
+    ExplodeRemote = ReplicatedStorage.RE["1Blo1wBomb1sServe1r"]
+end)
+
+local BombAmount = 5 
+
+FunTab:AddDropdown({
+    Name = "عدد القنابل",
+    Default = "5",
+    Options = {"5","10","15","20","25","30","35","40","45","50"},
+    Callback = function(value)
+        BombAmount = tonumber(value) or 5
+    end
+})
+
+FunTab:AddButton({
+    Name = "بدا سبام",
+    Callback = function()
+        local Character = Player.Character or Player.CharacterAdded:Wait()
+        local Humanoid = Character:WaitForChild("Humanoid")
+        local RootPart = Character:WaitForChild("HumanoidRootPart")
+        local origin = RootPart.CFrame
+
+        local function getBombCount()
+            local cnt = 0
+            if Player:FindFirstChild("Backpack") then
+                for _, t in ipairs(Player.Backpack:GetChildren()) do
+                    if t:IsA("Tool") and t.Name:lower():find("bomb") then
+                        cnt = cnt + 1
+                    end
+                end
+            end
+            if Player.Character then
+                for _, t in ipairs(Player.Character:GetChildren()) do
+                    if t:IsA("Tool") and t.Name:lower():find("bomb") then
+                        cnt = cnt + 1
+                    end
+                end
+            end
+            return cnt
+        end
+
+        local function collectBombs(target)
+            local collected = 0
+            local BombRef = BombFolder and BombFolder:FindFirstChild("Bomb")
+            local attempts = 0
+            while collected < target and attempts < 400 do
+                attempts = attempts + 1
+                if not BombRef then
+                    for _, d in ipairs(workspace:GetDescendants()) do
+                        if d:IsA("BasePart") and d.Name:lower():find("bomb") then
+                            BombRef = d
+                            break
+                        end
+                    end
+                end
+
+                if BombRef and RootPart then
+                    pcall(function()
+                        RootPart.CFrame = BombRef.CFrame + Vector3.new(0, 2, 0)
+                        if BombRef:FindFirstChild("ClickDetector") then
+                            fireclickdetector(BombRef.ClickDetector)
+                        end
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, true, game, 0)
+                        task.wait(0.01)
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, false, game, 0)
+                    end)
+                end
+
+                task.wait(0.08)
+                collected = getBombCount()
+            end
+            return collected
+        end
+
+        local function throwBombs()
+            local thrown = 0
+            local tools = {}
+            if Player:FindFirstChild("Backpack") then
+                for _, t in ipairs(Player.Backpack:GetChildren()) do
+                    if t:IsA("Tool") and t.Name:lower():find("bomb") then
+                        table.insert(tools, t)
+                    end
+                end
+            end
+            if Player.Character then
+                for _, t in ipairs(Player.Character:GetChildren()) do
+                    if t:IsA("Tool") and t.Name:lower():find("bomb") then
+                        table.insert(tools, t)
+                    end
+                end
+            end
+
+            for _, tool in ipairs(tools) do
+                pcall(function()
+                    if tool.Parent ~= Player.Character then
+                        Humanoid:EquipTool(tool)
+                        task.wait(0.06)
+                    end
+                    if type(tool.Activate) == "function" then
+                        tool:Activate()
+                    end
+                    for i = 1, 2 do
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, true, game, 0)
+                        task.wait(0.01)
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, false, game, 0)
+                    end
+                    task.wait(0.12)
+                    thrown = thrown + 1
+                end)
+            end
+            return thrown
+        end
+
+        task.spawn(function()
+            local collected = collectBombs(BombAmount)
+
+            pcall(function() RootPart.CFrame = origin end)
+            task.wait(0.12)
+
+            local thrown = throwBombs()
+
+            if ExplodeRemote then
+                local safetyLimit = math.max(40, (collected + 10)) 
+                local spamCount = 0
+                while getBombCount() > 0 and spamCount < safetyLimit do
+                    pcall(function()
+                        ExplodeRemote:FireServer("Bomb" .. Player.Name)
+                    end)
+                    spamCount = spamCount + 1
+                    task.wait(0.09)
+                end
+                
+                pcall(function()
+                    ExplodeRemote:FireServer("Bomb" .. Player.Name)
+                end)
+            end
+
+        end)
+    end
+})
+FunTab:AddButton({
+    Name = "حذف كل القنابل",
+    Callback = function()
+        local args = {
+            [1] = "ClearAllTools"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer(unpack(args))
+    end
+})
+local BodyTab = Window:MakeTab({
+    Title = "اجسام",
+     Icon = "rbxassetid://10734883598"
+})
+BodyTab:AddSection({ Name = "اجسام اولاد كاملة          ", Icon = "rbxassetid://10734943902" })
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجلين",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%D9%8A%D9%86"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجل شبح يمنى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D8%B4%D8%A8%D8%AD%20%D9%8A%D9%85%D9%86%D9%89"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجل شبح يسرى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D8%B4%D8%A8%D8%AD%20%D9%8A%D8%B3%D8%B1%D9%89"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجل مقطوعة",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D9%85%D9%82%D8%B7%D9%88%D8%B9%D8%A9"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجل مافيا يمنى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D9%85%D8%A7%D9%81%D9%8A%D8%A7%20%D9%8A%D9%85%D9%86%D8%A9"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجل مافيا  يسرى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D9%85%D8%A7%D9%81%D9%8A%D8%A7%20%D9%8A%D8%B3%D8%B1%D9%89"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد طويل برجل مافيا  يسرى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D9%85%D8%A7%D9%81%D9%8A%D8%A7%20%D9%8A%D8%B3%D8%B1%D9%89"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ولد انمي",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%A7%D9%86%D9%85%D9%8A%202"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم مونستر مطلوب",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D9%85%D9%88%D9%86%D8%B3%D8%AA%D8%B1"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم مونستر تركيب مورفن",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D9%85%D9%88%D8%B1%D9%81%D9%86"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم ترند",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%AA%D8%B1%D9%86%D8%AF"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم كيوت",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D9%83%D9%8A%D9%88%D8%AA%201"))()
+    end
+})
+BodyTab:AddSection({ Name = "اجسام بنات كاملة          ", Icon = "rbxassetid://10734943902" })
+BodyTab:AddButton({
+    Name = "جسم بنت طويل برجلين",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body-2/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%A8%D9%86%D8%AA%20%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%D9%8A%D9%86"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم بنت طويل برجل شبح يمنى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body-2/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%A8%D9%86%D8%AA%20%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D8%B4%D8%A8%D8%AD%20%D9%8A%D9%85%D9%86%D9%89"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم بنت طويل برجل شبح يسرى",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body-2/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%A8%D9%86%D8%AA%20%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D8%B4%D8%A8%D8%AD%20%D9%8A%D8%B3%D8%B1%D9%89"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم بنت طويل برجل مقطوعة",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body-2/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%A8%D9%86%D8%AA%20%D8%B7%D9%88%D9%8A%D9%84%20%D8%A8%D8%B1%D8%AC%D9%84%20%D9%85%D9%82%D8%B7%D9%88%D8%B9%D8%A9"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "جسم بنت انمي",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Body-2/refs/heads/main/%D8%AC%D8%B3%D9%85%20%D8%A8%D9%86%D8%AA%20%D8%A7%D9%86%D9%85%D9%8A"))()
+    end
+})
+BodyTab:AddSection({ Name = " R6 اجسام          ", Icon = "rbxassetid://10734943902" })
+BodyTab:AddButton({
+    Name = "R6_1",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R61"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R62"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_3",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R63"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_4",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R64"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_5",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R67"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_1X1X1X",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R6%5Cn1X1X1X1"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_GIRL1",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R6girl"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_GIRL2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R6girl2"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "R6_مقلوب",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/R6/refs/heads/main/R6%D9%85%D9%82%D9%84%D9%88%D8%A8"))()
+    end
+})
+BodyTab:AddSection({ Name = "  اجسام اقزام       ", Icon = "rbxassetid://10734943902" })
+BodyTab:AddButton({
+    Name = "قزم 1",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%201"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "قزم 2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%202"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "قزم 3",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%203"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "قزم 4",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%204"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "قزم 5",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%205"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "قزم 6",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%206"))()
+    end
+})
+BodyTab:AddButton({
+    Name = "قزم 7",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bruton-lua-sources/Mini-body/refs/heads/main/%D9%82%D8%B2%D9%85%207"))()
+    end
+})
+local ShaderTab = Window:MakeTab({"الجودة", "rbxassetid://108609244803977"})
+ShaderTab:AddToggle({
+    Name = "V1 جودة ",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            local workspace = game:GetService("Workspace")
+            local Lighting = game:GetService("Lighting")
+            local RunService = game:GetService("RunService")
+            local Debris = game:GetService("Debris")
+            local TweenService = game:GetService("TweenService")
+            local SoundService = game:GetService("SoundService")
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
+            local model = workspace:FindFirstChild("Model")
+
+            _G.SistemaAtivo = true
+            _G.SistemaConnections = {}
+            _G.SistemaInstances = {}
+
+            local function addConnection(connection)
+                table.insert(_G.SistemaConnections, connection)
+            end
+
+            local function addInstance(instance)
+                table.insert(_G.SistemaInstances, instance)
+            end
+
+            local sound = Instance.new("Sound")
+            sound.SoundId = "rbxassetid://131644923"
+            sound.Volume = 1
+            sound.Parent = SoundService
+            sound:Play()
+            addInstance(sound)
+
+            if model then
+                local function setMat(obj)
+                    for _, c in pairs(obj:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            c.Material = Enum.Material.Basalt
+                        elseif c:IsA("Model") or c:IsA("Folder") then
+                            setMat(c)
+                        end
+                    end
+                end
+                
+                if model:FindFirstChild("001_SnowStreet") then
+                    setMat(model["001_SnowStreet"])
+                end
+                
+                if model:FindFirstChild("Street") then
+                    for _, o in pairs(model.Street:GetDescendants()) do
+                        if o:IsA("BasePart") then
+                            o.Material = Enum.Material.Basalt
+                        end
+                    end
+                end
+                
+                for _, o in pairs(model:GetChildren()) do
+                    if o:IsA("BasePart") and (o.Name == "Sidewalk" or o.Name == "Wedge") and o.Material == Enum.Material.SmoothPlastic then
+                        o.Material = Enum.Material.Cobblestone
+                    end
+                end
+                
+                local modelConnection = model.ChildAdded:Connect(function(obj)
+                    if obj:IsA("BasePart") and (obj.Name == "Sidewalk" or obj.Name == "Wedge") and obj.Material == Enum.Material.SmoothPlastic then
+                        obj.Material = Enum.Material.Cobblestone
+                    end
+                end)
+                addConnection(modelConnection)
+            end
+
+            -- Sistema de som ambiente
+            local soundPart = Instance.new("Part")
+            soundPart.Size = Vector3.new(1,1,1)
+            soundPart.Transparency = 1
+            soundPart.Anchored = true
+            soundPart.CanCollide = false
+            soundPart.Parent = workspace
+            addInstance(soundPart)
+
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:WaitForChild("HumanoidRootPart")
+
+            local birdSound = Instance.new("Sound")
+            birdSound.Name = "BirdsSound"
+            birdSound.SoundId = "rbxassetid://1237969272"
+            birdSound.Looped = true
+            birdSound.Volume = 0.05
+            birdSound.Parent = soundPart
+            addInstance(birdSound)
+
+            local wolfSound = Instance.new("Sound")
+            wolfSound.SoundId = "rbxassetid://6654360741"
+            wolfSound.Volume = 0.05
+            wolfSound.Looped = false
+            wolfSound.Parent = workspace
+            addInstance(wolfSound)
+
+            local heartbeatConn = RunService.Heartbeat:Connect(function()
+                if hrp and hrp.Parent and _G.SistemaAtivo then
+                    soundPart.Position = hrp.Position + Vector3.new(0,10,0)
+                end
+            end)
+            addConnection(heartbeatConn)
+
+            local function isNight()
+                local t = Lighting.ClockTime
+                return (t >= 18 or t <= 6)
+            end
+
+            local nightCycleConn = task.spawn(function()
+                while _G.SistemaAtivo do
+                    if isNight() then
+                        if birdSound.IsPlaying then birdSound:Stop() end
+                        if wolfSound.IsPlaying then wolfSound:Stop() end
+                        wolfSound:Play()
+                    else
+                        if wolfSound.IsPlaying then wolfSound:Stop() end
+                        if not birdSound.IsPlaying then birdSound:Play() end
+                    end
+                    wait(20)
+                end
+            end)
+            addConnection(nightCycleConn)
+
+            local fountainPart = Instance.new("Part")
+            fountainPart.Anchored = true
+            fountainPart.CanCollide = false
+            fountainPart.Transparency = 1
+            fountainPart.Size = Vector3.new(1,1,1)
+            fountainPart.Position = Vector3.new(-27,19,15)
+            fountainPart.Parent = workspace
+            addInstance(fountainPart)
+
+            local attachment = Instance.new("Attachment")
+            attachment.Position = Vector3.new(-27,19,15)
+            attachment.Parent = fountainPart
+            addInstance(attachment)
+
+            local fountainSound = Instance.new("Sound")
+            fountainSound.Name = "FountainSound"
+            fountainSound.SoundId = "rbxassetid://4766793559"
+            fountainSound.Looped = true
+            fountainSound.Volume = 0.03
+            fountainSound.EmitterSize = 10
+            fountainSound.RollOffMode = Enum.RollOffMode.Linear
+            fountainSound.MaxDistance = 100
+            fountainSound.Parent = attachment
+            fountainSound:Play()
+            addInstance(fountainSound)
+
+            local customSound = Instance.new("Sound")
+            customSound.Name = "MyCustomSound"
+            customSound.SoundId = "rbxassetid://9048659736"
+            customSound.Volume = 0.01
+            customSound.Looped = true
+            customSound.PlayOnRemove = false
+            customSound.Parent = workspace
+            customSound:Play()
+            addInstance(customSound)
+
+            local active = false
+            local stars = {}
+            local shootingStarsFolder = Instance.new("Folder",workspace)
+            shootingStarsFolder.Name = "ShootingStars"
+            addInstance(shootingStarsFolder)
+            
+            local STAR_COUNT = 300
+            local SHOOTING_STAR_CHANCE = 0.3
+            local SHOOTING_STAR_MAX = 12
+            local shootingStarCooldown = 0.1
+
+            local spaceSound = Instance.new("Sound",workspace)
+            spaceSound.SoundId = "rbxassetid://1843520836"
+            spaceSound.Volume = 0.3
+            spaceSound.Looped = true
+            spaceSound.Name = "SpaceAmbience"
+            addInstance(spaceSound)
+
+            local function createStar()
+                if not _G.SistemaAtivo then return end
+                local star = Instance.new("Part")
+                local size = math.random(1,3)*0.5
+                star.Size = Vector3.new(size,size,size)
+                star.Position = Vector3.new(math.random(-1000,1000),math.random(300,700),math.random(-1000,1000))
+                star.Anchored = true
+                star.CanCollide = false
+                star.Material = Enum.Material.Neon
+                local colors = {Color3.fromRGB(255,255,255),Color3.fromRGB(255,255,180),Color3.fromRGB(180,200,255)}
+                star.Color = colors[math.random(1,#colors)]
+                star.Name = "Star"
+                star.Parent = workspace
+                addInstance(star)
+                
+                local light = Instance.new("PointLight",star)
+                light.Brightness = 2 + math.random()*1.5
+                light.Range = 12
+                addInstance(light)
+                
+                local starConn = spawn(function()
+                    while star.Parent and active and _G.SistemaAtivo do
+                        star.Transparency = 0.2 + math.sin(tick()*math.random(2,5))*0.2
+                        RunService.Heartbeat:Wait()
+                    end
+                    if star.Parent then star:Destroy() end
+                end)
+                addConnection(starConn)
+                table.insert(stars,star)
+            end
+
+            local function createShootingStar()
+                if not active or not _G.SistemaAtivo then return end
+                local startPos = Vector3.new(math.random(-1000,1000),math.random(350,600),math.random(-1000,1000))
+                local dir = Vector3.new(math.random(-1,1),math.random(-0.1,0.1),math.random(-1,1)).Unit
+                local speed = math.random(350,550)
+                local isFire = math.random() <= SHOOTING_STAR_CHANCE
+                local color = isFire and Color3.fromRGB(255,50,50) or Color3.fromRGB(255,255,220)
+                local trailColor = isFire and ColorSequence.new(Color3.fromRGB(255,120,0),Color3.fromRGB(255,230,50)) or ColorSequence.new(Color3.fromRGB(255,255,255),Color3.fromRGB(255,255,180))
+                
+                local star = Instance.new("Part")
+                star.Size = Vector3.new(0.5,0.5,3)
+                star.Position = startPos
+                star.Anchored = true
+                star.CanCollide = false
+                star.Material = Enum.Material.Neon
+                star.Color = color
+                star.Name = "ShootingStar"
+                star.Parent = shootingStarsFolder
+                addInstance(star)
+                
+                local att0 = Instance.new("Attachment",star)
+                local att1 = Instance.new("Attachment",star)
+                att1.Position = Vector3.new(0,0,-3)
+                addInstance(att0)
+                addInstance(att1)
+                
+                local trail = Instance.new("Trail",star)
+                trail.Attachment0 = att0
+                trail.Attachment1 = att1
+                trail.Lifetime = 0.35
+                trail.Color = trailColor
+                trail.LightEmission = 1
+                trail.WidthScale = NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(1,0)})
+                addInstance(trail)
+                
+                local light = Instance.new("PointLight",star)
+                light.Brightness = isFire and 12 or 7
+                light.Range = 35
+                light.Color = color
+                addInstance(light)
+                
+                if isFire then
+                    local fire = Instance.new("Fire",star)
+                    fire.Heat = 15
+                    fire.Size = 3.5
+                    fire.Color = Color3.fromRGB(255,110,0)
+                    fire.SecondaryColor = Color3.fromRGB(255,210,0)
+                    addInstance(fire)
+                end
+                
+                local lifetime = math.random(1,1.5)
+                local timePassed = 0
+                local moveConn
+                moveConn = RunService.Heartbeat:Connect(function(dt)
+                    if not active or not _G.SistemaAtivo then 
+                        moveConn:Disconnect() 
+                        if star.Parent then star:Destroy() end 
+                        return 
+                    end
+                    timePassed += dt
+                    if timePassed >= lifetime then 
+                        moveConn:Disconnect() 
+                        if star.Parent then star:Destroy() end 
+                        return 
+                    end
+                    local curve = math.sin(timePassed*20)*0.5
+                    star.Position += (dir+Vector3.new(0,curve,0)).Unit*speed*dt
+                end)
+                addConnection(moveConn)
+                Debris:AddItem(star,4)
+            end
+
+            local function updateSky()
+                if not _G.SistemaAtivo then return end
+                local hour = Lighting.ClockTime
+                local shouldBeActive = hour >= 18 or hour < 6
+                if shouldBeActive and not active then
+                    active = true
+                    Lighting.FogColor = Color3.fromRGB(10,10,30)
+                    Lighting.FogEnd = 5000
+                    Lighting.Brightness = 2
+                    for _,s in ipairs(stars) do if s and s.Parent then s:Destroy() end end
+                    stars = {}
+                    for _,p in ipairs(shootingStarsFolder:GetChildren()) do p:Destroy() end
+                    for i=1,STAR_COUNT do createStar() end
+                    spaceSound:Play()
+                elseif not shouldBeActive and active then
+                    active = false
+                    for _,s in ipairs(stars) do if s and s.Parent then s:Destroy() end end
+                    stars = {}
+                    for _,p in ipairs(shootingStarsFolder:GetChildren()) do p:Destroy() end
+                    spaceSound:Stop()
+                    Lighting.FogColor = Color3.fromRGB(192,192,192)
+                    Lighting.FogEnd = 100000
+                    Lighting.Brightness = 2
+                end
+            end
+
+            local shootingStarConn = task.spawn(function()
+                while _G.SistemaAtivo do
+                    if active then
+                        for i=1,SHOOTING_STAR_MAX do
+                            createShootingStar()
+                            task.wait(shootingStarCooldown)
+                        end
+                    else
+                        task.wait(1)
+                    end
+                end
+            end)
+            addConnection(shootingStarConn)
+
+            local skyUpdateConn = task.spawn(function()
+                while _G.SistemaAtivo do
+                    updateSky()
+                    task.wait(1)
+                end
+            end)
+            addConnection(skyUpdateConn)
+
+            local rainFolder = Instance.new("Folder",workspace)
+            rainFolder.Name = "FakeRain"
+            addInstance(rainFolder)
+            local isRaining = false
+
+            local birds = Instance.new("Sound",SoundService)
+            birds.SoundId = "rbxassetid://9111139882"
+            birds.Volume = 0.2
+            birds.Looped = true
+            birds:Play()
+            addInstance(birds)
+
+            local rainSound = Instance.new("Sound",SoundService)
+            rainSound.SoundId = "rbxassetid://9118823106"
+            rainSound.Volume = 0.3
+            rainSound.Looped = true
+            rainSound:Play()
+            addInstance(rainSound)
+
+            local thunder = Instance.new("Sound",SoundService)
+            thunder.SoundId = "rbxassetid://9120018695"
+            thunder.Volume = 0.4
+            addInstance(thunder)
+
+            local function updateBirdSound()
+                birds.Volume = isRaining and 0 or 0.2
+            end
+
+            local function spawnRain()
+                if not _G.SistemaAtivo then return end
+                isRaining = true
+                updateBirdSound()
+                for i=1,120 do
+                    local drop = Instance.new("Part")
+                    drop.Size = Vector3.new(0.1,2,0.1)
+                    drop.Anchored = true
+                    drop.CanCollide = false
+                    drop.Material = Enum.Material.Glass
+                    drop.Transparency = 0.5
+                    drop.Color = Color3.fromRGB(160,160,255)
+                    drop.Position = Vector3.new(math.random(-150,150),100,math.random(-150,150))
+                    drop.Parent = rainFolder
+                    addInstance(drop)
+                    local tween = TweenService:Create(drop,TweenInfo.new(1),{Position=drop.Position-Vector3.new(0,60,0)})
+                    tween:Play()
+                    Debris:AddItem(drop,1.5)
+                end
+                wait(1.5)
+                isRaining = false
+                updateBirdSound()
+            end
+
+            local function lightningStrike()
+                if not _G.SistemaAtivo then return end
+                local flash = Instance.new("Part")
+                flash.Size = Vector3.new(1,1000,1)
+                flash.Anchored = true
+                flash.CanCollide = false
+                flash.Transparency = 0.4
+                flash.Material = Enum.Material.Neon
+                flash.Color = Color3.new(1,1,1)
+                flash.Position = Vector3.new(math.random(-100,100),500,math.random(-100,100))
+                flash.Parent = workspace
+                addInstance(flash)
+                Lighting.Brightness = Lighting.Brightness + 1.5
+                thunder:Play()
+                wait(0.1)
+                Lighting.Brightness = Lighting.Brightness - 1.5
+                flash:Destroy()
+            end
+
+            for _,part in pairs(workspace:GetDescendants()) do
+                if part:IsA("BasePart") and part.Material == Enum.Material.SmoothPlastic then
+                    part.Reflectance = 0.25
+                end
+            end
+
+            local rainConn = task.spawn(function()
+                while _G.SistemaAtivo do
+                    spawnRain()
+                    if math.random() < 0.2 then lightningStrike() end
+                    wait(1)
+                end
+            end)
+            addConnection(rainConn)
+
+            Lighting.Brightness = 2
+            Lighting.GlobalShadows = true
+            Lighting.OutdoorAmbient = Color3.fromRGB(70, 70, 70)
+            Lighting.FogColor = Color3.fromRGB(120, 130, 140)
+            Lighting.FogStart = 80
+            Lighting.FogEnd = 600
+            Lighting.EnvironmentSpecularScale = 1
+            Lighting.EnvironmentDiffuseScale = 0.5
+
+            local sky = Instance.new("Sky")
+            sky.SkyboxBk = "rbxassetid://159454299"
+            sky.SkyboxDn = "rbxassetid://159454296"
+            sky.SkyboxFt = "rbxassetid://159454293"
+            sky.SkyboxLf = "rbxassetid://159454286"
+            sky.SkyboxRt = "rbxassetid://159454300"
+            sky.SkyboxUp = "rbxassetid://159454304"
+            sky.Parent = Lighting
+            addInstance(sky)
+
+            local color = Instance.new("ColorCorrectionEffect", Lighting)
+            color.Brightness = 0.03
+            color.Contrast = 0.15
+            color.Saturation = 0.05
+            color.TintColor = Color3.fromRGB(255, 240, 220)
+            addInstance(color)
+
+            local bloom = Instance.new("BloomEffect", Lighting)
+            bloom.Intensity = 0.8
+            bloom.Size = 56
+            bloom.Threshold = 0.9
+            addInstance(bloom)
+
+            local sunRays = Instance.new("SunRaysEffect", Lighting)
+            sunRays.Intensity = 0.05
+            sunRays.Spread = 0.8
+            addInstance(sunRays)
+
+            local blur = Instance.new("BlurEffect", Lighting)
+            blur.Size = 0
+            addInstance(blur)
+
+        else
+            _G.SistemaAtivo = false
+            
+            if _G.SistemaConnections then
+                for _, connection in pairs(_G.SistemaConnections) do
+                    if connection then
+                        pcall(function() connection:Disconnect() end)
+                    end
+                end
+                _G.SistemaConnections = {}
+            end
+            
+            if _G.SistemaInstances then
+                for _, instance in pairs(_G.SistemaInstances) do
+                    if instance and instance.Parent then
+                        pcall(function() instance:Destroy() end)
+                    end
+                end
+                _G.SistemaInstances = {}
+            end
+            
+            local Lighting = game:GetService("Lighting")
+            Lighting.Brightness = 1
+            Lighting.FogColor = Color3.fromRGB(191, 191, 191)
+            Lighting.FogEnd = 100000
+            Lighting.FogStart = 0
+            Lighting.GlobalShadows = true
+            Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+            
+            for _, effect in pairs(Lighting:GetChildren()) do
+                if effect:IsA("BloomEffect") or effect:IsA("ColorCorrectionEffect") or 
+                   effect:IsA("SunRaysEffect") or effect:IsA("BlurEffect") or effect:IsA("Sky") then
+                    effect:Destroy()
+                end
+            end
+            
+            if workspace:FindFirstChild("ShootingStars") then
+                workspace.ShootingStars:Destroy()
+            end
+            if workspace:FindFirstChild("FakeRain") then
+                workspace.FakeRain:Destroy()
+            end
+            
+            for _, sound in pairs(workspace:GetDescendants()) do
+                if sound:IsA("Sound") and (sound.Name == "SpaceAmbience" or sound.Name == "FountainSound" or sound.Name == "MyCustomSound") then
+                    sound:Stop()
+                end
+            end
+            
+            for _, sound in pairs(SoundService:GetDescendants()) do
+                if sound:IsA("Sound") then
+                    sound:Stop()
+                end
+            end
+        end
+    end
+})
+ShaderTab:AddToggle({
+    Name = "V2 جودة ",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            if not game:IsLoaded() then
+                game.Loaded:Wait()
+            end
+            
+            _G.IluminationAtiva = true
+            _G.IluminationInstances = {}
+            
+            local function addInstance(instance)
+                table.insert(_G.IluminationInstances, instance)
+            end
+            
+            local Lighting = game:GetService("Lighting")
+            
+            local Bloom = Instance.new("BloomEffect")
+            Bloom.Intensity = 0.1
+            Bloom.Threshold = 0
+            Bloom.Size = 100
+            Bloom.Parent = Lighting
+            addInstance(Bloom)
+            
+            local Tropic = Instance.new("Sky")
+            Tropic.Name = "Tropic"
+            Tropic.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+            Tropic.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+            Tropic.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+            Tropic.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+            Tropic.StarCount = 100
+            Tropic.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+            Tropic.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+            Tropic.Parent = Bloom
+            
+            local Sky = Instance.new("Sky")
+            Sky.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+            Sky.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+            Sky.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+            Sky.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+            Sky.CelestialBodiesShown = false
+            Sky.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+            Sky.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+            Sky.Parent = Bloom
+            
+            local Bloom2 = Instance.new("BloomEffect")
+            Bloom2.Enabled = false
+            Bloom2.Intensity = 0.35
+            Bloom2.Threshold = 0.2
+            Bloom2.Size = 56
+            Bloom2.Parent = Lighting
+            addInstance(Bloom2)
+            
+            local Tropic2 = Instance.new("Sky")
+            Tropic2.Name = "Tropic"
+            Tropic2.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+            Tropic2.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+            Tropic2.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+            Tropic2.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+            Tropic2.StarCount = 100
+            Tropic2.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+            Tropic2.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+            Tropic2.Parent = Bloom2
+            
+            local Sky2 = Instance.new("Sky")
+            Sky2.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+            Sky2.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+            Sky2.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+            Sky2.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+            Sky2.CelestialBodiesShown = false
+            Sky2.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+            Sky2.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+            Sky2.Parent = Bloom2
+            
+            local Blur = Instance.new("BlurEffect")
+            Blur.Size = 2
+            Blur.Parent = Lighting
+            addInstance(Blur)
+            
+            local Efecto = Instance.new("BlurEffect")
+            Efecto.Name = "Efecto"
+            Efecto.Enabled = false
+            Efecto.Size = 2
+            Efecto.Parent = Lighting
+            addInstance(Efecto)
+            
+            local Inaritaisha = Instance.new("ColorCorrectionEffect")
+            Inaritaisha.Name = "Inari taisha"
+            Inaritaisha.Saturation = 0.05
+            Inaritaisha.TintColor = Color3.fromRGB(255, 224, 219)
+            Inaritaisha.Parent = Lighting
+            addInstance(Inaritaisha)
+            
+            local Normal = Instance.new("ColorCorrectionEffect")
+            Normal.Name = "Normal"
+            Normal.Enabled = false
+            Normal.Saturation = -0.2
+            Normal.TintColor = Color3.fromRGB(255, 232, 215)
+            Normal.Parent = Lighting
+            addInstance(Normal)
+            
+            local SunRays = Instance.new("SunRaysEffect")
+            SunRays.Intensity = 0.05
+            SunRays.Parent = Lighting
+            addInstance(SunRays)
+            
+            local Sunset = Instance.new("Sky")
+            Sunset.Name = "Sunset"
+            Sunset.SkyboxUp = "rbxassetid://323493360"
+            Sunset.SkyboxLf = "rbxassetid://323494252"
+            Sunset.SkyboxBk = "rbxassetid://323494035"
+            Sunset.SkyboxFt = "rbxassetid://323494130"
+            Sunset.SkyboxDn = "rbxassetid://323494368"
+            Sunset.SunAngularSize = 14
+            Sunset.SkyboxRt = "rbxassetid://323494067"
+            Sunset.Parent = Lighting
+            addInstance(Sunset)
+            
+            local Takayama = Instance.new("ColorCorrectionEffect")
+            Takayama.Name = "Takayama"
+            Takayama.Enabled = false
+            Takayama.Saturation = -0.3
+            Takayama.Contrast = 0.1
+            Takayama.TintColor = Color3.fromRGB(235, 214, 204)
+            Takayama.Parent = Lighting
+            addInstance(Takayama)
+            
+            local L = game:GetService("Lighting")
+            _G.OriginalLightingSettings = {
+                Brightness = L.Brightness,
+                ColorShift_Bottom = L.ColorShift_Bottom,
+                ColorShift_Top = L.ColorShift_Top,
+                OutdoorAmbient = L.OutdoorAmbient,
+                ClockTime = L.ClockTime,
+                FogColor = L.FogColor,
+                FogEnd = L.FogEnd,
+                FogStart = L.FogStart,
+                ExposureCompensation = L.ExposureCompensation,
+                ShadowSoftness = L.ShadowSoftness,
+                Ambient = L.Ambient
+            }
+            
+            L.Brightness = 2.14
+            L.ColorShift_Bottom = Color3.fromRGB(11, 0, 20)
+            L.ColorShift_Top = Color3.fromRGB(240, 127, 14)
+            L.OutdoorAmbient = Color3.fromRGB(34, 0, 49)
+            L.ClockTime = 6.7
+            L.FogColor = Color3.fromRGB(94, 76, 106)
+            L.FogEnd = 1000
+            L.FogStart = 0
+            L.ExposureCompensation = 0.24
+            L.ShadowSoftness = 0
+            L.Ambient = Color3.fromRGB(59, 33, 27)
+            
+            local Bloom3 = Instance.new("BloomEffect")
+            Bloom3.Intensity = 0.1
+            Bloom3.Threshold = 0
+            Bloom3.Size = 100
+            Bloom3.Parent = Lighting
+            addInstance(Bloom3)
+            
+            local Tropic3 = Instance.new("Sky")
+            Tropic3.Name = "Tropic"
+            Tropic3.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+            Tropic3.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+            Tropic3.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+            Tropic3.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+            Tropic3.StarCount = 100
+            Tropic3.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+            Tropic3.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+            Tropic3.Parent = Bloom3
+            
+            local Sky3 = Instance.new("Sky")
+            Sky3.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+            Sky3.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+            Sky3.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+            Sky3.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+            Sky3.CelestialBodiesShown = false
+            Sky3.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+            Sky3.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+            Sky3.Parent = Bloom3
+            
+            local Bloom4 = Instance.new("BloomEffect")
+            Bloom4.Enabled = false
+            Bloom4.Intensity = 0.35
+            Bloom4.Threshold = 0.2
+            Bloom4.Size = 56
+            Bloom4.Parent = Lighting
+            addInstance(Bloom4)
+            
+            local Tropic4 = Instance.new("Sky")
+            Tropic4.Name = "Tropic"
+            Tropic4.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+            Tropic4.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+            Tropic4.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+            Tropic4.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+            Tropic4.StarCount = 100
+            Tropic4.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+            Tropic4.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+            Tropic4.Parent = Bloom4
+            
+            local Sky4 = Instance.new("Sky")
+            Sky4.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+            Sky4.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+            Sky4.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+            Sky4.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+            Sky4.CelestialBodiesShown = false
+            Sky4.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+            Sky4.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+            Sky4.Parent = Bloom4
+            
+            local Blur2 = Instance.new("BlurEffect")
+            Blur2.Size = 2
+            Blur2.Parent = Lighting
+            addInstance(Blur2)
+            
+            local Efecto2 = Instance.new("BlurEffect")
+            Efecto2.Name = "Efecto"
+            Efecto2.Enabled = false
+            Efecto2.Size = 2
+            Efecto2.Parent = Lighting
+            addInstance(Efecto2)
+            
+            local Inaritaisha2 = Instance.new("ColorCorrectionEffect")
+            Inaritaisha2.Name = "Inari taisha"
+            Inaritaisha2.Saturation = 0.05
+            Inaritaisha2.TintColor = Color3.fromRGB(255, 224, 219)
+            Inaritaisha2.Parent = Lighting
+            addInstance(Inaritaisha2)
+            
+            local Normal2 = Instance.new("ColorCorrectionEffect")
+            Normal2.Name = "Normal"
+            Normal2.Enabled = false
+            Normal2.Saturation = -0.2
+            Normal2.TintColor = Color3.fromRGB(255, 232, 215)
+            Normal2.Parent = Lighting
+            addInstance(Normal2)
+            
+            local SunRays2 = Instance.new("SunRaysEffect")
+            SunRays2.Intensity = 0.05
+            SunRays2.Parent = Lighting
+            addInstance(SunRays2)
+            
+            local Sunset2 = Instance.new("Sky")
+            Sunset2.Name = "Sunset"
+            Sunset2.SkyboxUp = "rbxassetid://323493360"
+            Sunset2.SkyboxLf = "rbxassetid://323494252"
+            Sunset2.SkyboxBk = "rbxassetid://323494035"
+            Sunset2.SkyboxFt = "rbxassetid://323494130"
+            Sunset2.SkyboxDn = "rbxassetid://323494368"
+            Sunset2.SunAngularSize = 14
+            Sunset2.SkyboxRt = "rbxassetid://323494067"
+            Sunset2.Parent = Lighting
+            addInstance(Sunset2)
+            
+            local Takayama2 = Instance.new("ColorCorrectionEffect")
+            Takayama2.Name = "Takayama"
+            Takayama2.Enabled = false
+            Takayama2.Saturation = -0.3
+            Takayama2.Contrast = 0.1
+            Takayama2.TintColor = Color3.fromRGB(235, 214, 204)
+            Takayama2.Parent = Lighting
+            addInstance(Takayama2)
+            
+            L.Brightness = 2.14
+            L.ColorShift_Bottom = Color3.fromRGB(11, 0, 20)
+            L.ColorShift_Top = Color3.fromRGB(240, 127, 14)
+            L.OutdoorAmbient = Color3.fromRGB(34, 0, 49)
+            L.ClockTime = 6.7
+            L.FogColor = Color3.fromRGB(94, 76, 106)
+            L.FogEnd = 1000
+            L.FogStart = 0
+            L.ExposureCompensation = 0.24
+            L.ShadowSoftness = 0
+            L.Ambient = Color3.fromRGB(59, 33, 27)
+            
+        else
+            _G.IluminationAtiva = false
+            
+            local Lighting = game:GetService("Lighting")
+            
+            if _G.OriginalLightingSettings then
+                Lighting.Brightness = _G.OriginalLightingSettings.Brightness or 1
+                Lighting.ColorShift_Bottom = _G.OriginalLightingSettings.ColorShift_Bottom or Color3.fromRGB(0, 0, 0)
+                Lighting.ColorShift_Top = _G.OriginalLightingSettings.ColorShift_Top or Color3.fromRGB(0, 0, 0)
+                Lighting.OutdoorAmbient = _G.OriginalLightingSettings.OutdoorAmbient or Color3.fromRGB(128, 128, 128)
+                Lighting.ClockTime = _G.OriginalLightingSettings.ClockTime or 14
+                Lighting.FogColor = _G.OriginalLightingSettings.FogColor or Color3.fromRGB(191, 191, 191)
+                Lighting.FogEnd = _G.OriginalLightingSettings.FogEnd or 100000
+                Lighting.FogStart = _G.OriginalLightingSettings.FogStart or 0
+                Lighting.ExposureCompensation = _G.OriginalLightingSettings.ExposureCompensation or 0
+                Lighting.ShadowSoftness = _G.OriginalLightingSettings.ShadowSoftness or 0.5
+                Lighting.Ambient = _G.OriginalLightingSettings.Ambient or Color3.fromRGB(0, 0, 0)
+            else
+                Lighting.Brightness = 1
+                Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
+                Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+                Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+                Lighting.ClockTime = 14
+                Lighting.FogColor = Color3.fromRGB(191, 191, 191)
+                Lighting.FogEnd = 100000
+                Lighting.FogStart = 0
+                Lighting.ExposureCompensation = 0
+                Lighting.ShadowSoftness = 0.5
+                Lighting.Ambient = Color3.fromRGB(0, 0, 0)
+            end
+            
+            if _G.IluminationInstances then
+                for _, instance in pairs(_G.IluminationInstances) do
+                    if instance and instance.Parent then
+                        pcall(function() 
+                            instance:Destroy() 
+                        end)
+                    end
+                end
+                _G.IluminationInstances = {}
+            end
+            
+            local effectsToRemove = {
+                "BloomEffect",
+                "BlurEffect", 
+                "ColorCorrectionEffect",
+                "SunRaysEffect",
+                "Sky"
+            }
+            
+            for _, effectType in ipairs(effectsToRemove) do
+                for _, effect in pairs(Lighting:GetChildren()) do
+                    if effect:IsA(effectType) then
+                        pcall(function() effect:Destroy() end)
+                    end
+                end
+            end
+        end
+    end
+})
+local Players=game:GetService("Players")
+local Lighting=game:GetService("Lighting")
+local StarterGui=game:GetService("StarterGui")
+local MaterialService=game:GetService("MaterialService")
+local ME=Players.LocalPlayer
+local enabled=false
+
+if not _G.Ignore then _G.Ignore={} end
+if _G.Settings==nil then
+_G.Settings={
+Players={["Ignore Me"]=true,["Ignore Others"]=true,["Ignore Tools"]=true},
+Meshes={NoMesh=false,NoTexture=false,Destroy=false},
+Images={Invisible=true,Destroy=false},
+Explosions={Smaller=true,Invisible=false,Destroy=false},
+Particles={Invisible=true,Destroy=false},
+TextLabels={LowerQuality=false,Invisible=false,Destroy=false},
+MeshParts={LowerQuality=true,Invisible=false,NoTexture=false,NoMesh=false,Destroy=false},
+Other={
+["FPS Cap"]=true,
+["No Camera Effects"]=true,
+["No Clothes"]=true,
+["Low Water Graphics"]=true,
+["No Shadows"]=true,
+["Low Rendering"]=true,
+["Low Quality Parts"]=true,
+["Low Quality Models"]=true,
+["Reset Materials"]=true,
+["Lower Quality MeshParts"]=true,
+ClearNilInstances=false
+}}
+end
+
+local CanBeEnabled={"ParticleEmitter","Trail","Smoke","Fire","Sparkles"}
+
+local function PartOfCharacter(i)
+for _,p in ipairs(Players:GetPlayers()) do
+if p~=ME and p.Character and i:IsDescendantOf(p.Character) then
+return true
+end
+end
+return false
+end
+
+local function DescendantOfIgnore(i)
+for _,v in pairs(_G.Ignore) do
+if i:IsDescendantOf(v) then return true end
+end
+return false
+end
+
+local function CheckIfBad(Inst)
+if not enabled then return end
+if not Inst:IsDescendantOf(Players)
+and (_G.Settings.Players["Ignore Others"] and not PartOfCharacter(Inst) or not _G.Settings.Players["Ignore Others"])
+and (_G.Settings.Players["Ignore Me"] and ME.Character and not Inst:IsDescendantOf(ME.Character) or not _G.Settings.Players["Ignore Me"])
+and (_G.Settings.Players["Ignore Tools"] and not Inst:IsA("BackpackItem") and not Inst:FindFirstAncestorWhichIsA("BackpackItem") or not _G.Settings.Players["Ignore Tools"])
+and (_G.Ignore and not table.find(_G.Ignore,Inst) and not DescendantOfIgnore(Inst) or true)
+then
+if Inst:IsA("DataModelMesh") then
+if Inst:IsA("SpecialMesh") then
+if _G.Settings.Meshes.NoMesh then Inst.MeshId="" end
+if _G.Settings.Meshes.NoTexture then Inst.TextureId="" end
+end
+if _G.Settings.Meshes.Destroy then Inst:Destroy() end
+
+elseif Inst:IsA("FaceInstance") then
+if _G.Settings.Images.Invisible then Inst.Transparency=1 Inst.Shiny=1 end
+if _G.Settings.Images.Destroy then Inst:Destroy() end
+
+elseif Inst:IsA("ShirtGraphic") then
+if _G.Settings.Images.Invisible then Inst.Graphic="" end
+if _G.Settings.Images.Destroy then Inst:Destroy() end
+
+elseif table.find(CanBeEnabled,Inst.ClassName) then
+if _G.Settings.Particles.Invisible then Inst.Enabled=false end
+if _G.Settings.Particles.Destroy then Inst:Destroy() end
+
+elseif Inst:IsA("PostEffect") and _G.Settings.Other["No Camera Effects"] then
+Inst.Enabled=false
+
+elseif Inst:IsA("Explosion") then
+if _G.Settings.Explosions.Smaller then Inst.BlastPressure=1 Inst.BlastRadius=1 end
+if _G.Settings.Explosions.Invisible then Inst.Visible=false end
+if _G.Settings.Explosions.Destroy then Inst:Destroy() end
+
+elseif Inst:IsA("Clothing") or Inst:IsA("SurfaceAppearance") or Inst:IsA("BaseWrap") then
+if _G.Settings.Other["No Clothes"] then Inst:Destroy() end
+
+elseif Inst:IsA("BasePart") and not Inst:IsA("MeshPart") then
+if _G.Settings.Other["Low Quality Parts"] then
+Inst.Material=Enum.Material.Plastic
+Inst.Reflectance=0
+end
+
+elseif Inst:IsA("TextLabel") and Inst:IsDescendantOf(workspace) then
+if _G.Settings.TextLabels.LowerQuality then
+Inst.Font=Enum.Font.SourceSans
+Inst.TextScaled=false
+Inst.RichText=false
+Inst.TextSize=14
+end
+if _G.Settings.TextLabels.Invisible then Inst.Visible=false end
+if _G.Settings.TextLabels.Destroy then Inst:Destroy() end
+
+elseif Inst:IsA("Model") then
+if _G.Settings.Other["Low Quality Models"] then
+Inst.LevelOfDetail=1
+end
+
+elseif Inst:IsA("MeshPart") then
+if _G.Settings.MeshParts.LowerQuality then
+Inst.RenderFidelity=2
+Inst.Material=Enum.Material.Plastic
+Inst.Reflectance=0
+end
+if _G.Settings.MeshParts.Invisible then Inst.Transparency=1 end
+if _G.Settings.MeshParts.NoTexture then Inst.TextureID="" end
+if _G.Settings.MeshParts.NoMesh then Inst.MeshId="" end
+if _G.Settings.MeshParts.Destroy then Inst:Destroy() end
+end
+end
+end
+
+local function EnableFPS()
+for _,v in ipairs(game:GetDescendants()) do
+CheckIfBad(v)
+end
+game.DescendantAdded:Connect(function(v)
+task.wait(1)
+CheckIfBad(v)
+end)
+end
+ShaderTab:AddToggle({
+Name="120 FPS",
+Default=false,
+Callback=function(v)
+enabled=v
+if v then
+EnableFPS()
+end
+end
 })
