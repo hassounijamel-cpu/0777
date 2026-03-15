@@ -32,7 +32,7 @@ for _, mensagem in ipairs(mensagens) do
 	wait(0.1)
 end
 
-local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/077/refs/heads/main/NeymarGUI.txt"))()
+local Libary = loadstring(game:HttpGet("حط الواجهه هنا"))()
 
   Libary:SetTheme("PeachPuff")
 
