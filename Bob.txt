@@ -53,37 +53,19 @@ Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://99353410676626", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
-local InfoTab = Window:MakeTab({ Title = "الحقوق", Icon = "rbxassetid://15309138473" })
+local InfoTab = Window:MakeTab({ Title = "Menu", Icon = "rbxassetid://15309138473" })
 
--- مربع المعلومات العلوي
-local Player = game.Players.LocalPlayer
+-- Section للمربع العلوي
+InfoTab:AddSection({ Name = " " }) -- اسم فارغ ليكون مكان المربع
 
-local Frame = Instance.new("Frame")
-Frame.Parent = InfoTab
-Frame.Size = UDim2.new(1, -10, 0, 90)
-Frame.BackgroundTransparency = 1
+-- صورة اللاعب والنص
+InfoTab:AddParagraph({
+    Title = "سكربت حسنين || نيمار",
+    Content = "صورة اللاعب: Kdkjdnde\nيمكن تعديل الحجم حسب المكتبة",
+})
 
--- صورة السكن
-local Avatar = Instance.new("ImageLabel")
-Avatar.Parent = Frame
-Avatar.Size = UDim2.new(0, 80, 0, 80)
-Avatar.Position = UDim2.new(0, 5, 0, 5)
-Avatar.BackgroundTransparency = 1
-Avatar.Image = "https://www.roblox.com/headshot-thumbnail/image?userId="..Player.UserId.."&width=420&height=420&format=png"
-
--- النص جنب الصورة
-local Title = Instance.new("TextLabel")
-Title.Parent = Frame
-Title.Position = UDim2.new(0, 95, 0, 20)
-Title.Size = UDim2.new(0, 250, 0, 40)
-Title.BackgroundTransparency = 1
-Title.Text = "سكربت حسنين || نيمار"
-Title.TextScaled = true
-Title.Font = Enum.Font.GothamBold
-Title.TextColor3 = Color3.fromRGB(255,255,255)
-
--- المعلومات
-InfoTab:AddSection({ "معلومات سكربت" })
+-- معلومات السكربت
+InfoTab:AddSection({ Name = "معلومات سكربت" })
 InfoTab:AddParagraph({ "Kdkjdnde المطور: نيمار حساب روب" })
 InfoTab:AddParagraph({ "TIK TOK: WLV27" })
 InfoTab:AddParagraph({ "GUI: WX" })
