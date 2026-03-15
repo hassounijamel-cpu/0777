@@ -1929,7 +1929,7 @@ local selectedName = ""
 NameTab:AddTextBox({
     Name = "اكتب شتريد في البايو هنا",
     Description = "",
-    PlaceholderText = "LOC4T",
+    PlaceholderText = "NEYMAR",
     Callback = function(Value)
         selectedBio = Value
     end
@@ -1938,7 +1938,7 @@ NameTab:AddTextBox({
 NameTab:AddTextBox({
     Name = "اكتب شتريد في الاسم هنا",
     Description = "",
-    PlaceholderText = "LOC4T",
+    PlaceholderText = "NEYMAR",
     Callback = function(Value)
         selectedName = Value
     end
@@ -2111,4 +2111,234 @@ NameTab:AddToggle({
             end)
         end
     end
+})
+local Tab = Window:MakeTab({"لاق السيرفر", "bomb"})
+
+-- قسم إيقاف السيرفر
+local Section = Tab:AddSection({
+    Name = "إيقاف السيرفر"
+})
+
+-- زر إيقاف السيرفر
+Tab:AddButton({
+    Name = "إيقاف السيرفر",
+    Callback = function()
+        for m = 1, 495 do
+            local args = {
+                [1] = "PickingTools",
+                [2] = "FireHose"
+            }
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer(unpack(args))
+
+            local args = {
+                [1] = "FireHose",
+                [2] = "DestroyFireHose"
+            }
+            game:GetService("Players").LocalPlayer.Backpack.FireHose.ToolSound:FireServer(unpack(args))
+        end
+
+        local oldcf = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(999999999.414, -475, 999999999.414)
+
+        local rootpart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        repeat wait() until rootpart.Parent == nil
+        repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldcf
+
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "سكربت النسخ",
+            Text = "تم إيقاف السيرفر، سيتم الإغلاق الآن",
+            Button1 = "حسناً",
+            Duration = 5
+        })
+
+        wait()
+
+        for _, ergeg in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if ergeg.Name == "FireHose" then
+                ergeg.Parent = game.Players.LocalPlayer.Character
+            end
+        end
+
+        wait(0.2)
+
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "سكربت النسخ",
+            Text = "بدأ النسخ، انتظر قليلاً",
+            Button1 = "حسناً",
+            Duration = 5
+        })
+
+        wait(0.5)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9999, -475, 9999)
+    end
+})
+
+-- زر إيقاف السيرفر (خطأ إنترنت)
+Tab:AddButton({
+    Name = "إيقاف السيرفر (خطأ في الإنترنت)",
+    Callback = function()
+        for m = 1, 535 do
+            local args = {
+                [1] = "PickingTools",
+                [2] = "FireHose"
+            }
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer(unpack(args))
+
+            local args = {
+                [1] = "FireHose",
+                [2] = "DestroyFireHose"
+            }
+            game:GetService("Players").LocalPlayer.Backpack.FireHose.ToolSound:FireServer(unpack(args))
+        end
+
+        local oldcf = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(999999999.414, -475, 999999999.414)
+
+        local rootpart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        repeat wait() until rootpart.Parent == nil
+        repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldcf
+
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "سكربت النسخ",
+            Text = "تم إيقاف السيرفر",
+            Button1 = "حسناً",
+            Duration = 5
+        })
+
+        wait()
+
+        for _, ergeg in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if ergeg.Name == "FireHose" then
+                ergeg.Parent = game.Players.LocalPlayer.Character
+            end
+        end
+
+        wait(0.2)
+
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "سكربت النسخ",
+            Text = "بدأ النسخ، انتظر",
+            Button1 = "حسناً",
+            Duration = 5
+        })
+
+        wait(0.5)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9999, -475, 9999)
+    end
+})
+
+-- قسم اللاغ باستخدام اللابتوب
+local Section = Tab:AddSection({
+    Name = "لاق باستخدام اللابتوب"
+})
+
+local toggles = { LagLaptop = false }
+
+local function clickLaptopPart(part)
+    local clickDetector = part:FindFirstChildWhichIsA("ClickDetector")
+    if clickDetector then
+        fireclickdetector(clickDetector)
+    end
+end
+
+local function lagarJogoLaptop(laptopPart, maxClicks)
+    local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    local clickCount = 0
+    while toggles.LagLaptop and clickCount < maxClicks do
+        hrp.CFrame = laptopPart.CFrame + Vector3.new(0, 3, 0)
+        clickLaptopPart(laptopPart)
+        clickCount += 1
+        task.wait(0.05)
+    end
+end
+
+Tab:AddToggle({
+    Name = "تفعيل لاق اللابتوب",
+    Default = false,
+    Callback = function(state)
+        toggles.LagLaptop = state
+        if state then
+            local laptopPart = workspace:FindFirstChild("WorkspaceCom")
+                and workspace.WorkspaceCom:FindFirstChild("001_GiveTools")
+                and workspace.WorkspaceCom["001_GiveTools"]:FindFirstChild("Laptop")
+
+            if laptopPart and laptopPart:IsA("BasePart") then
+                spawn(function()
+                    lagarJogoLaptop(laptopPart, 999999999)
+                end)
+            end
+        end
+    end
+})
+
+Tab:AddParagraph({
+"معلومات اللاغ",
+"تأثير اللاغ يبدأ بعد 35 ثانية"
+})
+
+-- قسم اللاغ باستخدام الهاتف
+local Section = Tab:AddSection({
+    Name = "لاق باستخدام الهاتف"
+})
+
+toggles.LagPhone = false
+
+local function clickPhonePart(part)
+    local clickDetector = part:FindFirstChildWhichIsA("ClickDetector")
+    if clickDetector then
+        fireclickdetector(clickDetector)
+    end
+end
+
+local function lagarJogoPhone(phonePart, maxClicks)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    local clickCount = 0
+    while toggles.LagPhone and clickCount < maxClicks do
+        hrp.CFrame = phonePart.CFrame + Vector3.new(0, 3, 0)
+        clickPhonePart(phonePart)
+        clickCount += 1
+        task.wait(0.05)
+    end
+end
+
+Tab:AddToggle({
+    Name = "تفعيل لاق الهاتف",
+    Default = false,
+    Callback = function(state)
+        toggles.LagPhone = state
+    end
+})
+
+Tab:AddParagraph({
+"معلومات اللاغ",
+"تأثير اللاغ يبدأ بعد 35 ثانية"
+})
+
+-- قسم اللاغ باستخدام القنبلة
+local Section = Tab:AddSection({
+    Name = "لاق باستخدام القنبلة"
+})
+
+local BombActive = false
+
+Tab:AddToggle({
+    Name = "تفعيل لاق القنبلة",
+    Default = false,
+    Callback = function(Value)
+        BombActive = Value
+    end
+})
+
+Tab:AddParagraph({
+"معلومات اللاغ",
+"تأثير اللاغ يبدأ بعد 35 ثانية"
 })
