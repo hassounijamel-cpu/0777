@@ -50,10 +50,10 @@ local InfoTab = Window:MakeTab({ Title = "الحقوق", Icon = "rbxassetid://81
 
 InfoTab:AddSection({ "معلومات سكربت" })
 InfoTab:AddParagraph({ "Kdkjdnde المطور: نيمار حساب روب" })
-InfoTab:AddParagraph({ "TIK TOK: ney_marr2" })
+InfoTab:AddParagraph({ "TIK TOK: WLV27" })
 InfoTab:AddParagraph({ "GUI: WX" })
-InfoTab:AddParagraph({ "لو تريد تتعاون معي تواصل تيلي" })
-InfoTab:AddParagraph({ "Telegram: @ney_marr2" })
+InfoTab:AddParagraph({ "تليجرام" })
+InfoTab:AddParagraph({ "Telegram: @WLV66" })
 -- BTN TEAM
 local TabAnti = Window:MakeTab({"المضادات", "rbxassetid://10734951847"})
 local Players = game:GetService("Players")
