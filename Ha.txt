@@ -75,7 +75,6 @@ TabAll:AddButton({
 
 -- ================= المضادات =================
 TabAll:AddSection({ Name = "🛡️ المضادات" })
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
