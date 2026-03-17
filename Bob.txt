@@ -62,6 +62,7 @@ InfoTab:AddParagraph({ "TIK TOK: WLV27" })
 InfoTab:AddParagraph({ "GUI: WX" })
 InfoTab:AddParagraph({ "تليجرام" })
 InfoTab:AddParagraph({ "Telegram: @WLV66" })
+
 local TabAnti = Window:MakeTab({"المضادات", "rbxassetid://10734951847"})
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
