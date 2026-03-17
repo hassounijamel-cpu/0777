@@ -56,58 +56,6 @@ Window:AddMinimizeButton({
 local InfoTab = Window:MakeTab({ Title = "الحقوق", Icon = "rbxassetid://15309138473" })
 
 
--- زر من أنا
-InfoTab:AddButton({
-	Name = "من أنا",
-	Callback = function()
-
-		local player = game.Players.LocalPlayer
-		local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-		gui.Name = "WhoAmI_GUI"
-
-		-- خلفية سوداء
-		local frame = Instance.new("Frame", gui)
-		frame.Size = UDim2.new(1,0,1,0)
-		frame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-
-		-- النص
-		local textLabel = Instance.new("TextLabel", frame)
-		textLabel.Size = UDim2.new(1,0,0.2,0)
-		textLabel.Position = UDim2.new(0,0,0.4,0)
-		textLabel.BackgroundTransparency = 1
-		textLabel.TextColor3 = Color3.fromRGB(255,255,255)
-		textLabel.TextScaled = true
-		textLabel.Font = Enum.Font.GothamBold
-		textLabel.Text = ""
-
-		-- العداد
-		local counter = Instance.new("TextLabel", frame)
-		counter.Size = UDim2.new(0.1,0,0.1,0)
-		counter.Position = UDim2.new(0,10,0.9,-50)
-		counter.BackgroundTransparency = 1
-		counter.TextColor3 = Color3.fromRGB(255,255,255)
-		counter.TextScaled = true
-		counter.Font = Enum.Font.GothamBold
-
-		local message = "أنا حسنين معروف باسم نيمار مطور سكربتات من العراق أطور سكربتات من 2024 و أتمنى ان يعجبكم هذا السكربت"
-
-		-- كتابة حرف حرف
-		for i = 1, #message do
-			textLabel.Text = string.sub(message, 1, i)
-			wait(0.05)
-		end
-
-		-- عداد من 15 إلى 1
-		for i = 15, 1, -1 do
-			counter.Text = tostring(i)
-			wait(1)
-		end
-
-		-- حذف كلشي
-		gui:Destroy()
-
-	end
-})
 InfoTab:AddSection({ "معلومات سكربت" })
 InfoTab:AddParagraph({ "Kdkjdnde المطور: نيمار حساب روب" })
 InfoTab:AddParagraph({ "TIK TOK: WLV27" })
