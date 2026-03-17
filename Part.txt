@@ -1,0 +1,178 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+
+-- GUI
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "Gui"
+Gui.Parent = gethui and gethui() or game.CoreGui
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+local Main = Instance.new("Frame")
+Main.Parent = Gui
+Main.BackgroundColor3 = Color3.fromRGB(0,30,120)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.33,0,0.54,0)
+Main.Size = UDim2.new(0.24,0,0.17,0)
+Main.Active = true
+Main.Draggable = true
+
+local Label = Instance.new("TextLabel")
+Label.Parent = Main
+Label.BackgroundColor3 = Color3.fromRGB(0,40,140)
+Label.Size = UDim2.new(1,0,0.16,0)
+Label.Font = Enum.Font.Nunito
+Label.Text = "NEYMAR"
+Label.TextColor3 = Color3.fromRGB(255,255,255)
+Label.TextScaled = true
+
+local Box = Instance.new("TextBox")
+Box.Parent = Main
+Box.BackgroundColor3 = Color3.fromRGB(0,50,150)
+Box.BorderSizePixel = 0
+Box.Position = UDim2.new(0.1,0,0.22,0)
+Box.Size = UDim2.new(0.8,0,0.37,0)
+Box.Font = Enum.Font.SourceSansBold
+Box.PlaceholderText = "Player here"
+Box.Text = ""
+Box.TextColor3 = Color3.fromRGB(255,255,255)
+Box.TextScaled = true
+
+-- زر بصورة
+local Button = Instance.new("ImageButton")
+Button.Parent = Main
+Button.BackgroundColor3 = Color3.fromRGB(0,40,140)
+Button.BorderSizePixel = 2
+Button.Position = UDim2.new(0.18,0,0.65,0)
+Button.Size = UDim2.new(0.63,0,0.28,0)
+Button.Image = "rbxassetid://125602848737897"
+
+local ButtonText = Instance.new("TextLabel")
+ButtonText.Parent = Button
+ButtonText.BackgroundTransparency = 1
+ButtonText.Size = UDim2.new(1,0,1,0)
+ButtonText.Font = Enum.Font.Nunito
+ButtonText.Text = "تشغيل"
+ButtonText.TextColor3 = Color3.fromRGB(255,255,255)
+ButtonText.TextScaled = true
+
+-- زر إظهار الواجهة
+local ToggleButton = Instance.new("ImageButton")
+ToggleButton.Parent = Gui
+ToggleButton.BackgroundTransparency = 0.3
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0,40,140)
+ToggleButton.BorderSizePixel = 0
+ToggleButton.Position = UDim2.new(0.01,0,0.45,0)
+ToggleButton.Size = UDim2.new(0.05,0,0.09,0)
+ToggleButton.Image = "rbxassetid://99353410676626"
+ToggleButton.Active = true
+ToggleButton.Draggable = true
+
+-- System
+local character
+local humanoidRootPart
+local player = nil
+local blackHoleActive = false
+local DescendantAddedConnection
+
+local Folder = Instance.new("Folder", Workspace)
+local Part = Instance.new("Part", Folder)
+local Attachment1 = Instance.new("Attachment", Part)
+Part.Anchored = true
+Part.CanCollide = false
+Part.Transparency = 1
+
+getgenv().Network = getgenv().Network or {
+	BaseParts = {},
+	Velocity = Vector3.new(14.46,14.46,14.46)
+}
+
+RunService.Heartbeat:Connect(function()
+	sethiddenproperty(LocalPlayer,"SimulationRadius",math.huge)
+	for _,Part in pairs(Network.BaseParts) do
+		if Part:IsDescendantOf(Workspace) then
+			Part.Velocity = Network.Velocity
+		end
+	end
+end)
+
+local function ForcePart(v)
+	if v:IsA("BasePart") and not v.Anchored and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
+		
+		v.CanCollide = false
+		
+		local Torque = Instance.new("Torque",v)
+		Torque.Torque = Vector3.new(100000,100000,100000)
+		
+		local AlignPosition = Instance.new("AlignPosition",v)
+		local Attachment2 = Instance.new("Attachment",v)
+		
+		Torque.Attachment0 = Attachment2
+		
+		AlignPosition.MaxForce = math.huge
+		AlignPosition.MaxVelocity = math.huge
+		AlignPosition.Responsiveness = 200
+		AlignPosition.Attachment0 = Attachment2
+		AlignPosition.Attachment1 = Attachment1
+	end
+end
+
+local function toggleBlackHole()
+	blackHoleActive = not blackHoleActive
+	
+	if blackHoleActive then
+		ButtonText.Text = "إيقاف"
+		
+		for _,v in ipairs(Workspace:GetDescendants()) do
+			ForcePart(v)
+		end
+		
+		DescendantAddedConnection = Workspace.DescendantAdded:Connect(function(v)
+			if blackHoleActive then
+				ForcePart(v)
+			end
+		end)
+		
+		task.spawn(function()
+			while blackHoleActive and RunService.RenderStepped:Wait() do
+				Attachment1.WorldCFrame = humanoidRootPart.CFrame
+			end
+		end)
+	else
+		ButtonText.Text = "تشغيل"
+		if DescendantAddedConnection then
+			DescendantAddedConnection:Disconnect()
+		end
+	end
+end
+
+local function getPlayer(name)
+	local lowerName = string.lower(name)
+	for _,p in pairs(Players:GetPlayers()) do
+		if string.find(string.lower(p.Name),lowerName) or string.find(string.lower(p.DisplayName),lowerName) then
+			return p
+		end
+	end
+end
+
+Box.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		player = getPlayer(Box.Text)
+		if player then
+			Box.Text = player.Name
+		end
+	end
+end)
+
+Button.MouseButton1Click:Connect(function()
+	if player then
+		character = player.Character or player.CharacterAdded:Wait()
+		humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+		toggleBlackHole()
+	end
+end)
+
+ToggleButton.MouseButton1Click:Connect(function()
+	Main.Visible = not Main.Visible
+end)
