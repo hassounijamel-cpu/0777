@@ -554,10 +554,11 @@ TabAll:AddToggle({
         enabledKids=v
     end
 })
-local TrollTab = Window:MakeTab({ Title = "تخريب", Icon = "rbxassetid://13364900349" })
-TrollTab:AddSection({ "بناء قصر ضخم فسبون" })
-TrollTab:AddParagraph({ "لا تنسى تروح لبيت 6" })
-TrollTab:AddButton({
+
+local Trolt7rebTab = Window:MakeTab({ Title = "تخريب", Icon = "rbxassetid://13364900349" })
+Trolt7rebTab:AddSection({ "بناء قصر ضخم فسبون" })
+Trolt7rebTab:AddParagraph({ "لا تنسى تروح لبيت 6" })
+Trolt7rebTab:AddButton({
     Name = "بناء مختبر الحدث فسبون",
     Description = "",
     Callback = function()
@@ -590,8 +591,8 @@ local args2 = { 6, "001_Landmark" }
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Lot:BuildProperty"):FireServer(unpack(args2))
 end
 })
-local Section = TrollTab:AddSection({"سبامات"})
-TrollTab:AddButton({
+local Section = Trolt7rebTab:AddSection({"سبامات"})
+Trolt7rebTab:AddButton({
     Name = "سبام كرات سلة اعطيه شوي وقت",
     Callback = function()
 
@@ -644,7 +645,7 @@ TrollTab:AddButton({
     end
 })
 
-TrollTab:AddButton({
+Trolt7rebTab:AddButton({
     Name = "ايقاف",
     Callback = function()
         local player = game.Players.LocalPlayer
@@ -654,8 +655,8 @@ TrollTab:AddButton({
     end
 })
 
-TrollTab:AddSection({ "هالة الابواب" })
-TrollTab:AddButton({
+Trolt7rebTab:AddSection({ "هالة الابواب" })
+Trolt7rebTab:AddButton({
     Name = "هالة الابواب",
     Description = "اسحب كل الابواب عندك",
     Callback = function()
@@ -782,7 +783,7 @@ end)
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
 local window = library:Window("ismail hub")
 
-window:Slider("ismail bring Doors",1,100,10, function(Value)
+window:Slider("Neymar bring Doors",1,100,10, function(Value)
    radius = Value
 end)
 
@@ -806,8 +807,8 @@ end)
 toggleBlackHole()
     end
 })
-TrollTab:AddSection({ "👻توسيع المجال غوجو👻" })
-TrollTab:AddButton({
+Trolt7rebTab:AddSection({ "👻توسيع المجال غوجو👻" })
+Trolt7rebTab:AddButton({
     Name = "توسيع المجال بنفسجي",
     Description = "جمد كل السيرفر مع تاثير الفضاء",
     Callback = function()
@@ -1000,7 +1001,7 @@ task.spawn(function()
 end)
 end
 })
-TrollTab:AddButton({
+Trolt7rebTab:AddButton({
     Name = "توسيع المجال اخضر✳️",
     Description = "",
     Callback = function()
@@ -1194,7 +1195,7 @@ end)
 end
 })
 
-TrollTab:AddSection({ "تخريب بالقوارب والسفن" })
+Trolt7rebTab:AddSection({ "تخريب بالقوارب والسفن" })
 TrollTab:AddButton({
     Name = "سفينة 🚢 القراصنة الكبيرة",
     Description = "سفينة كبيرة تئيك الطريق لا تنزل هي تنزلك",
@@ -1341,7 +1342,7 @@ RunService.Heartbeat:Connect(function(dt)
 end)
 end
 })
-TrollTab:AddParagraph({ "شيل سفينة زي متشيل سيارة" })
+Trolt7rebTab:AddParagraph({ "شيل سفينة زي متشيل سيارة" })
 local Troll = Window:MakeTab({ Title = "تخريب على اللاعبين", Icon = "rbxassetid://131153193945220" })
 
 
