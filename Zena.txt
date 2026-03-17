@@ -529,7 +529,7 @@ Section = LocalPlayerTab:AddSection({
 LocalPlayerTab:AddButton({
     Name = "شلونك",
     Callback = function()
-       no
+       
     end
 })
 LocalPlayerTab:AddToggle({
