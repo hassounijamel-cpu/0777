@@ -2044,3 +2044,5 @@ Tab4:AddButton({
         end
     end
 })
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/0777/refs/heads/main/%D8%AA%D8%A7%D8%A8%20%D8%A7%D8%BA%D8%A7%D9%86%D9%8A.txt"))()
