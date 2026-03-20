@@ -965,7 +965,7 @@ MyTab:AddToggle({
 })
 
 --================ فعالياتي =================--
-local PlayTab = Window:MakeTab({ Title = "فعالياتي", Icon = "rbxassetid://10723407498" })
+local PlayTab = Window:MakeTab({ Title = "فعاليات", Icon = "rbxassetid://10723407498" })
 
 local Plrs = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
@@ -1190,7 +1190,7 @@ PlayTab:AddButton({
 })
 
 --================ ترسانتي =================--
-local GearTab = Window:MakeTab({ Title = "ترسانتي", Icon = "rbxassetid://10723416652" })
+local GearTab = Window:MakeTab({ Title = "تخريب قوي", Icon = "rbxassetid://10723416652" })
 
 local RSvc = game:GetService("RunService")
 
@@ -1713,3 +1713,4 @@ Tab:AddParagraph({
 "معلومات اللاغ",
 "تأثير اللاغ يبدأ بعد 35 ثانية"
 })
+
