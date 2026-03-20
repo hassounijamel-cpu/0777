@@ -5382,3 +5382,327 @@ Tab188:AddToggle({
         end
     end
 })
+
+local pl = game.Players.LocalPlayer
+local players = {}
+
+local function updatePlayerList()
+    players = {}
+    for _, player in pairs(game.Players:GetPlayers()) do
+        table.insert(players, player.Name)
+    end
+    return players
+end
+
+updatePlayerList()
+local TabBaby = Window:MakeTab({ Title = "الاطفال", Icon = "rbxassetid://10709769732" })
+
+local chasingplayer = nil
+local players = {}
+local function updatePlayerList()
+    players = {}
+    for _, p in pairs(game.Players:GetPlayers()) do
+        table.insert(players, p.Name)
+    end
+    return players
+end
+updatePlayerList()
+
+local playerChild = TabBaby:AddDropdown({
+    Name = "اختيار اللاعب لارسال الطفل",
+    Options = players,
+    Default = "",
+    Callback = function(selected)
+        if game.Players:FindFirstChild(selected) then
+            chasingplayer = selected
+        else
+            chasingplayer = nil
+        end
+    end
+})
+
+TabBaby:AddButton({
+    Name = "تحديث القائمة",
+    Callback = function()
+        local updatedPlayers = updatePlayerList()
+        if playerChild and updatedPlayers then
+            pcall(function()
+                playerChild:Refresh(updatedPlayers)
+            end)
+            if chasingplayer and not game.Players:FindFirstChild(chasingplayer) then
+                chasingplayer = nil
+                pcall(function()
+                    playerChild:Set("")
+                end)
+            end
+        end
+    end
+})
+
+local SelectedGender = "BabyBoy"
+local Genders = { {Name = "ولد", Value = "BabyBoy"}, {Name = "بنت", Value = "BabyGirl"} }
+
+TabBaby:AddDropdown({
+    Name = "اختيار الطفل",
+    Options = (function()
+        local opts = {}
+        for _, g in ipairs(Genders) do
+            table.insert(opts, g.Name)
+        end
+        return opts
+    end)(),
+    Default = Genders[1].Name,
+    Callback = function(selected)
+        for _, g in ipairs(Genders) do
+            if g.Name == selected then
+                SelectedGender = g.Value
+                break
+            end
+        end
+    end
+})
+
+TabBaby:AddButton({
+    Name = "وضع الطفل اولا",
+    Callback = function()
+        local args = {
+            [1] = "CharacterFollowSpawnPlayer",
+            [2] = SelectedGender
+        }
+        local success, err = pcall(function()
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1Bab1yFollo1w"):FireServer(unpack(args))
+        end)
+        if not success then
+            warn("LOC4T HUB: " .. err)
+        end
+    end
+})
+
+TabBaby:AddButton({
+    Name = "ارسال الطفل ثانيا",
+    Callback = function()
+        if not chasingplayer then
+            warn("LOC4T HUB")
+            return
+        end
+
+        local target = chasingplayer
+
+        if not workspace:FindFirstChild(pl.Name) or not workspace[pl.Name]:FindFirstChild("FollowCharacter") then
+            warn("LOC4T HUB")
+            return
+        end
+
+        if workspace:FindFirstChild(target) and workspace[pl.Name]:FindFirstChild("FollowCharacter") then
+            workspace[pl.Name].FollowCharacter.Parent = workspace[target]
+
+            if getgenv().ChildFollowLoop then
+                getgenv().ChildFollowLoop:Disconnect()
+            end
+
+            getgenv().ChildFollowLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                local followCharacter = workspace[target]:FindFirstChild("FollowCharacter")
+                local humanoidRootPart = workspace[target]:FindFirstChild("HumanoidRootPart")
+
+                if followCharacter and humanoidRootPart then
+                    followCharacter.Torso.BodyPosition.Position = humanoidRootPart.Position
+                    followCharacter.Torso.BodyGyro.CFrame = humanoidRootPart.CFrame
+                end
+            end)
+        end
+    end
+})
+TabBaby:AddSection({ Name = "البانج          ", Icon = "rbxassetid://10747381992" })
+TabBaby:AddButton({
+    Title = "بانج امامي",
+    Description = "تاكد انك رسبنت الطفل",
+    Callback = function()
+        if not chasingplayer then
+            warn("LOC4T HUB")
+            return
+        end
+
+        local target = chasingplayer
+        local pl = game.Players.LocalPlayer
+
+        if not workspace:FindFirstChild(pl.Name) or not workspace[pl.Name]:FindFirstChild("FollowCharacter") then
+            warn("LOC4T HUB")
+            return
+        end
+
+        if workspace:FindFirstChild(target) and workspace[pl.Name]:FindFirstChild("FollowCharacter") then
+            local followCharacter = workspace[pl.Name].FollowCharacter
+            local targetChar = workspace[target]
+            local hrp = targetChar:FindFirstChild("HumanoidRootPart")
+
+            if not hrp then
+                warn("LOC4T HUB")
+                return
+            end
+
+            local head = targetChar:FindFirstChild("Head")
+            local facePos
+            if head then
+                facePos = head.Position + head.CFrame.LookVector * 0.1 
+            else
+                facePos = hrp.Position + hrp.CFrame.LookVector * 0.1
+            end
+
+            followCharacter.Parent = workspace
+            followCharacter:MoveTo(facePos)
+
+            if getgenv().ChildFollowLoop then
+                getgenv().ChildFollowLoop:Disconnect()
+            end
+
+            getgenv().ChildFollowLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                if not (targetChar and targetChar:FindFirstChild("HumanoidRootPart") and followCharacter and followCharacter:FindFirstChild("Torso")) then
+                    getgenv().ChildFollowLoop:Disconnect()
+                    return
+                end
+
+                local targetHRP = targetChar.HumanoidRootPart
+                local headNow = targetChar:FindFirstChild("Head")
+                local torso = followCharacter.Torso
+
+                local facePosition
+                if headNow then
+                    facePosition = headNow.Position + headNow.CFrame.LookVector * 0.1 
+                else
+                    facePosition = targetHRP.Position + targetHRP.CFrame.LookVector * 0.1
+                end
+
+                local pos1 = facePosition + targetHRP.CFrame.LookVector * -0.2  
+                local pos2 = facePosition + targetHRP.CFrame.LookVector * 2.9   
+
+                local t = tick() % 1
+                local progress = math.abs(math.sin(t * math.pi))
+                local newPos = pos1:Lerp(pos2, progress)
+
+                torso.BodyPosition.Position = newPos
+                torso.BodyGyro.CFrame = CFrame.lookAt(torso.Position, facePosition)
+            end)
+        end
+    end
+})
+TabBaby:AddButton({
+    Title = "بانج خلفي",
+    Description = "تاكد انك رسبنت الطفل",
+    Callback = function()
+        if not chasingplayer then
+            warn("LOC4T HUB")
+            return
+        end
+
+        local target = chasingplayer
+        local pl = game.Players.LocalPlayer
+
+        if not workspace:FindFirstChild(pl.Name) or not workspace[pl.Name]:FindFirstChild("FollowCharacter") then
+            warn("LOC4T HUB")
+            return
+        end
+
+        if workspace:FindFirstChild(target) and workspace[pl.Name]:FindFirstChild("FollowCharacter") then
+            local followCharacter = workspace[pl.Name].FollowCharacter
+            local targetChar = workspace[target]
+            local hrp = targetChar:FindFirstChild("HumanoidRootPart")
+
+            if not hrp then
+                warn("LOC4T HUB")
+                return
+            end
+
+            local backPos = hrp.Position - hrp.CFrame.LookVector * 0.1 
+
+            followCharacter.Parent = workspace
+            followCharacter:MoveTo(backPos)
+ 
+            if getgenv().ChildFollowLoop then
+                getgenv().ChildFollowLoop:Disconnect()
+            end
+
+            getgenv().ChildFollowLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                if not (targetChar and targetChar:FindFirstChild("HumanoidRootPart") and followCharacter and followCharacter:FindFirstChild("Torso")) then
+                    getgenv().ChildFollowLoop:Disconnect()
+                    return
+                end
+
+                local targetHRP = targetChar.HumanoidRootPart
+                local torso = followCharacter.Torso
+
+                local backPosition = targetHRP.Position - targetHRP.CFrame.LookVector * 0.1 
+
+                local pos1 = backPosition - targetHRP.CFrame.LookVector * 2.8   
+                local pos2 = backPosition - targetHRP.CFrame.LookVector * -0.2  
+
+                local t = tick() % 1
+                local progress = math.abs(math.sin(t * math.pi))
+                local newPos = pos1:Lerp(pos2, progress)
+
+                torso.BodyPosition.Position = newPos
+                torso.BodyGyro.CFrame = CFrame.lookAt(torso.Position, targetHRP.Position)
+            end)
+        end
+    end
+})
+TabBaby:AddSection({ Name = "من تريد تغير البانج او الارسال سوي ارجاع          ", Icon = "rbxassetid://10747384394" })
+TabBaby:AddButton({
+    Name = "ارجاع الطفل",
+    Callback = function()
+        if rawget(getgenv(), "ChildFollowLoop") then
+            getgenv().ChildFollowLoop:Disconnect()
+            getgenv().ChildFollowLoop = nil
+        end
+
+        local args = { [1] = "DeleteFollowCharacter" }
+        pcall(function()
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1Bab1yFollo1w"):FireServer(unpack(args))
+        end)
+
+        local args1 = { [1] = "CharacterFollowSpawnPlayer", [2] = SelectedGender }
+        pcall(function()
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1Bab1yFollo1w"):FireServer(unpack(args1))
+        end)
+    end
+})
+TabBaby:AddSection({ Name = "مشاهدة اللاعب          ", Icon = "rbxassetid://10723346871" })
+TabBaby:AddToggle({
+    Name = "مشاهدة اللاعب",
+    Default = false,
+    Callback = function(Value)
+        local Players = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+        local LocalPlayer = Players.LocalPlayer
+        local Camera = workspace.CurrentCamera
+
+        if Value then
+            if not chasingplayer then
+                warn("LOC4T HUB")
+                return
+            end
+
+            if not rawget(getgenv(), "CameraConnection") then
+                getgenv().CameraConnection = RunService.Heartbeat:Connect(function()
+                    local targetPlayer = Players:FindFirstChild(chasingplayer)
+                    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+                        Camera.CameraSubject = targetPlayer.Character.Humanoid
+                    else
+                        if rawget(getgenv(), "CameraConnection") then
+                            getgenv().CameraConnection:Disconnect()
+                            getgenv().CameraConnection = nil
+                        end
+                        Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") or nil
+                    end
+                end)
+            end
+        else
+            if rawget(getgenv(), "CameraConnection") then
+                getgenv().CameraConnection:Disconnect()
+                getgenv().CameraConnection = nil
+            end
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                Camera.CameraSubject = LocalPlayer.Character.Humanoid
+            end
+        end
+    end
+})
