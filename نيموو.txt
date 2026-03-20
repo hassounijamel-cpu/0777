@@ -5706,3 +5706,64 @@ TabBaby:AddToggle({
         end
     end
 })
+
+local Tab11 = Window:MakeTab({"سكربتات", "scroll"})
+Tab11:AddButton({
+    Name = "سكربت مؤثرات vip ",
+    Description = "تضهر للكل",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Gazer-Ha/Gaze-stuff/refs/heads/main/Fe%20Particle%20Giver"))()
+    end
+})
+
+Tab11:AddButton({
+    Name = "R4D",
+    Description = "سكربت مابي فايده",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-R4D-Leak-12773"))()
+    end
+})
+
+
+
+Tab11:AddButton({
+    Name = "سكربت صملة",
+    Description = "vr7",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP"))()
+    end
+})
+
+local Section = Tab11:AddSection({"سكربتات تفيدكم"})
+
+Tab11:AddButton({
+    Name = "حضن",
+    Description = "تفيد اذا عندك حبيبة و تريد تحظنها(كسمك خنت ثقة اهلك/ج)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/martinng5/martin/refs/heads/main/martin.lua.txt"))()
+    end
+})
+
+Tab11:AddButton({
+    Name = "زر هيج خليته المهم شلونكم",
+    Description = "احبك من اخوانه نيمار",
+    Callback = function()
+        
+    end
+})
+
+Tab11:AddButton({
+    Name = "جلغ",
+    Description = "اضرب بل لعبة و بل حقيقة شتصير بعد",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/YZoglOyJ/raw"))()
+    end
+})
+
+Tab11:AddButton({
+    Name = "Cartola",
+    Description = "سكربت جيمباسات",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Davi999z/Cartola-Hub/refs/heads/main/Protected_4364260427894834.lua.txt"))()
+    end
+})
