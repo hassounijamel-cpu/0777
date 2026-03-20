@@ -555,7 +555,7 @@ TabAll:AddToggle({
     end
 })
 
-local MyTab = Window:MakeTab({ Title = "V5 | كل الأنظمة", Icon = "rbxassetid://10734910187" })
+local MyTab = Window:MakeTab({ Title = "التلوينات", Icon = "rbxassetid://10734910187" })
 
 --================ الخدمات =================--
 local RS = game:GetService("ReplicatedStorage")
