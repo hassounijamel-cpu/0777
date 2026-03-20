@@ -2045,7 +2045,7 @@ Tab4:AddButton({
     end
 })
 
-local SkyboxTab = Window:MakeTab({ Title = "SKYBOX", Icon = "rbxassetid://10709805838" })
+local SkyboxTab = Window:MakeTab({ Title = "SKYBOX", Icon = "rbxassetid://13364900349" })
 
 local skyboxEnabled = false
 local skyboxTrack = nil
