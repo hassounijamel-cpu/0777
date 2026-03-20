@@ -554,3 +554,412 @@ TabAll:AddToggle({
         enabledKids=v
     end
 })
+
+local MyTab = Window:MakeTab({ Title = "V5 | كل الأنظمة", Icon = "rbxassetid://10734910187" })
+
+--================ الخدمات =================--
+local RS = game:GetService("ReplicatedStorage")
+local RSvc = game:GetService("RunService")
+local Plrs = game:GetService("Players")
+local LP = Plrs.LocalPlayer
+
+--================ التلوين (الاسم + البايو) =================--
+MyTab:AddSection({ Name = "نظام تلوين متطور", Icon = "rbxassetid://10709782758" })
+
+local ColorRemote = RS:WaitForChild("RE"):WaitForChild("1RPNam1eColo1r")
+
+local timeTick = 0
+local colorSpeed = 2 
+local enableNameColor = false
+local enableBioColor = false
+local fastName = false
+local fastBio = false
+
+RSvc.RenderStepped:Connect(function(dt)
+	timeTick += dt
+	local spd = fastName and 20 or colorSpeed
+
+	local r = math.sin(timeTick * spd) * 0.5 + 0.5
+	local g = math.sin(timeTick * spd + 2) * 0.5 + 0.5
+	local b = math.sin(timeTick * spd + 4) * 0.5 + 0.5
+
+	local clr = Color3.new(r, g, b)
+
+	if enableNameColor or fastName then
+		ColorRemote:FireServer("PickingRPNameColor", clr)
+	end
+	if enableBioColor or fastBio then
+		ColorRemote:FireServer("PickingRPBioColor", clr)
+	end
+end)
+
+MyTab:AddSlider({
+	Name = "سرعة اللون",
+	Min = 0.1,
+	Max = 500,
+	Default = 2,
+	Increment = 0.1,
+	Callback = function(v)
+		colorSpeed = v
+	end
+})
+
+MyTab:AddToggle({
+	Name = "تشغيل لون الاسم",
+	Callback = function(v)
+		enableNameColor = v
+	end
+})
+
+MyTab:AddToggle({
+	Name = "تشغيل لون البايو",
+	Callback = function(v)
+		enableBioColor = v
+	end
+})
+
+--================ الكتابة المتحركة =================--
+MyTab:AddSection({ Name = "نظام الكتابة المتحركة", Icon = "rbxassetid://10723345088" })
+
+local TextRemote = RS:WaitForChild("RE"):WaitForChild("1RPNam1eTex1t")
+
+local myBio, myName = "", ""
+
+MyTab:AddTextBox({
+	Name = "اكتب البايو",
+	Callback = function(v)
+		myBio = v
+	end
+})
+
+MyTab:AddTextBox({
+	Name = "اكتب الاسم",
+	Callback = function(v)
+		myName = v
+	end
+})
+
+local function TextEffect(typeName, getText, reverse, state)
+	task.spawn(function()
+		while state() do
+			local txt = getText()
+			if txt ~= "" then
+				for i = 1, #txt do
+					if not state() then return end
+					TextRemote:FireServer(typeName, string.sub(txt, 1, i))
+					task.wait(0.08)
+				end
+				if reverse then
+					for i = #txt, 1, -1 do
+						if not state() then return end
+						TextRemote:FireServer(typeName, string.sub(txt, 1, i))
+						task.wait(0.08)
+					end
+				end
+			else
+				task.wait(0.2)
+			end
+		end
+	end)
+end
+
+local bioLoop, bioReverse, nameLoop, nameReverse = false,false,false,false
+
+MyTab:AddToggle({
+	Name = "تأثير بايو",
+	Callback = function(v)
+		bioLoop = v
+		if v then
+			TextEffect("RolePlayBio", function() return myBio end, false, function() return bioLoop end)
+		end
+	end
+})
+
+MyTab:AddToggle({
+	Name = "تأثير بايو عكسي",
+	Callback = function(v)
+		bioReverse = v
+		if v then
+			TextEffect("RolePlayBio", function() return myBio end, true, function() return bioReverse end)
+		end
+	end
+})
+
+MyTab:AddToggle({
+	Name = "تأثير اسم",
+	Callback = function(v)
+		nameLoop = v
+		if v then
+			TextEffect("RolePlayName", function() return myName end, false, function() return nameLoop end)
+		end
+	end
+})
+
+MyTab:AddToggle({
+	Name = "تأثير اسم عكسي",
+	Callback = function(v)
+		nameReverse = v
+		if v then
+			TextEffect("RolePlayName", function() return myName end, true, function() return nameReverse end)
+		end
+	end
+})
+
+--================ سبام الاسم =================--
+MyTab:AddSection({ Name = "سبام الاسماء", Icon = "rbxassetid://10734933966" })
+
+local spamActive = false
+local spamDelay = 1
+local list = {"","","","",""}
+
+for i=1,5 do
+	MyTab:AddTextBox({
+		Name = "اسم "..i,
+		Callback = function(v) list[i]=v end
+	})
+end
+
+MyTab:AddSlider({
+	Name="سرعة السبام",
+	Min=1,Max=100,Default=5,
+	Callback=function(v) spamDelay=v end
+})
+
+MyTab:AddToggle({
+	Name="تشغيل السبام",
+	Callback=function(v)
+		spamActive=v
+		if v then
+			task.spawn(function()
+				while spamActive do
+					for _,n in ipairs(list) do
+						if not spamActive then break end
+						if n~="" then
+							TextRemote:FireServer("RolePlayName",n)
+							task.wait(1/spamDelay)
+						end
+					end
+				end
+			end)
+		end
+	end
+})
+
+--================ سبام البايو =================--
+MyTab:AddSection({ Name = "سبام البايو", Icon = "rbxassetid://10734933966" })
+
+local bioSpam=false
+local bioList={"","","","",""}
+local bioSpeed=1
+
+for i=1,5 do
+	MyTab:AddTextBox({
+		Name="بايو "..i,
+		Callback=function(v) bioList[i]=v end
+	})
+end
+
+MyTab:AddSlider({
+	Name="سرعة البايو",
+	Min=1,Max=100,Default=5,
+	Callback=function(v) bioSpeed=v end
+})
+
+MyTab:AddToggle({
+	Name="تشغيل سبام البايو",
+	Callback=function(v)
+		bioSpam=v
+		if v then
+			task.spawn(function()
+				while bioSpam do
+					for _,b in ipairs(bioList) do
+						if not bioSpam then break end
+						if b~="" then
+							TextRemote:FireServer("RolePlayBio",b)
+							task.wait(1/bioSpeed)
+						end
+					end
+				end
+			end)
+		end
+	end
+})
+
+--================ تلوين الأدوات =================--
+MyTab:AddSection({ Name = "تلوين الأدوات", Icon = "rbxassetid://10734950309" })
+
+local RemoteFolder = RS:WaitForChild("RE")
+local activeToolColor=false
+local selectedTool="BabyRattle"
+
+local ToolList={
+["رول الطلاء"]="PaintRoller",
+["روج"]="Lipstick",
+["قوس"]="Bow",
+["مسجل"]="Boombox",
+["حافظة"]="Thermos",
+["حلو"]="Donut",
+["فرشة حصان"]="HorseBrush",
+["عصي مضيئة"]="GlowingBatons",
+["ميكرفون"]="Megaphone",
+["شمعة"]="Candle",
+["شعلة"]="GuardTorch",
+["لعبة"]="BabyRattle"
+}
+
+MyTab:AddDropdown({
+	Name="اختيار الأداة",
+	Options={"رول الطلاء","روج","قوس","مسجل","حافظة","حلو","فرشة حصان","عصي مضيئة","ميكرفون","شمعة","شعلة","لعبة"},
+	Default="لعبة",
+	Callback=function(v)
+		selectedTool=ToolList[v]
+	end
+})
+
+local function holdTool(name)
+	local char=LP.Character or LP.CharacterAdded:Wait()
+	local hum=char:WaitForChild("Humanoid")
+	local tool=LP.Backpack:WaitForChild(name,2)
+	if tool then
+		tool.Parent=char
+		hum:EquipTool(tool)
+	end
+	return tool
+end
+
+local function rainbow(t)
+	return Color3.fromHSV(t%1,1,1)
+end
+
+MyTab:AddToggle({
+	Name="تشغيل تلوين الأداة",
+	Callback=function(v)
+		activeToolColor=v
+		if not v then return end
+
+		task.spawn(function()
+			RemoteFolder:WaitForChild("1Clea1rTool1s"):FireServer("ClearAllTools")
+			task.wait(0.2)
+
+			RemoteFolder:WaitForChild("1Too1l"):InvokeServer("PickingTools",selectedTool)
+			task.wait(0.3)
+
+			local tool=holdTool(selectedTool)
+			if not tool then return end
+
+			local colorEvent=
+				LP.PlayerGui:WaitForChild("ToolGui")
+				:WaitForChild("ToolSettings")
+				:WaitForChild("Settings")
+				:WaitForChild("PropsColor")
+				:WaitForChild("SetColor")
+
+			local hue=0
+			local current=rainbow(0)
+
+			local conn
+			conn=RSvc.RenderStepped:Connect(function(dt)
+				if not activeToolColor then conn:Disconnect() return end
+				hue+=dt*0.3
+				local target=rainbow(hue)
+				current=current:Lerp(target,dt*5)
+				colorEvent:FireServer(current)
+			end)
+		end)
+	end
+})
+
+--================ تلوين الشعر =================--
+MyTab:AddSection({ Name="تلوين الشعر", Icon="rbxassetid://10734939942" })
+
+local hairActive=false
+local hairList={
+	Color3.new(1,1,0),Color3.new(0,0,1),Color3.new(1,0,1),Color3.new(1,1,1),
+	Color3.new(0,1,0),Color3.new(0.5,0,1),Color3.new(1,0.6,0),Color3.new(0,1,1)
+}
+
+MyTab:AddToggle({
+	Name="تشغيل تلوين الشعر",
+	Callback=function(v)
+		hairActive=v
+		if v then
+			task.spawn(function()
+				local i=1
+				while hairActive do
+					RS:WaitForChild("RE"):WaitForChild("1Max1y"):FireServer("ChangeHairColor2",hairList[i])
+					task.wait(0.1)
+					i=i%#hairList+1
+				end
+			end)
+		end
+	end
+})
+
+--================ تلوين الجسم =================--
+MyTab:AddSection({ Name="تلوين الجسم", Icon="rbxassetid://10709782758" })
+
+local BodyRemote=RS:WaitForChild("Remotes"):WaitForChild("ChangeBodyColor")
+
+local bodyColors={
+"Pastel brown","Pastel yellow","Pastel blue","Pastel green","Pastel pink",
+"Really red","Bright orange","Bright blue","Bright violet","Bright green",
+"Bright yellow","White","Black","Dark stone grey"
+}
+
+local bodyActive=false
+
+MyTab:AddToggle({
+	Name="تشغيل تلوين الجسم",
+	Callback=function(v)
+		bodyActive=v
+		if v then
+			task.spawn(function()
+				while bodyActive do
+					for _,c in ipairs(bodyColors) do
+						if not bodyActive then break end
+						BodyRemote:FireServer(c)
+						task.wait(0.3)
+					end
+				end
+			end)
+		end
+	end
+})
+
+--================ تلوين الدراجة =================--
+MyTab:AddSection({ Name="تلوين الدراجة", Icon="rbxassetid://10734950309" })
+
+local speedRGB=1
+
+MyTab:AddSlider({
+	Name="سرعة RGB",
+	Min=1,Max=5,Default=3,
+	Callback=function(v) speedRGB=v end
+})
+
+local function getRGB(spd)
+	local h=(tick()*spd%5)/5
+	return Color3.fromHSV(h,1,1)
+end
+
+local function send(eventName,args)
+	local ev=RS:FindFirstChild("RE")
+	if ev and ev:FindFirstChild(eventName) then
+		pcall(function()
+			ev[eventName]:FireServer(unpack(args))
+		end)
+	end
+end
+
+MyTab:AddToggle({
+	Name="تلوين الدراجة / السكوتر",
+	Callback=function(v)
+		getgenv().bikeRGB=v
+		task.spawn(function()
+			while getgenv().bikeRGB do
+				send("1Player1sCa1r",{"NoMotorColor",getRGB(speedRGB)})
+				task.wait(0.1)
+			end
+		end)
+	end
+})
