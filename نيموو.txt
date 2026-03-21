@@ -5707,63 +5707,475 @@ TabBaby:AddToggle({
     end
 })
 
-local Tab11 = Window:MakeTab({"سكربتات", "scroll"})
-Tab11:AddButton({
-    Name = "سكربت مؤثرات vip ",
-    Description = "تضهر للكل",
+local BatTab = Window:MakeTab({"البيوت", "rbxassetid://10709782939"})
+BatTab:AddSection({ Name = "تخريب البيوت          ", Icon = "rbxassetid://10709782939" })
+local SelectHouse = nil
+local NoclipDoor = nil
+
+local function getHouseList()
+    local houseTable = {}
+    local lots = workspace:FindFirstChild("001_Lots")
+    if lots then
+        for _, House in ipairs(lots:GetChildren()) do
+            if House.Name ~= "For Sale" and House:IsA("Model") then
+                table.insert(houseTable, House.Name)
+            end
+        end
+    end
+    return houseTable
+end
+
+pcall(function()
+    BatTab:AddDropdown({
+        Name = "اختيار البيت",
+        Options = getHouseList(),
+        Default = "...",
+        Callback = function(Value)
+            SelectHouse = Value
+            if NoclipDoor then
+                NoclipDoor:Set(false)
+            end
+            print("neymar: " .. tostring(Value))
+        end
+    })
+end)
+
+local function DropdownHouseUpdate()
+    local houseTable = getHouseList()
+    print("neymar HUB:", #houseTable)
+    pcall(function()
+        BatTab:ClearDropdown("اختيار البيت") 
+        BatTab:AddDropdown({
+            Name = "اختيار البيت",
+            Options = houseTable,
+            Default = "...",
+            Callback = function(Value)
+                SelectHouse = Value
+                if NoclipDoor then
+                    NoclipDoor:Set(false)
+                end
+            end
+        })
+    end)
+end
+
+pcall(DropdownHouseUpdate)
+
+pcall(function()
+    BatTab:AddButton({
+        Name = "تحديث قائمة البيوت",
+        Callback = function()
+            print("neymar HUB")
+            pcall(DropdownHouseUpdate)
+        end
+    })
+end)
+pcall(function()
+    BatTab:AddButton({
+        Name = "الانتقال الى البيت",
+        Callback = function()
+            local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+            if House and game.Players.LocalPlayer.Character then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(House.WorldPivot.Position)
+            else
+                print("neymar: " .. tostring(SelectHouse))
+            end
+        end
+    })
+end)
+pcall(function()
+    BatTab:AddButton({
+        Name = "الانتقال الى الخزنة",
+        Callback = function()
+            local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+            if House and House:FindFirstChild("HousePickedByPlayer") and game.Players.LocalPlayer.Character then
+                local safe = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_Safe")
+                if safe then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safe.WorldPivot.Position)
+                else
+                    print("neymar: " .. tostring(SelectHouse))
+                end
+            else
+                print("neymar: " .. tostring(SelectHouse))
+            end
+        end
+    })
+end)
+pcall(function()
+    NoclipDoor = BatTab:AddToggle({
+        Name = "اختراق باب المنزل",
+        Description = "",
+        Default = false,
+        Callback = function(Value)
+            pcall(function()
+                local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+                if House and House:FindFirstChild("HousePickedByPlayer") then
+                    local housepickedbyplayer = House.HousePickedByPlayer
+                    local doors = housepickedbyplayer.HouseModel:FindFirstChild("001_HouseDoors")
+                    if doors and doors:FindFirstChild("HouseDoorFront") then
+                        for _, Base in ipairs(doors.HouseDoorFront:GetChildren()) do
+                            if Base:IsA("BasePart") then
+                                Base.CanCollide = not Value
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    })
+end)
+
+pcall(function()
+    BatTab:AddToggle({
+        Name = "سبام جرس",
+        Description = "",
+        Default = false,
+        Callback = function(Value)
+            getgenv().ChaosHubAutoSpawnDoorbellValue = Value
+            spawn(function()
+                while getgenv().ChaosHubAutoSpawnDoorbellValue do
+                    local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+                    if House and House:FindFirstChild("HousePickedByPlayer") then
+                        local doorbell = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_DoorBell")
+                        if doorbell and doorbell:FindFirstChild("TouchBell") then
+                            pcall(function()
+                                fireclickdetector(doorbell.TouchBell.ClickDetector)
+                            end)
+                        end
+                    end
+                    task.wait(0.5)
+                end
+            end)
+        end
+    })
+end)
+
+pcall(function()
+    BatTab:AddToggle({
+        Name = "سبام طرق الباب",
+        Description = "",
+        Default = false,
+        Callback = function(Value)
+            getgenv().ChaosHubAutoSpawnDoorValue = Value
+            spawn(function()
+                while getgenv().ChaosHubAutoSpawnDoorValue do
+                    local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+                    if House and House:FindFirstChild("HousePickedByPlayer") then
+                        local doors = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_HouseDoors")
+                        if doors and doors:FindFirstChild("HouseDoorFront") and doors.HouseDoorFront:FindFirstChild("Knock") then
+                            pcall(function()
+                                fireclickdetector(doors.HouseDoorFront.Knock.TouchBell.ClickDetector)
+                            end)
+                        end
+                    end
+                    task.wait(0.5)
+                end
+            end)
+        end
+    })
+end)
+pcall(function()
+BatTab:AddSection({ Name = "مضادات الباند          ", Icon = "rbxassetid://10709782939" })
+end)
+BatTab:AddButton({
+    Name = "ازالة الباند",
+    Description = "شيل اي باند من كل المنازل",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Gazer-Ha/Gaze-stuff/refs/heads/main/Fe%20Particle%20Giver"))()
+        local successCount = 0
+        local failCount = 0
+        for i = 1, 37 do
+            local bannedBlockName = "BannedBlock" .. i
+            local bannedBlock = Workspace:FindFirstChild(bannedBlockName, true)
+            if bannedBlock then
+                local success, _ = pcall(function()
+                    bannedBlock:Destroy()
+                end)
+                if success then
+                    successCount = successCount + 1
+                else
+                    failCount = failCount + 1
+                end
+            end
+        end
+        for _, house in pairs(Workspace:GetDescendants()) do
+            if house.Name:match("BannedBlock") then
+                local success, _ = pcall(function()
+                    house:Destroy()
+                end)
+                if success then
+                    successCount = successCount + 1
+                else
+                    failCount = failCount + 1
+                end
+            end
+        end
+        if successCount > 0 then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "neymar HUB",
+                Text = "تم ازالة الحضر من" .. successCount .. " بيت!",
+                Duration = 5
+            })
+        end
+        if failCount > 0 then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "neymar HUB",
+                Text = "فشل من ازالة الباند من " .. failCount .. " بيت.",
+                Duration = 5
+            })
+        end
+        if successCount == 0 and failCount == 0 then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "neymar HUB",
+                Text = "مافي باند عشان ينحذف",
+                Duration = 5
+            })
+        end
+    end
+})
+BatTab:AddToggle({
+    Name = "ازالة الباند",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoRemoveBan = Value
+        while getgenv().AutoRemoveBan and task.wait(1) do
+            local rs = game:GetService("ReplicatedStorage")           
+            for _, obj in pairs(rs:GetChildren()) do
+                if obj:IsA("Folder") and string.lower(obj.Name):match("bannedlot") then
+                    obj:Destroy()
+                    print("تم ازالة الباند: " .. obj.Name)
+                end
+            end
+        end
+    end    
+})
+BatTab:AddSection({ Name = "اعدادات البيت          ", Icon = "rbxassetid://10734950020" })
+local function getRainbowColor(t)
+    return Color3.fromHSV((t % 1), 1, 1)
+end
+
+local rainbowHouseActive = false
+
+BatTab:AddToggle({
+    Name = "تلوين المنزل",
+    Description = "تلوين تلقائي للبيت",
+    Default = false,
+    Callback = function(state)
+        rainbowHouseActive = state
+        if state then
+            task.spawn(function()
+                local time = 0
+                while rainbowHouseActive do
+                    local color = getRainbowColor(time)
+                    local args = {
+                        [1] = "ColorPickHouse",
+                        [2] = color
+                    }
+                    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                    local event = ReplicatedStorage:FindFirstChild("RE") and ReplicatedStorage.RE:FindFirstChild("1Player1sHous1e")
+                    if event then
+                        pcall(function()
+                            event:FireServer(unpack(args))
+                        end)
+                    end
+                    task.wait(0.1)
+                    time = time + 0.02
+                end
+            end)
+        end
     end
 })
 
-Tab11:AddButton({
-    Name = "R4D",
-    Description = "سكربت مابي فايده",
+BatTab:AddButton({
+    Name = "حرق المنزل دون جيمباس",
     Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-R4D-Leak-12773"))()
+        local args = {
+            [1] = "PlayerWantsFireOnFirePassNotShowingAnyone"
+        }
+        game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(args))
     end
 })
 
+local loopTravaPorta = false
+local Remote = game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e")
 
+local function portaLoop()
+    spawn(function()
+        while loopTravaPorta do
+            local args = { [1] = "LockDoors" }
+            Remote:FireServer(unpack(args))
+            task.wait(1.5) 
+        end
+    end)
+end
 
-Tab11:AddButton({
-    Name = "سكربت صملة",
-    Description = "vr7",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP"))()
+BatTab:AddToggle({
+    Name = "سبام فتح قفل الابواب",
+    Default = false,
+    Callback = function(state)
+        loopTravaPorta = state
+        if state then
+            portaLoop()
+        end
+    end
+})
+local RE = game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e")
+
+local runningGarage = false
+BatTab:AddToggle({
+    Name = "سبام الكراج",
+    Default = false,
+    Callback = function(state)
+        runningGarage = state
+        if state then
+            spawn(function()
+                while runningGarage do
+                    RE:FireServer("GarageDoor")
+                    wait(0.5)
+                end
+            end)
+            warn("تم تشغيل سبام الكراج")
+        else
+            warn("تم إيقاف سبام الكراج")
+        end
     end
 })
 
-local Section = Tab11:AddSection({"سكربتات تفيدكم"})
-
-Tab11:AddButton({
-    Name = "حضن",
-    Description = "تفيد اذا عندك حبيبة و تريد تحظنها(كسمك خنت ثقة اهلك/ج)",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/martinng5/martin/refs/heads/main/martin.lua.txt"))()
+local runningCurtains = false
+BatTab:AddToggle({
+    Name = "سبام الستائر",
+    Default = false,
+    Callback = function(state)
+        runningCurtains = state
+        if state then
+            spawn(function()
+                while runningCurtains do
+                    RE:FireServer("Curtains")
+                    wait(0.5)
+                end
+            end)
+            warn("تم تشغيل سبام الستائر")
+        else
+            warn("تم إيقاف سبام الستائر")
+        end
     end
 })
 
-Tab11:AddButton({
-    Name = "زر هيج خليته المهم شلونكم",
-    Description = "احبك من اخوانه نيمار",
-    Callback = function()
-        
+local runningBaby = false
+BatTab:AddToggle({
+    Name = "سبام خيارات الطفل",
+    Default = false,
+    Callback = function(state)
+        runningBaby = state
+        if state then
+            spawn(function()
+                while runningBaby do
+                    RE:FireServer("BabyOptionYes")
+                    wait(0.5)
+                    RE:FireServer("BabyOptionNo")
+                    wait(0.5)
+                end
+            end)
+            warn("تم تشغيل سبام الطفل")
+        else
+            warn("تم إيقاف سبام الطفل")
+        end
+    end
+})
+BatTab:AddSection({ Name = "تنقل للبيوت          ", Icon = "rbxassetid://10709818399" })
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local player = Players.LocalPlayer
+
+local casas = {
+    ["بيت 1"] = Vector3.new(260.29, 4.37, 209.32),
+    ["بيت 2"] = Vector3.new(234.49, 4.37, 228.00),
+    ["بيت 3"] = Vector3.new(262.79, 21.37, 210.84),
+    ["بيت 4"] = Vector3.new(229.60, 21.37, 225.40),
+    ["بيت 5"] = Vector3.new(173.44, 21.37, 228.11),
+    ["بيت 6"] = Vector3.new(-43, 21, -137),
+    ["بيت 7"] = Vector3.new(-40, 36, -137),
+    ["بيت 11"] = Vector3.new(-21, 40, 436),
+    ["بيت 12"] = Vector3.new(155, 37, 433),
+    ["بيت 13"] = Vector3.new(255, 35, 431),
+    ["بيت 14"] = Vector3.new(254, 38, 394),
+    ["بيت 15"] = Vector3.new(148, 39, 387),
+    ["بيت 16"] = Vector3.new(-17, 42, 395),
+    ["بيت 17"] = Vector3.new(-189, 37, -247),
+    ["بيت 18"] = Vector3.new(-354, 37, -244),
+    ["بيت 19"] = Vector3.new(-456, 36, -245),
+    ["بيت 20"] = Vector3.new(-453, 38, -295),
+    ["بيت 21"] = Vector3.new(-356, 38, -294),
+    ["بيت 22"] = Vector3.new(-187, 37, -295),
+    ["بيت 23"] = Vector3.new(-410, 68, -447),
+    ["بيت 24"] = Vector3.new(-348, 69, -496),
+    ["بيت 28"] = Vector3.new(-103, 12, 1087),
+    ["بيت 29"] = Vector3.new(-730, 6, 808),
+    ["بيت 30"] = Vector3.new(-245, 7, 822),
+    ["بيت 31"] = Vector3.new(639, 76, -361),
+    ["بيت 32"] = Vector3.new(-908, 6, -361),
+    ["بيت 33"] = Vector3.new(-111, 70, -417),
+    ["بيت 34"] = Vector3.new(230, 38, 569),
+    ["بيت 35"] = Vector3.new(-30, 13, 2209)
+}
+
+local function teleportWithTween(targetPosition, nomeLocal)
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    if targetPosition and humanoidRootPart then
+        local goal = {CFrame = CFrame.new(targetPosition)}
+        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+        local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+        tween:Play()
+        tween.Completed:Connect(function()
+            StarterGui:SetCore("SendNotification", {
+                Title = "neyamr HUB",
+                Text = " تم نقلك إلى: " .. nomeLocal,
+                Icon = "rbxthumb://type=Asset&id=93386023056221&w=150&h=150",
+                Duration = 3
+            })
+        end)
+    end
+end
+
+local houseNames = {}
+for name, _ in pairs(casas) do
+    table.insert(houseNames, name)
+end
+
+table.sort(houseNames, function(a, b)
+    local numA = tonumber(a:match("%d+")) or 0
+    local numB = tonumber(b:match("%d+")) or 0
+    return numA < numB
+end)
+
+local selectedHouse = nil
+
+BatTab:AddDropdown({
+    Name = "اختيار البيت",
+    Options = houseNames,
+    Default = "",
+    Callback = function(house)
+        selectedHouse = house
     end
 })
 
-Tab11:AddButton({
-    Name = "جلغ",
-    Description = "اضرب بل لعبة و بل حقيقة شتصير بعد",
+BatTab:AddButton({
+    Name = "الانتقال إلى البيت",
     Callback = function()
-        loadstring(game:HttpGet("https://pastefy.app/YZoglOyJ/raw"))()
-    end
-})
-
-Tab11:AddButton({
-    Name = "Cartola",
-    Description = "سكربت جيمباسات",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Davi999z/Cartola-Hub/refs/heads/main/Protected_4364260427894834.lua.txt"))()
+        if not selectedHouse then
+            StarterGui:SetCore("SendNotification", {
+                Title = "neymar HUB",
+                Text = "اختار بيت",
+                Icon = "",
+                Duration = 3
+            })
+            return
+        end
+        local targetPos = casas[selectedHouse]
+        if targetPos then
+            teleportWithTween(targetPos, selectedHouse)
+        end
     end
 })
