@@ -372,7 +372,7 @@ TabFE:AddButton({
 
 -- زر احتياطي
 TabFE:AddButton({
-    Name = "اذا ما صار البس هذا cOOldude452311",
+    Name = "ما ما كدرت تلبس السكن اضغط هنا عشان تنسخ السكن",
     Callback = function()
         setclipboard("cOOldude452311")
     end
@@ -471,13 +471,13 @@ TabFE:AddButton({
 })
 
 -- =========================
--- تاب أشياء تفيدك
+-- تاب أشياء تفيدك (كامل)
 -- =========================
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local RS = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
 
 local TabUtil = Window:MakeTab({
   IsMobile = false,
@@ -486,19 +486,121 @@ local TabUtil = Window:MakeTab({
 })
 
 -- =========================
--- مضاد بانق
+-- مضاد بانق (قوي 🔥)
 -- =========================
-local enabledAntiBang = false
+local character, humanoid, root
+local invisible = false
+local savedParts = {}
+local enabled = false
 
-local function setInvisible(v)
-    enabledAntiBang = v
+local Remotes = RS:WaitForChild("Remotes")
+local resetRemote = Remotes:WaitForChild("ResetCharacterAppearance")
+
+local function cacheParts()
+    savedParts = {}
+    for _,v in ipairs(character:GetDescendants()) do
+        if v:IsA("BasePart") and v.Transparency < 1 then
+            table.insert(savedParts, v)
+        end
+    end
+end
+
+local function setInvisible(state)
+    invisible = state
+    for _,p in ipairs(savedParts) do
+        p.Transparency = state and 0.5 or 0
+    end
+end
+
+local function onCharacter(char)
+    character = char
+    humanoid = char:WaitForChild("Humanoid")
+    root = char:WaitForChild("HumanoidRootPart")
+    cacheParts()
+    setInvisible(false)
+end
+
+LocalPlayer.CharacterAdded:Connect(onCharacter)
+if LocalPlayer.Character then
+    onCharacter(LocalPlayer.Character)
+end
+
+RunService.Heartbeat:Connect(function()
+    if invisible and root and humanoid then
+        local oldCF = root.CFrame
+        local oldOffset = humanoid.CameraOffset
+
+        local newCF = oldCF * CFrame.new(0, -200000, 0)
+        local rel = newCF:ToObjectSpace(CFrame.new(oldCF.Position)).Position
+
+        root.CFrame = newCF
+        humanoid.CameraOffset = rel
+
+        RunService.RenderStepped:Wait()
+
+        root.CFrame = oldCF
+        humanoid.CameraOffset = oldOffset
+    end
+end)
+
+local function getAccSet(desc)
+    local t = {}
+    for _,a in ipairs(desc:GetAccessories(true)) do
+        if a.AssetId then t[a.AssetId] = true end
+    end
+    return t
+end
+
+local function countMatch(a,b)
+    local c = 0
+    for id in pairs(a) do
+        if b[id] then c += 1 end
+    end
+    return c
+end
+
+local function tweenTo(plr)
+    local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local thrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and thrp then
+        TweenService:Create(hrp, TweenInfo.new(0.2), {CFrame = thrp.CFrame}):Play()
+    end
+end
+
+local function watch(plr)
+    if plr == LocalPlayer then return end
+    task.spawn(function()
+        while enabled and plr.Parent do
+            if plr.Character and LocalPlayer.Character then
+                local lhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+                local thum = plr.Character:FindFirstChildOfClass("Humanoid")
+                if lhum and thum then
+                    local lset = getAccSet(lhum:GetAppliedDescription())
+                    local tset = getAccSet(thum:GetAppliedDescription())
+                    if countMatch(lset, tset) >= 3 then
+                        resetRemote:FireServer()
+                        task.wait(0.1)
+                        tweenTo(plr)
+                    end
+                end
+            end
+            task.wait(0.2)
+        end
+    end)
 end
 
 TabUtil:AddToggle({
     Name = "مضاد بانق",
     Default = false,
     Callback = function(v)
+        enabled = v
         setInvisible(v)
+
+        if v then
+            for _,plr in pairs(Players:GetPlayers()) do
+                watch(plr)
+            end
+        end
     end
 })
 
@@ -531,24 +633,19 @@ TabUtil:AddToggle({
 -- =========================
 -- شادر
 -- =========================
-local shaderEnabled = false
-local colorCorrection
+local shader
 
 TabUtil:AddToggle({
     Name = "شادر",
     Default = false,
     Callback = function(v)
-        shaderEnabled = v
-        
         if v then
-            colorCorrection = Instance.new("ColorCorrectionEffect")
-            colorCorrection.Parent = game.Lighting
-            colorCorrection.Saturation = 0.3
-            colorCorrection.Contrast = 0.2
+            shader = Instance.new("ColorCorrectionEffect")
+            shader.Parent = game.Lighting
+            shader.Saturation = 0.3
+            shader.Contrast = 0.2
         else
-            if colorCorrection then
-                colorCorrection:Destroy()
-            end
+            if shader then shader:Destroy() end
         end
     end
 })
@@ -561,18 +658,18 @@ TabUtil:AddToggle({
     Default = false,
     Callback = function(v)
         if v then
-            game:GetService("Lighting").GlobalShadows = false
-            game:GetService("Lighting").FogEnd = 1e10
+            game.Lighting.GlobalShadows = false
+            game.Lighting.FogEnd = 1e10
             settings().Rendering.QualityLevel = "Level01"
         else
-            game:GetService("Lighting").GlobalShadows = true
+            game.Lighting.GlobalShadows = true
             settings().Rendering.QualityLevel = "Automatic"
         end
     end
 })
 
 -- =========================
--- مضاد طرد (بسيط)
+-- مضاد طرد
 -- =========================
 TabUtil:AddToggle({
     Name = "مضاد طرد",
@@ -587,7 +684,7 @@ TabUtil:AddToggle({
 })
 
 -- =========================
--- مضاد طرد v2 (قوي)
+-- مضاد طرد v2
 -- =========================
 TabUtil:AddToggle({
     Name = "مضاد طرد v2",
@@ -597,11 +694,8 @@ TabUtil:AddToggle({
             loadstring([[
                 local Players = game:GetService("Players")
                 local lp = Players.LocalPlayer
-
                 lp.Kick = function() return nil end
                 game.Shutdown = function() return nil end
-
-                print("Anti Kick v2 Enabled")
             ]])()
         end
     end
