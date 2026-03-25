@@ -1,0 +1,608 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+-- to see more features the docs: https://github.com/as6cd0/splibv2/blob/main/splibDocumentation.md
+
+local splib = loadstring(game:HttpGet("https://raw.githubusercontent.com/as6cd0/SP_Hub/refs/heads/main/splibv2"))()
+
+local Window = splib:MakeWindow({
+ Name = "Neymar Hub Library v2",
+ SubTitle = "made by: Neymar hub",
+ HidePremium = false,
+ SaveConfig = true,
+ Toggle = true,
+ Setting = true,
+ RainbowMainFrame = false,
+ RainbowTitle = false,
+ RainbowSubTitle = false,
+ ToggleIcon = "rbxassetid://83114982417764",
+ CloseCallback = true
+})
+
+-- =========================
+-- تاب حقوق
+-- =========================
+local Tab = Window:MakeTab({
+  IsMobile = false,
+  Name = "حقوق",
+  Icon = "rbxassetid://4483345998"
+})
+
+Tab:AddButton({
+    Name = "يوزري: Kdkjdnde",
+    Callback = function()
+        setclipboard("Kdkjdnde")
+    end
+})
+
+Tab:AddButton({
+    Name = "الاسم: ItsTheNeymar",
+    Callback = function()
+        setclipboard("ItsTheNeymar")
+    end
+})
+
+Tab:AddButton({
+    Name = "حسابي تيك: WLV27",
+    Callback = function()
+        setclipboard("WLV27")
+    end
+})
+
+-- =========================
+-- تاب تخريب
+-- =========================
+local SpamMessage = "مرحبا"
+local SpamSpeed = 1
+local Spamming = false
+
+local Tab2 = Window:MakeTab({
+  IsMobile = false,
+  Name = "تخريب",
+  Icon = "rbxassetid://13364900349"
+})
+
+Tab2:AddTextbox({
+    Name = "ضع رسالتك هنا",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(Value)
+        SpamMessage = Value
+    end
+})
+
+Tab2:AddTextbox({
+    Name = "ضع السرعه",
+    Default = "1",
+    TextDisappear = false,
+    Callback = function(Value)
+        SpamSpeed = tonumber(Value) or 1
+    end
+})
+
+Tab2:AddToggle({
+    Name = "ابدأ سبام شات",
+    Default = false,
+    Callback = function(Value)
+        Spamming = Value
+        
+        while Spamming do
+            task.wait(SpamSpeed)
+            pcall(function()
+                game:GetService("ReplicatedStorage")
+                :WaitForChild("DefaultChatSystemChatEvents")
+                :WaitForChild("SayMessageRequest")
+                :FireServer(SpamMessage, "All")
+            end)
+        end
+    end
+})
+
+-- زر ضرب 18
+Tab2:AddButton({
+    Name = "ضرب 18",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/YZoglOyJ/raw"))()
+    end
+})
+
+-- =========================
+-- تاب اللاعب
+-- =========================
+local Player = game:GetService("Players").LocalPlayer
+
+local WalkSpeedValue = 16
+local JumpPowerValue = 50
+
+local PlayerTab = Window:MakeTab({
+  IsMobile = false,
+  Name = "اللاعب",
+  Icon = "rbxassetid://7734053495"
+})
+
+-- خانة السرعة
+PlayerTab:AddTextbox({
+    Name = "سرعة اللاعب (1 - 999)",
+    Default = "16",
+    TextDisappear = false,
+    Callback = function(Value)
+        WalkSpeedValue = tonumber(Value) or 16
+    end
+})
+
+-- توغل السرعة
+PlayerTab:AddToggle({
+    Name = "تشغيل السرعة",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            Player.Character.Humanoid.WalkSpeed = WalkSpeedValue
+        else
+            Player.Character.Humanoid.WalkSpeed = 16
+        end
+    end
+})
+
+-- خانة النط
+PlayerTab:AddTextbox({
+    Name = "ارتفاع النط (1 - 999)",
+    Default = "50",
+    TextDisappear = false,
+    Callback = function(Value)
+        JumpPowerValue = tonumber(Value) or 50
+    end
+})
+
+-- توغل النط
+PlayerTab:AddToggle({
+    Name = "تشغيل النط",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            Player.Character.Humanoid.JumpPower = JumpPowerValue
+        else
+            Player.Character.Humanoid.JumpPower = 50
+        end
+    end
+})
+
+-- زر اختفاء
+PlayerTab:AddButton({
+    Name = "سكربت اختفاء",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Awesome-Invisible-man-133400"))()
+    end
+})
+
+-- زر قفل الشاشه
+PlayerTab:AddButton({
+    Name = "قفل الشاشه",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Sector9922/SECTOR-SHIFT-LOCK/main/SECTOR%20SHIFT%20LOCK"))()
+    end
+})
+
+-- =========================
+-- تاب الاستهداف فقط
+-- =========================
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+local TargetName = nil
+local TeleportLoop = false
+
+local TargetTab = Window:MakeTab({
+  IsMobile = false,
+  Name = "استهداف",
+  Icon = "rbxassetid://7733960981"
+})
+
+-- كتابة 3 احرف
+TargetTab:AddTextbox({
+    Name = "ضع ثلاث احرف من اسم اللاعب",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(Value)
+        Value = string.lower(Value)
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= LocalPlayer then
+                if string.sub(string.lower(plr.Name),1,#Value) == Value then
+                    TargetName = plr.Name
+                    print("تم اختيار:", TargetName)
+                end
+            end
+        end
+    end
+})
+
+-- تجيب اللاعب
+local function getTarget()
+    if TargetName then
+        return Players:FindFirstChild(TargetName)
+    end
+end
+
+-- =========================
+-- بانج (رايح جاي 🔥)
+-- =========================
+local function createBangToggle(name, yOffset, faceBang)
+    local active = false
+    local connection
+    local flip = false
+
+    TargetTab:AddToggle({
+        Name = name,
+        Default = false,
+        Callback = function(Value)
+            active = Value
+
+            local char = LocalPlayer.Character
+            local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+            if not humanoid then return end
+
+            if Value then
+                humanoid.PlatformStand = true
+
+                connection = RunService.Heartbeat:Connect(function()
+                    if active then
+                        local target = getTarget()
+                        if target and target.Character and target.Character:FindFirstChild("Head") then
+                            local head = target.Character.Head
+                            if char.PrimaryPart then
+                                
+                                flip = not flip
+                                local offset = flip and 2 or -2
+
+                                if faceBang then
+                                    char:SetPrimaryPartCFrame(
+                                        head.CFrame 
+                                        * CFrame.new(0, 1, offset)
+                                        * CFrame.Angles(0, math.rad(180), 0)
+                                    )
+                                else
+                                    char:SetPrimaryPartCFrame(
+                                        head.CFrame 
+                                        * CFrame.new(0, yOffset, offset)
+                                    )
+                                end
+                            end
+                        end
+                    end
+                end)
+            else
+                humanoid.PlatformStand = false
+                if connection then
+                    connection:Disconnect()
+                end
+            end
+        end
+    })
+end
+
+createBangToggle("Bang", -1, false)
+createBangToggle("Bang 2", -1.5, false)
+createBangToggle("الوجه Bang", 1, true)
+createBangToggle("الوجه Bang 2", 1, true)
+
+-- =========================
+-- مراقبة اللاعب
+-- =========================
+TargetTab:AddToggle({
+    Name = "مراقبه اللاعب",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            local target = getTarget()
+            if target and target.Character then
+                workspace.CurrentCamera.CameraSubject = target.Character:FindFirstChildOfClass("Humanoid")
+            end
+        else
+            if LocalPlayer.Character then
+                workspace.CurrentCamera.CameraSubject = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            end
+        end
+    end
+})
+
+-- =========================
+-- انتقال عند اللاعب
+-- =========================
+TargetTab:AddButton({
+    Name = "انتقال عند اللاعب",
+    Callback = function()
+        local target = getTarget()
+        if target and target.Character and target.Character.PrimaryPart then
+            LocalPlayer.Character:SetPrimaryPartCFrame(
+                target.Character.PrimaryPart.CFrame + Vector3.new(0,2,0)
+            )
+        end
+    end
+})
+
+-- =========================
+-- تكرار الانتقال
+-- =========================
+TargetTab:AddToggle({
+    Name = "تكرار الانتقال عند اللاعب",
+    Default = false,
+    Callback = function(Value)
+        TeleportLoop = Value
+        
+        while TeleportLoop do
+            task.wait(1)
+            local target = getTarget()
+            if target and target.Character and target.Character.PrimaryPart then
+                LocalPlayer.Character:SetPrimaryPartCFrame(
+                    target.Character.PrimaryPart.CFrame + Vector3.new(0,2,0)
+                )
+            end
+        end
+    end
+})
+
+-- =========================
+-- تاب FE (بدون واجهة قديمة)
+-- =========================
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local TabFE = Window:MakeTab({
+  IsMobile = false,
+  Name = "fe",
+  Icon = "rbxassetid://7734053495"
+})
+
+-- =========================
+-- زر لبس سكاي بوكس
+-- =========================
+TabFE:AddButton({
+    Name = "البس لبس skybox",
+    Callback = function()
+        local args = {
+            ";char me cOOldude452311"
+        }
+        game:GetService("ReplicatedStorage")
+        :WaitForChild("HDAdminHDClient")
+        :WaitForChild("Signals")
+        :WaitForChild("RequestCommand")
+        :InvokeServer(unpack(args))
+    end
+})
+
+-- زر احتياطي
+TabFE:AddButton({
+    Name = "اذا ما صار البس هذا cOOldude452311",
+    Callback = function()
+        setclipboard("cOOldude452311")
+    end
+})
+
+-- =========================
+-- نظام الأنيميشن (Toggle)
+-- =========================
+local function play(id, speed)
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if not hum then return end
+    
+    local anim = Instance.new("Animation")
+    anim.AnimationId = id
+    
+    local track = hum:LoadAnimation(anim)
+    track.Looped = true
+    
+    if speed then
+        track:AdjustSpeed(speed)
+    end
+    
+    track:Play()
+    return track
+end
+
+local tracks = {}
+
+-- skybox1
+TabFE:AddToggle({
+    Name = "V1 / skybox1",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            tracks.V1 = play("rbxassetid://70883871260184")
+        else
+            if tracks.V1 then
+                tracks.V1:Stop()
+                tracks.V1 = nil
+            end
+        end
+    end
+})
+
+-- skybox2 (سريع)
+TabFE:AddToggle({
+    Name = "V2 / skybox2",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            tracks.V2 = play("rbxassetid://70883871260184", 5)
+        else
+            if tracks.V2 then
+                tracks.V2:Stop()
+                tracks.V2 = nil
+            end
+        end
+    end
+})
+
+-- skybox3
+TabFE:AddToggle({
+    Name = "V4 / skybox3",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            tracks.V4 = play("rbxassetid://70883871260184")
+        else
+            if tracks.V4 then
+                tracks.V4:Stop()
+                tracks.V4 = nil
+            end
+        end
+    end
+})
+
+-- =========================
+-- زر R6
+-- =========================
+TabFE:AddButton({
+    Name = "يخلي جسمك R6",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/Neymar1/refs/heads/main/R6%20anims.lua"))()
+    end
+})
+
+-- =========================
+-- زر معلومات
+-- =========================
+TabFE:AddButton({
+    Name = "فيه أشياء اكثر قريبا راح تنضاف",
+    Callback = function()
+        print("قريبا...")
+    end
+})
+
+-- =========================
+-- تاب أشياء تفيدك
+-- =========================
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local RS = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local TabUtil = Window:MakeTab({
+  IsMobile = false,
+  Name = "أشياء تفيدك",
+  Icon = "rbxassetid://10734951847"
+})
+
+-- =========================
+-- مضاد بانق
+-- =========================
+local enabledAntiBang = false
+
+local function setInvisible(v)
+    enabledAntiBang = v
+end
+
+TabUtil:AddToggle({
+    Name = "مضاد بانق",
+    Default = false,
+    Callback = function(v)
+        setInvisible(v)
+    end
+})
+
+-- =========================
+-- مضاد فلنق
+-- =========================
+local AntiFling = false
+
+TabUtil:AddToggle({
+    Name = "مضاد فلنق",
+    Default = false,
+    Callback = function(v)
+        AntiFling = v
+        
+        if v then
+            RunService.Stepped:Connect(function()
+                if AntiFling and LocalPlayer.Character then
+                    for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.Velocity = Vector3.new(0,0,0)
+                            part.RotVelocity = Vector3.new(0,0,0)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+
+-- =========================
+-- شادر
+-- =========================
+local shaderEnabled = false
+local colorCorrection
+
+TabUtil:AddToggle({
+    Name = "شادر",
+    Default = false,
+    Callback = function(v)
+        shaderEnabled = v
+        
+        if v then
+            colorCorrection = Instance.new("ColorCorrectionEffect")
+            colorCorrection.Parent = game.Lighting
+            colorCorrection.Saturation = 0.3
+            colorCorrection.Contrast = 0.2
+        else
+            if colorCorrection then
+                colorCorrection:Destroy()
+            end
+        end
+    end
+})
+
+-- =========================
+-- تقليل لاق
+-- =========================
+TabUtil:AddToggle({
+    Name = "تقليل لاق",
+    Default = false,
+    Callback = function(v)
+        if v then
+            game:GetService("Lighting").GlobalShadows = false
+            game:GetService("Lighting").FogEnd = 1e10
+            settings().Rendering.QualityLevel = "Level01"
+        else
+            game:GetService("Lighting").GlobalShadows = true
+            settings().Rendering.QualityLevel = "Automatic"
+        end
+    end
+})
+
+-- =========================
+-- مضاد طرد (بسيط)
+-- =========================
+TabUtil:AddToggle({
+    Name = "مضاد طرد",
+    Default = false,
+    Callback = function(v)
+        if v then
+            pcall(function()
+                LocalPlayer.Kick = function() return nil end
+            end)
+        end
+    end
+})
+
+-- =========================
+-- مضاد طرد v2 (قوي)
+-- =========================
+TabUtil:AddToggle({
+    Name = "مضاد طرد v2",
+    Default = false,
+    Callback = function(v)
+        if v then
+            loadstring([[
+                local Players = game:GetService("Players")
+                local lp = Players.LocalPlayer
+
+                lp.Kick = function() return nil end
+                game.Shutdown = function() return nil end
+
+                print("Anti Kick v2 Enabled")
+            ]])()
+        end
+    end
+})
