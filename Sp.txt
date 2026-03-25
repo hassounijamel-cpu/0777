@@ -471,7 +471,7 @@ TabFE:AddButton({
 })
 
 -- =========================
--- تاب أشياء تفيدك (كامل)
+-- تاب أشياء تفيدك (SP صحيح)
 -- =========================
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -480,13 +480,13 @@ local TweenService = game:GetService("TweenService")
 local RS = game:GetService("ReplicatedStorage")
 
 local TabUtil = Window:MakeTab({
-  IsMobile = false,
-  Name = "أشياء تفيدك",
-  Icon = "rbxassetid://10734951847"
+    Name = "أشياء تفيدك",
+    Icon = "rbxassetid://10734951847",
+    IsMobile = false
 })
 
 -- =========================
--- مضاد بانق (قوي 🔥)
+-- مضاد بانق (كودك كامل)
 -- =========================
 local character, humanoid, root
 local invisible = false
@@ -517,7 +517,6 @@ local function onCharacter(char)
     humanoid = char:WaitForChild("Humanoid")
     root = char:WaitForChild("HumanoidRootPart")
     cacheParts()
-    setInvisible(false)
 end
 
 LocalPlayer.CharacterAdded:Connect(onCharacter)
@@ -528,18 +527,9 @@ end
 RunService.Heartbeat:Connect(function()
     if invisible and root and humanoid then
         local oldCF = root.CFrame
-        local oldOffset = humanoid.CameraOffset
-
-        local newCF = oldCF * CFrame.new(0, -200000, 0)
-        local rel = newCF:ToObjectSpace(CFrame.new(oldCF.Position)).Position
-
-        root.CFrame = newCF
-        humanoid.CameraOffset = rel
-
+        root.CFrame = oldCF * CFrame.new(0, -200000, 0)
         RunService.RenderStepped:Wait()
-
         root.CFrame = oldCF
-        humanoid.CameraOffset = oldOffset
     end
 end)
 
@@ -609,24 +599,22 @@ TabUtil:AddToggle({
 -- =========================
 local AntiFling = false
 
+RunService.Stepped:Connect(function()
+    if AntiFling and LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Velocity = Vector3.new(0,0,0)
+                part.RotVelocity = Vector3.new(0,0,0)
+            end
+        end
+    end
+end)
+
 TabUtil:AddToggle({
     Name = "مضاد فلنق",
     Default = false,
     Callback = function(v)
         AntiFling = v
-        
-        if v then
-            RunService.Stepped:Connect(function()
-                if AntiFling and LocalPlayer.Character then
-                    for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.Velocity = Vector3.new(0,0,0)
-                            part.RotVelocity = Vector3.new(0,0,0)
-                        end
-                    end
-                end
-            end)
-        end
     end
 })
 
@@ -659,7 +647,6 @@ TabUtil:AddToggle({
     Callback = function(v)
         if v then
             game.Lighting.GlobalShadows = false
-            game.Lighting.FogEnd = 1e10
             settings().Rendering.QualityLevel = "Level01"
         else
             game.Lighting.GlobalShadows = true
@@ -691,12 +678,10 @@ TabUtil:AddToggle({
     Default = false,
     Callback = function(v)
         if v then
-            loadstring([[
-                local Players = game:GetService("Players")
-                local lp = Players.LocalPlayer
-                lp.Kick = function() return nil end
+            pcall(function()
+                LocalPlayer.Kick = function() return nil end
                 game.Shutdown = function() return nil end
-            ]])()
+            end)
         end
     end
 })
