@@ -45,144 +45,123 @@ Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://99353410676626", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
--- =========================
--- تاب الاعدادات (ألوان كثيرة + رينبو)
--- =========================
+--[[
+تاب الإعدادات - تغيير لون الواجهة
+Redz V5
+--]]
+
+-- افترض أن عندك Library و Window معرفين مسبقاً
 local SettingsTab = Window:MakeTab({
-    Name = "الاعدادات",
-    Icon = "rbxassetid://4483345998"
+    Name = "الإعدادات",
+    Icon = "rbxassetid://6034818370", -- أي أيقون تحب
+    PremiumOnly = false
 })
 
-local RunService = game:GetService("RunService")
+-- متغير اللون المختار
+local SelectedColor = Color3.fromRGB(255, 200, 180)
 
-local SelectedColor = Color3.fromRGB(255,0,0)
-local RainbowEnabled = false
+-- جميع الألوان الممكنة
+local Colors = {
+    {Name = "وردي فاتح", Color = Color3.fromRGB(255, 200, 180)},
+    {Name = "وردي غامق", Color = Color3.fromRGB(200, 100, 120)},
+    {Name = "أحمر", Color = Color3.fromRGB(255, 0, 0)},
+    {Name = "أصفر", Color = Color3.fromRGB(255, 255, 0)},
+    {Name = "أخضر", Color = Color3.fromRGB(0, 255, 0)},
+    {Name = "أزرق", Color = Color3.fromRGB(0, 150, 255)},
+    {Name = "بنفسجي", Color = Color3.fromRGB(150, 0, 255)},
+    {Name = "برتقالي", Color = Color3.fromRGB(255, 120, 0)},
+    {Name = "فيروزي", Color = Color3.fromRGB(0, 255, 255)},
+    {Name = "أبيض", Color = Color3.fromRGB(255, 255, 255)},
+    {Name = "أسود", Color = Color3.fromRGB(0, 0, 0)},
+    {Name = "ذهبي", Color = Color3.fromRGB(255, 215, 0)},
+    {Name = "فضي", Color = Color3.fromRGB(192,192,192)}
+}
 
--- =========================
--- قائمة ألوان ضخمة 🔥
--- =========================
-SettingsTab:AddDropdown({
+-- Dropdown لاختيار اللون
+local ColorDropdown = SettingsTab:AddDropdown({
     Name = "اختر اللون",
-    Options = {
-        "احمر","اخضر","ازرق","اصفر","برتقالي","بنفسجي","وردي",
-        "ابيض","اسود","رمادي","رمادي غامق",
-        "ازرق فاتح","اخضر فاتح","وردي فاتح","اصفر فاتح",
-        "ازرق غامق","اخضر غامق","احمر غامق",
-        "ذهبي","فضي","برونزي","بني","بيج",
-        "نيون اخضر","نيون ازرق","نيون وردي","نيون اصفر","نيون بنفسجي",
-        "سماوي","فيروزي","تركواز","ازرق بحري",
-        "كرزي","عنابي","لافندر","موف","كحلي","ليموني","نعناعي","خوخي"
-    },
-    Default = "احمر",
-    Callback = function(v)
-        local colors = {
-            ["احمر"] = Color3.fromRGB(255,0,0),
-            ["اخضر"] = Color3.fromRGB(0,255,0),
-            ["ازرق"] = Color3.fromRGB(0,0,255),
-            ["اصفر"] = Color3.fromRGB(255,255,0),
-            ["برتقالي"] = Color3.fromRGB(255,140,0),
-            ["بنفسجي"] = Color3.fromRGB(170,0,255),
-            ["وردي"] = Color3.fromRGB(255,0,150),
-
-            ["ابيض"] = Color3.fromRGB(255,255,255),
-            ["اسود"] = Color3.fromRGB(0,0,0),
-            ["رمادي"] = Color3.fromRGB(150,150,150),
-            ["رمادي غامق"] = Color3.fromRGB(50,50,50),
-
-            ["ازرق فاتح"] = Color3.fromRGB(100,180,255),
-            ["اخضر فاتح"] = Color3.fromRGB(100,255,100),
-            ["وردي فاتح"] = Color3.fromRGB(255,150,200),
-            ["اصفر فاتح"] = Color3.fromRGB(255,255,150),
-
-            ["ازرق غامق"] = Color3.fromRGB(0,0,139),
-            ["اخضر غامق"] = Color3.fromRGB(0,100,0),
-            ["احمر غامق"] = Color3.fromRGB(139,0,0),
-
-            ["ذهبي"] = Color3.fromRGB(255,215,0),
-            ["فضي"] = Color3.fromRGB(192,192,192),
-            ["برونزي"] = Color3.fromRGB(205,127,50),
-            ["بني"] = Color3.fromRGB(139,69,19),
-            ["بيج"] = Color3.fromRGB(245,245,220),
-
-            ["نيون اخضر"] = Color3.fromRGB(57,255,20),
-            ["نيون ازرق"] = Color3.fromRGB(0,255,255),
-            ["نيون وردي"] = Color3.fromRGB(255,20,147),
-            ["نيون اصفر"] = Color3.fromRGB(255,255,102),
-            ["نيون بنفسجي"] = Color3.fromRGB(204,0,255),
-
-            ["سماوي"] = Color3.fromRGB(0,200,255),
-            ["فيروزي"] = Color3.fromRGB(64,224,208),
-            ["تركواز"] = Color3.fromRGB(0,255,200),
-            ["ازرق بحري"] = Color3.fromRGB(0,105,148),
-
-            ["كرزي"] = Color3.fromRGB(222,49,99),
-            ["عنابي"] = Color3.fromRGB(128,0,32),
-            ["لافندر"] = Color3.fromRGB(230,230,250),
-            ["موف"] = Color3.fromRGB(224,176,255),
-            ["كحلي"] = Color3.fromRGB(0,0,80),
-            ["ليموني"] = Color3.fromRGB(180,255,0),
-            ["نعناعي"] = Color3.fromRGB(152,255,152),
-            ["خوخي"] = Color3.fromRGB(255,218,185)
-        }
-
-        SelectedColor = colors[v]
+    Default = "وردي فاتح",
+    Options = (function()
+        local t = {}
+        for _,c in ipairs(Colors) do
+            table.insert(t, c.Name)
+        end
+        return t
+    end)(),
+    Callback = function(Value)
+        for _,c in ipairs(Colors) do
+            if c.Name == Value then
+                SelectedColor = c.Color
+            end
+        end
     end
 })
 
--- =========================
--- تفعيل اللون
--- =========================
+-- زر لتفعيل اللون المختار
 SettingsTab:AddButton({
     Name = "تفعيل اللون",
     Callback = function()
-        RainbowEnabled = false
+        -- تحديث الثيم ديناميكياً
+        local function UpdateThemeColor(color)
+            redzlib.Themes.Darker["Color Hub 1"] = ColorSequence.new({
+                ColorSequenceKeypoint.new(0.00, color),
+                ColorSequenceKeypoint.new(0.50, color),
+                ColorSequenceKeypoint.new(1.00, color)
+            })
+            redzlib.Themes.Darker["Color Hub 2"] = color
+            redzlib.Themes.Darker["Color Stroke"] = color
+            redzlib.Themes.Darker["Color Theme"] = color
+            redzlib.Themes.Darker["Color Text"] = color
+            redzlib.Themes.Darker["Color Dark Text"] = color
 
-        redzlib.Themes.Darker["Color Hub 1"] = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, SelectedColor),
-            ColorSequenceKeypoint.new(1, SelectedColor)
-        })
-
-        if Library and Library.Update then
-            Library:Update()
-        elseif Window and Window.Refresh then
-            Window:Refresh()
-        end
-    end
-})
-
--- =========================
--- 🌈 رينبو
--- =========================
-SettingsTab:AddToggle({
-    Name = "Rainbow UI 🌈",
-    Default = false,
-    Callback = function(v)
-        RainbowEnabled = v
-
-        if v then
-            task.spawn(function()
-                while RainbowEnabled do
-                    local t = tick()
-
-                    local c1 = Color3.fromHSV((t % 5)/5,1,1)
-                    local c2 = Color3.fromHSV(((t+1)%5)/5,1,1)
-                    local c3 = Color3.fromHSV(((t+2)%5)/5,1,1)
-
-                    redzlib.Themes.Darker["Color Hub 1"] = ColorSequence.new({
-                        ColorSequenceKeypoint.new(0, c1),
-                        ColorSequenceKeypoint.new(0.5, c2),
-                        ColorSequenceKeypoint.new(1, c3)
-                    })
-
-                    if Library and Library.Update then
-                        Library:Update()
-                    elseif Window and Window.Refresh then
-                        Window:Refresh()
-                    end
-
-                    task.wait(0.1)
+            -- تحديث فورياً
+            pcall(function()
+                if Library and Library.SetTheme then
+                    Library:SetTheme("Darker")
+                end
+                if Library and Library.Update then
+                    Library:Update()
+                end
+                if Window and Window.Refresh then
+                    Window:Refresh()
                 end
             end)
         end
+
+        UpdateThemeColor(SelectedColor)
+    end
+})
+
+-- 🌈 توغل رينبو متحرك
+local RainbowEnabled = false
+SettingsTab:AddToggle({
+    Name = "رينبو",
+    Default = false,
+    Callback = function(Value)
+        RainbowEnabled = Value
+        spawn(function()
+            while RainbowEnabled do
+                for i = 0, 1, 0.01 do
+                    local color = Color3.fromHSV(i, 1, 1)
+                    pcall(function()
+                        redzlib.Themes.Darker["Color Hub 1"] = ColorSequence.new({
+                            ColorSequenceKeypoint.new(0, color),
+                            ColorSequenceKeypoint.new(1, color)
+                        })
+                        redzlib.Themes.Darker["Color Hub 2"] = color
+                        redzlib.Themes.Darker["Color Stroke"] = color
+                        redzlib.Themes.Darker["Color Theme"] = color
+                        redzlib.Themes.Darker["Color Text"] = color
+                        redzlib.Themes.Darker["Color Dark Text"] = color
+
+                        if Library and Library.SetTheme then Library:SetTheme("Darker") end
+                        if Library and Library.Update then Library:Update() end
+                        if Window and Window.Refresh then Window:Refresh() end
+                    end)
+                    task.wait(0.05)
+                    if not RainbowEnabled then break end
+                end
+            end
+        end)
     end
 })
