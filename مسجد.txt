@@ -1,0 +1,1242 @@
+-- Mosque \ by x9d x wxa \ Dont hating muslims
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RequestCommand = ReplicatedStorage:WaitForChild("HDAdminHDClient").Signals.RequestCommandSilent
+
+RequestCommand:InvokeServer(";btools me")
+task.wait(1.2)
+RequestCommand:InvokeServer(";punish all")
+task.wait(0.2) 
+
+
+local player = game.Players.LocalPlayer
+local backpack = player.Backpack
+local character = player.Character
+
+local function getF3X()
+    for _, v in ipairs(backpack:GetChildren()) do
+        if v:FindFirstChild("SyncAPI") then return v end
+    end
+    for _, v in ipairs(character:GetChildren()) do
+        if v:FindFirstChild("SyncAPI") then return v end
+    end
+    return nil
+end
+
+local f3x = getF3X()
+if not f3x then
+    warn("F3X / SyncAPI not found – please equip btools and try again")
+    return
+end
+
+local syncapi = f3x.SyncAPI
+local endpoint = syncapi.ServerEndpoint
+
+
+for _, v in ipairs(workspace:GetDescendants()) do
+    if v:IsA("BasePart") or v:IsA("UnionOperation") or v:IsA("MeshPart") then
+        task.spawn(function()
+            pcall(function()
+                endpoint:InvokeServer("Remove", {v})
+            end)
+        end)
+    end
+end
+task.wait(1)
+
+
+local function syncAnchor(ep, part, anchored)
+    ep:InvokeServer("SyncAnchor", {{Part = part, Anchored = anchored}})
+end
+
+local function batchResize(ep, tbl) if #tbl>0 then ep:InvokeServer("SyncResize", tbl) end end
+local function batchMaterial(ep, tbl) if #tbl>0 then ep:InvokeServer("SyncMaterial", tbl) end end
+local function batchColor(ep, tbl) if #tbl>0 then ep:InvokeServer("SyncColor", tbl) end end
+local function batchCollision(ep, tbl) if #tbl>0 then ep:InvokeServer("SyncCollision", tbl) end end
+
+
+local function createMesh(ep, part) ep:InvokeServer("CreateMeshes", {{Part = part}}) end
+local function syncMeshType(ep, part, t) ep:InvokeServer("SyncMesh", {{Part = part, MeshType = t}}) end
+local function syncMeshScale(ep, part, s) ep:InvokeServer("SyncMesh", {{Part = part, Scale = s}}) end
+local function syncMeshOffset(ep, part, o) ep:InvokeServer("SyncMesh", {{Part = part, Offset = o}}) end
+local function syncMeshId(ep, part, id) ep:InvokeServer("SyncMesh", {{Part = part, MeshId = id}}) end
+local function syncMeshTexture(ep, part, tex) ep:InvokeServer("SyncMesh", {{Part = part, TextureId = tex}}) end
+local function syncMeshVertexColor(ep, part, col) ep:InvokeServer("SyncMesh", {{Part = part, VertexColor = col}}) end
+
+
+local function createDecal(ep, part, face) ep:InvokeServer("CreateTextures", {{Part = part, Face = face, TextureType = "Decal"}}) end
+local function setDecalTexture(ep, part, tex, face) ep:InvokeServer("SyncTexture", {{Part = part, Face = face, TextureType = "Decal", Texture = tex}}) end
+local function setDecalTransparency(ep, part, trans, face) ep:InvokeServer("SyncTexture", {{Part = part, Face = face, TextureType = "Decal", Transparency = trans}}) end
+
+
+local function createTexture(ep, part, face) ep:InvokeServer("CreateTextures", {{Part = part, Face = face, TextureType = "Texture"}}) end
+local function setTextureId(ep, part, tex, face) ep:InvokeServer("SyncTexture", {{Part = part, Face = face, TextureType = "Texture", Texture = tex}}) end
+local function setTextureTransparency(ep, part, trans, face) ep:InvokeServer("SyncTexture", {{Part = part, Face = face, TextureType = "Texture", Transparency = trans}}) end
+
+
+local function createLight(ep, part, lightType)
+    ep:InvokeServer("CreateLights", {{Part = part, LightType = lightType}})
+end
+local function syncLight(ep, part, lightType, brightness, range, color, shadows, face, angle)
+    local params = {Part = part, LightType = lightType}
+    if brightness ~= nil then params.Brightness = brightness end
+    if range ~= nil then params.Range = range end
+    if color then params.Color = color end
+    if shadows ~= nil then params.Shadows = shadows end
+    if face and face ~= "nil" then params.Face = face end
+    if angle ~= nil then params.Angle = angle end
+    ep:InvokeServer("SyncLighting", {params})
+end
+
+
+local function createGroup(ep, groupType, parent, items) return ep:InvokeServer("CreateGroup", groupType, parent, items) end
+local function setName(ep, obj, name) ep:InvokeServer("SetName", {obj}, name) end
+local function setLocked(ep, part, lock) ep:InvokeServer("SetLocked", {part}, lock) end
+
+
+local P = {}
+
+local partData = {
+    [6] = {anchored = true},
+    [7] = {anchored = true},
+    [8] = {anchored = true},
+    [9] = {anchored = true},
+    [10] = {anchored = true},
+    [11] = {anchored = true},
+    [12] = {anchored = true},
+    [13] = {anchored = true},
+    [14] = {anchored = true},
+    [15] = {anchored = true},
+    [16] = {anchored = true},
+    [17] = {anchored = true},
+    [18] = {anchored = true},
+    [20] = {anchored = true},
+    [21] = {anchored = true},
+    [22] = {anchored = true},
+    [23] = {anchored = true},
+    [24] = {anchored = true},
+    [25] = {anchored = true},
+    [26] = {anchored = true},
+    [27] = {anchored = true},
+    [28] = {anchored = true},
+    [29] = {anchored = true},
+    [30] = {anchored = true},
+    [31] = {anchored = true},
+    [32] = {anchored = true},
+    [34] = {anchored = true},
+    [35] = {anchored = true},
+    [36] = {anchored = true},
+    [37] = {anchored = true},
+    [38] = {anchored = true},
+    [39] = {anchored = true},
+    [40] = {anchored = true},
+    [41] = {anchored = true},
+    [42] = {anchored = true},
+    [43] = {anchored = true},
+    [44] = {anchored = true},
+    [45] = {anchored = true},
+    [46] = {anchored = true},
+    [48] = {anchored = true},
+    [49] = {anchored = true},
+    [50] = {anchored = true},
+    [51] = {anchored = true},
+    [52] = {anchored = true},
+    [53] = {anchored = true},
+    [54] = {anchored = true},
+    [55] = {anchored = true},
+    [56] = {anchored = true},
+    [57] = {anchored = true},
+    [58] = {anchored = true},
+    [59] = {anchored = true},
+    [60] = {anchored = true},
+    [61] = {anchored = true},
+    [62] = {anchored = true},
+    [63] = {anchored = true},
+    [64] = {anchored = true},
+    [65] = {anchored = true},
+    [66] = {anchored = true},
+    [67] = {anchored = true},
+    [68] = {anchored = true},
+    [69] = {anchored = true},
+    [70] = {anchored = true},
+    [71] = {anchored = true},
+    [72] = {anchored = true},
+    [73] = {anchored = true},
+    [74] = {anchored = true},
+    [75] = {anchored = true},
+    [76] = {anchored = true},
+    [77] = {anchored = true},
+    [78] = {anchored = true},
+    [79] = {anchored = true},
+    [80] = {anchored = true},
+    [81] = {anchored = true},
+    [82] = {anchored = true},
+    [83] = {anchored = true},
+    [84] = {anchored = true},
+    [85] = {anchored = true},
+    [86] = {anchored = true},
+    [87] = {anchored = true},
+    [88] = {anchored = true},
+    [89] = {anchored = true},
+    [90] = {anchored = true},
+    [91] = {anchored = true},
+    [92] = {anchored = true},
+    [93] = {anchored = true},
+    [94] = {anchored = true},
+    [95] = {anchored = true},
+    [96] = {anchored = true},
+    [97] = {anchored = true},
+    [98] = {anchored = true},
+    [100] = {anchored = true},
+    [106] = {anchored = true},
+    [114] = {anchored = true},
+    [115] = {anchored = true},
+    [202] = {anchored = true},
+    [142] = {anchored = true},
+    [260] = {anchored = true},
+    [258] = {anchored = true},
+    [241] = {anchored = true},
+    [172] = {anchored = true},
+    [226] = {anchored = true},
+    [225] = {anchored = true},
+    [222] = {anchored = true},
+    [243] = {anchored = true},
+    [192] = {anchored = true},
+    [256] = {anchored = true},
+    [147] = {anchored = true},
+    [194] = {anchored = true},
+    [193] = {anchored = true},
+    [146] = {anchored = true},
+    [189] = {anchored = true},
+    [144] = {anchored = true},
+    [157] = {anchored = true},
+    [171] = {anchored = true},
+    [174] = {anchored = true},
+    [155] = {anchored = true},
+    [197] = {anchored = true},
+    [224] = {anchored = true},
+    [212] = {anchored = true},
+    [220] = {anchored = true},
+    [130] = {anchored = true},
+    [170] = {anchored = true},
+}
+
+local partDefs = {
+
+    [6] = {shape="Normal", cframe=CFrame.new(-79.16160583496094,-75.76950073242188,82.0251693725586,1,0,0,0,1,0,0,0,1)},
+    [7] = {shape="Normal", cframe=CFrame.new(-78.85659790039062,-99.30950927734375,82.33679962158203,1,0,0,0,1,0,0,0,1)},
+    [8] = {shape="Normal", cframe=CFrame.new(-79.15943908691406,-48.226646423339844,81.9998550415039,1,0,0,0,1,0,0,0,1)},
+    [9] = {shape="Normal", cframe=CFrame.new(-79.06448364257812,-48.829505920410156,84.69017028808594,1,0,0,0,1,0,0,0,1)},
+    [10] = {shape="Cylinder", cframe=CFrame.new(-79.25152587890625,-37.65260314941406,81.88353729248047,0,0,-1,-1,0,0,0,1,0)},
+    [11] = {shape="Normal", cframe=CFrame.new(-79.04701232910156,-48.029483795166016,82.0849380493164,1,0,0,0,1,0,0,0,1)},
+    [12] = {shape="Normal", cframe=CFrame.new(-79.0469970703125,-48.06948471069336,82.04996490478516,1,0,0,0,1,0,0,0,1)},
+    [13] = {shape="Normal", cframe=CFrame.new(-79.06448364257812,-48.82448959350586,79.44999694824219,1,0,0,0,1,0,0,0,1)},
+    [14] = {shape="Ball", cframe=CFrame.new(-79.00642395019531,-45.055198669433594,81.93476104736328,1,0,0,0,1,0,0,0,1)},
+    [15] = {shape="Normal", cframe=CFrame.new(-79.06442260742188,-45.91438293457031,81.95520782470703,1,0,0,0,1,0,0,0,1)},
+    [16] = {shape="Normal", cframe=CFrame.new(-81.7044677734375,-48.759490966796875,82.13518524169922,1,0,0,0,1,0,0,0,1)},
+    [17] = {shape="Normal", cframe=CFrame.new(-76.43452453613281,-48.849510192871094,82.10018157958984,1,0,0,0,1,0,0,0,1)},
+    [18] = {shape="Normal", cframe=CFrame.new(-79.14443969726562,-48.241641998291016,81.99486541748047,1,0,0,0,1,0,0,0,1)},
+    [20] = {shape="Normal", cframe=CFrame.new(-23.826141357421875,-75.76950073242188,82.0251693725586,1,0,0,0,1,0,0,0,1)},
+    [21] = {shape="Normal", cframe=CFrame.new(-23.521133422851562,-99.30950927734375,82.33679962158203,1,0,0,0,1,0,0,0,1)},
+    [22] = {shape="Normal", cframe=CFrame.new(-23.7115478515625,-48.029483795166016,82.0849380493164,1,0,0,0,1,0,0,0,1)},
+    [23] = {shape="Normal", cframe=CFrame.new(-23.729019165039062,-48.82448959350586,79.44999694824219,1,0,0,0,1,0,0,0,1)},
+    [24] = {shape="Normal", cframe=CFrame.new(-21.09906005859375,-48.849510192871094,82.10018157958984,1,0,0,0,1,0,0,0,1)},
+    [25] = {shape="Normal", cframe=CFrame.new(-23.729019165039062,-48.829505920410156,84.69017028808594,1,0,0,0,1,0,0,0,1)},
+    [26] = {shape="Normal", cframe=CFrame.new(-23.711532592773438,-48.06948471069336,82.04996490478516,1,0,0,0,1,0,0,0,1)},
+    [27] = {shape="Normal", cframe=CFrame.new(-23.823974609375,-48.226646423339844,81.9998550415039,1,0,0,0,1,0,0,0,1)},
+    [28] = {shape="Normal", cframe=CFrame.new(-26.369003295898438,-48.759490966796875,82.13518524169922,1,0,0,0,1,0,0,0,1)},
+    [29] = {shape="Normal", cframe=CFrame.new(-23.808975219726562,-48.241641998291016,81.99486541748047,1,0,0,0,1,0,0,0,1)},
+    [30] = {shape="Cylinder", cframe=CFrame.new(-23.916061401367188,-37.65260314941406,81.88353729248047,0,0,-1,-1,0,0,0,1,0)},
+    [31] = {shape="Normal", cframe=CFrame.new(-23.728958129882812,-45.91438293457031,81.95520782470703,1,0,0,0,1,0,0,0,1)},
+    [32] = {shape="Ball", cframe=CFrame.new(-23.67095947265625,-45.055198669433594,81.93476104736328,1,0,0,0,1,0,0,0,1)},
+    [34] = {shape="Normal", cframe=CFrame.new(-79.04701232910156,-48.029483795166016,16.929916381835938,1,0,0,0,1,0,0,0,1)},
+    [35] = {shape="Normal", cframe=CFrame.new(-79.15943908691406,-48.226646423339844,16.8448486328125,1,0,0,0,1,0,0,0,1)},
+    [36] = {shape="Normal", cframe=CFrame.new(-78.85659790039062,-99.30950927734375,17.181777954101562,1,0,0,0,1,0,0,0,1)},
+    [37] = {shape="Normal", cframe=CFrame.new(-79.16160583496094,-75.76950073242188,16.870162963867188,1,0,0,0,1,0,0,0,1)},
+    [38] = {shape="Normal", cframe=CFrame.new(-79.0469970703125,-48.06948471069336,16.894943237304688,1,0,0,0,1,0,0,0,1)},
+    [39] = {shape="Ball", cframe=CFrame.new(-79.00642395019531,-45.055198669433594,16.779739379882812,1,0,0,0,1,0,0,0,1)},
+    [40] = {shape="Normal", cframe=CFrame.new(-76.43452453613281,-48.849510192871094,16.945175170898438,1,0,0,0,1,0,0,0,1)},
+    [41] = {shape="Cylinder", cframe=CFrame.new(-79.25152587890625,-37.65260314941406,16.728515625,0,0,-1,-1,0,0,0,1,0)},
+    [42] = {shape="Normal", cframe=CFrame.new(-79.06448364257812,-48.829505920410156,19.535171508789062,1,0,0,0,1,0,0,0,1)},
+    [43] = {shape="Normal", cframe=CFrame.new(-79.06442260742188,-45.91438293457031,16.800186157226562,1,0,0,0,1,0,0,0,1)},
+    [44] = {shape="Normal", cframe=CFrame.new(-79.06448364257812,-48.82448959350586,14.29498291015625,1,0,0,0,1,0,0,0,1)},
+    [45] = {shape="Normal", cframe=CFrame.new(-81.7044677734375,-48.759490966796875,16.98016357421875,1,0,0,0,1,0,0,0,1)},
+    [46] = {shape="Normal", cframe=CFrame.new(-79.14443969726562,-48.241641998291016,16.839859008789062,1,0,0,0,1,0,0,0,1)},
+    [48] = {shape="Normal", cframe=CFrame.new(-23.606842041015625,-99.30950927734375,17.181777954101562,1,0,0,0,1,0,0,0,1)},
+    [49] = {shape="Normal", cframe=CFrame.new(-23.814727783203125,-48.829505920410156,19.535171508789062,1,0,0,0,1,0,0,0,1)},
+    [50] = {shape="Cylinder", cframe=CFrame.new(-24.00177001953125,-37.65260314941406,16.728515625,0,0,-1,-1,0,0,0,1,0)},
+    [51] = {shape="Ball", cframe=CFrame.new(-23.756668090820312,-45.055198669433594,16.779739379882812,1,0,0,0,1,0,0,0,1)},
+    [52] = {shape="Normal", cframe=CFrame.new(-21.184768676757812,-48.849510192871094,16.945175170898438,1,0,0,0,1,0,0,0,1)},
+    [53] = {shape="Normal", cframe=CFrame.new(-23.911849975585938,-75.76950073242188,16.870162963867188,1,0,0,0,1,0,0,0,1)},
+    [54] = {shape="Normal", cframe=CFrame.new(-23.894683837890625,-48.241641998291016,16.839859008789062,1,0,0,0,1,0,0,0,1)},
+    [55] = {shape="Normal", cframe=CFrame.new(-23.814727783203125,-48.82448959350586,14.29498291015625,1,0,0,0,1,0,0,0,1)},
+    [56] = {shape="Normal", cframe=CFrame.new(-23.797256469726562,-48.029483795166016,16.929916381835938,1,0,0,0,1,0,0,0,1)},
+    [57] = {shape="Normal", cframe=CFrame.new(-23.7972412109375,-48.06948471069336,16.894943237304688,1,0,0,0,1,0,0,0,1)},
+    [58] = {shape="Normal", cframe=CFrame.new(-26.4547119140625,-48.759490966796875,16.98016357421875,1,0,0,0,1,0,0,0,1)},
+    [59] = {shape="Normal", cframe=CFrame.new(-23.909683227539062,-48.226646423339844,16.8448486328125,1,0,0,0,1,0,0,0,1)},
+    [60] = {shape="Normal", cframe=CFrame.new(-23.814666748046875,-45.91438293457031,16.800186157226562,1,0,0,0,1,0,0,0,1)},
+    [61] = {shape="Normal", cframe=CFrame.new(-52.095489501953125,-84.81948852539062,82.53179931640625,1,0,0,0,1,0,0,0,1)},
+    [62] = {shape="Normal", cframe=CFrame.new(-59.04347229003906,-94.87063598632812,83.4095687866211,0.9556800127029419,-0.29440733790397644,0,0.29440733790397644,0.9556800127029419,0,0,0,1)},
+    [63] = {shape="Normal", cframe=CFrame.new(-50.866607666015625,-99.0945053100586,52.48182678222656,1,0,0,0,1,0,0,0,1)},
+    [64] = {shape="Normal", cframe=CFrame.new(-59.246978759765625,-88.89433288574219,83.49459075927734,0.9449185132980347,0.32730573415756226,0,-0.32730573415756226,0.9449185132980347,-0,-0,0,1)},
+    [65] = {shape="Normal", cframe=CFrame.new(-51.17303466796875,-96.0206298828125,83.35458374023438,0.9907578229904175,-0.13564269244670868,0,0.13564269244670868,0.9907578229904175,0,0,0,1)},
+    [66] = {shape="Normal", cframe=CFrame.new(-47.70159912109375,-101.1195068359375,62.3017578125,1,0,0,0,1,0,0,0,1)},
+    [67] = {shape="Normal", cframe=CFrame.new(-27.065902709960938,-89.20951080322266,44.10182189941406,-1.1920928955078125e-07,0,1.0000001192092896,0,1,0,-1.0000001192092896,0,-1.1920928955078125e-07)},
+    [68] = {shape="Normal", cframe=CFrame.new(-45.26557922363281,-90.1177978515625,83.4095687866211,0.9556800127029419,-0.29440733790397644,0,0.29440733790397644,0.9556800127029419,0,0,0,1)},
+    [69] = {shape="Normal", cframe=CFrame.new(-51.58546447753906,-78.43948364257812,43.756744384765625,1,0,0,0,1,0,0,0,1)},
+    [70] = {shape="Normal", cframe=CFrame.new(-51.21659851074219,-90.34950256347656,76.13182067871094,1,0,0,0,1,0,0,0,1)},
+    [71] = {shape="Wedge", cframe=CFrame.new(-51.20536804199219,-80.29448699951172,70.97682189941406,-1,0,0,0,1,0,0,0,-1)},
+    [72] = {shape="Normal", cframe=CFrame.new(-58.77400207519531,-97.63639068603516,82.97959899902344,0.9907578229904175,-0.13564269244670868,0,0.13564269244670868,0.9907578229904175,0,0,0,1)},
+    [73] = {shape="Normal", cframe=CFrame.new(-58.88493347167969,-87.84909057617188,83.49459075927734,0.9449185132980347,0.32730573415756226,0,-0.32730573415756226,0.9449185132980347,-0,-0,0,1)},
+    [74] = {shape="Normal", cframe=CFrame.new(-45.29313659667969,-92.865478515625,83.49459075927734,0.9449185132980347,0.32730573415756226,0,-0.32730573415756226,0.9449185132980347,-0,-0,0,1)},
+    [75] = {shape="Normal", cframe=CFrame.new(-52.17549133300781,-77.13447570800781,66.97674560546875,1,0,0,0,1,0,0,0,1)},
+    [76] = {shape="Normal", cframe=CFrame.new(-52.1693115234375,-90.94781494140625,83.36459350585938,0.9449185132980347,0.32730573415756226,0,-0.32730573415756226,0.9449185132980347,-0,-0,0,1)},
+    [77] = {shape="Normal", cframe=CFrame.new(-58.969970703125,-96.20468139648438,82.97959899902344,0.9907578229904175,-0.13564269244670868,0,0.13564269244670868,0.9907578229904175,0,0,0,1)},
+    [78] = {shape="Normal", cframe=CFrame.new(-51.91552734375,-74.69447326660156,46.01173400878906,1,0,0,0,1,0,0,0,1)},
+    [79] = {shape="Normal", cframe=CFrame.new(-36.2205810546875,-91.05949401855469,82.22679901123047,1,0,0,0,1,0,0,0,1)},
+    [80] = {shape="Normal", cframe=CFrame.new(-52.98455810546875,-86.73451232910156,83.35458374023438,0.9484416246414185,0.31695178151130676,0,-0.31695178151130676,0.9484416246414185,-0,-0,0,1)},
+    [81] = {shape="Normal", cframe=CFrame.new(-44.497467041015625,-94.69517517089844,82.97959899902344,0.9907578229904175,-0.13564269244670868,0,0.13564269244670868,0.9907578229904175,0,0,0,1)},
+    [82] = {shape="Normal", cframe=CFrame.new(-51.17045593261719,-82.01949310302734,77.48680114746094,1,0,0,0,1,0,0,0,1)},
+    [83] = {shape="Normal", cframe=CFrame.new(-27.06787109375,-91.9657211303711,74.22174072265625,-1.1920928955078125e-07,0,1.0000001192092896,0,1,0,-1.0000001192092896,0,-1.1920928955078125e-07)},
+    [84] = {shape="Normal", cframe=CFrame.new(-52.15052795410156,-92.42404174804688,83.35458374023438,0.9556800127029419,-0.29440733790397644,0,0.29440733790397644,0.9556800127029419,0,0,0,1)},
+    [85] = {shape="Normal", cframe=CFrame.new(-45.559783935546875,-93.63529968261719,83.49459075927734,0.9449185132980347,0.32730573415756226,0,-0.32730573415756226,0.9449185132980347,-0,-0,0,1)},
+    [86] = {shape="Normal", cframe=CFrame.new(-44.65583801269531,-95.57782745361328,82.97959899902344,0.9907578229904175,-0.13564269244670868,0,0.13564269244670868,0.9907578229904175,0,0,0,1)},
+    [87] = {shape="Normal", cframe=CFrame.new(-57.5416259765625,-94.39450073242188,75.94682312011719,1,0,0,0,1,0,0,0,1)},
+    [88] = {shape="Normal", cframe=CFrame.new(-32.17051696777344,-77.13447570800781,45.70172119140625,1,0,0,0,1,0,0,0,1)},
+    [89] = {shape="Normal", cframe=CFrame.new(-67.30659484863281,-91.05949401855469,82.22679901123047,1,0,0,0,1,0,0,0,1)},
+    [90] = {shape="Normal", cframe=CFrame.new(-52.02052307128906,-76.39447784423828,45.63671875,1,0,0,0,1,0,0,0,1)},
+    [91] = {shape="Normal", cframe=CFrame.new(-59.77476501464844,-93.99872589111328,83.4095687866211,0.9556800127029419,-0.29440733790397644,0,0.29440733790397644,0.9556800127029419,0,0,0,1)},
+    [92] = {shape="Normal", cframe=CFrame.new(-51.2457275390625,-89.20951080322266,20.50677490234375,-1.1920928955078125e-07,0,1.0000001192092896,0,1,0,-1.0000001192092896,0,-1.1920928955078125e-07)},
+    [93] = {shape="Normal", cframe=CFrame.new(-52.1904296875,-77.13447570800781,24.526718139648438,1,0,0,0,1,0,0,0,1)},
+    [94] = {shape="Normal", cframe=CFrame.new(-72.15040588378906,-77.13447570800781,45.076751708984375,1,0,0,0,1,0,0,0,1)},
+    [95] = {shape="Cylinder", cframe=CFrame.new(-52.167510986328125,-47.47845458984375,45.93663024902344,0,-1,-0,-1,0,-0,0,0,-1)},
+    [96] = {shape="Ball", cframe=CFrame.new(-51.90501403808594,-75.70867919921875,45.32402038574219,1,0,0,0,1,0,0,0,1)},
+    [97] = {shape="Normal", cframe=CFrame.new(-76.0765380859375,-89.20951080322266,44.10182189941406,-1.1920928955078125e-07,0,1.0000001192092896,0,1,0,-1.0000001192092896,0,-1.1920928955078125e-07)},
+    [98] = {shape="Normal", cframe=CFrame.new(-76.0765380859375,-90.70951080322266,74.22174072265625,-1.1920928955078125e-07,0,1.0000001192092896,0,1,0,-1.0000001192092896,0,-1.1920928955078125e-07)},
+    [100] = {shape="Normal", cframe=CFrame.new(-79.6916732788086,-85.6256103515625,86.40921020507812,1,0,0,0,1,0,0,0,1)},
+    [106] = {shape="Normal", cframe=CFrame.new(-79.6916732788086,-85.6256103515625,86.40921020507812,1,0,0,0,1,0,0,0,1)},
+    [114] = {shape="Normal", cframe=CFrame.new(-80.87772369384766,-95.89728546142578,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [115] = {shape="Normal", cframe=CFrame.new(-79.69161987304688,-91.1528549194336,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [202] = {shape="Normal", cframe=CFrame.new(-53.51301574707031,-67.57201385498047,86.26212310791016,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [142] = {shape="Normal", cframe=CFrame.new(-79.69161987304688,-91.1528549194336,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [260] = {shape="Normal", cframe=CFrame.new(-67.66424560546875,-89.71449279785156,83.03456115722656,-1,0,0,0,1,0,0,0,-1)},
+    [258] = {shape="Normal", cframe=CFrame.new(-35.97321701049805,-89.71449279785156,83.14457702636719,-1,0,0,0,1,0,0,0,-1)},
+    [241] = {shape="Normal", cframe=CFrame.new(-59.32854080200195,-71.69444274902344,82.78456115722656,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [172] = {shape="Normal", cframe=CFrame.new(-23.826141357421875,-91.15186309814453,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+    [226] = {shape="Normal", cframe=CFrame.new(-53.737632751464844,-71.69444274902344,82.78456115722656,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [225] = {shape="Normal", cframe=CFrame.new(-55.60126876831055,-77.16840362548828,77.72432708740234,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [222] = {shape="Normal", cframe=CFrame.new(-53.737632751464844,-71.69444274902344,82.78456115722656,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [243] = {shape="Normal", cframe=CFrame.new(-53.737632751464844,-67.5889663696289,86.5797348022461,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [192] = {shape="Normal", cframe=CFrame.new(-53.364906311035156,-66.80855560302734,86.28460693359375,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [256] = {shape="Spawn", cframe=CFrame.new(-51.468101501464844,-98.84950256347656,110.66883850097656,1,0,0,0,1,0,0,0,1)},
+    [147] = {shape="Normal", cframe=CFrame.new(-76.13330078125,-91.1528549194336,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [194] = {shape="Normal", cframe=CFrame.new(-53.68663024902344,-68.5324935913086,88.73491668701172,1,0,0,0,0.7342872023582458,-0.6788389086723328,0,0.6788389086723328,0.7342872023582458)},
+    [193] = {shape="Normal", cframe=CFrame.new(-53.51301574707031,-67.57201385498047,86.26212310791016,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [146] = {shape="Normal", cframe=CFrame.new(-78.5055160522461,-95.89728546142578,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [189] = {shape="Normal", cframe=CFrame.new(-27.384965896606445,-91.15186309814453,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+    [144] = {shape="Normal", cframe=CFrame.new(-83.24993896484375,-91.1528549194336,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [157] = {shape="Normal", cframe=CFrame.new(-23.826141357421875,-87.5930404663086,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+    [171] = {shape="Normal", cframe=CFrame.new(-22.63986587524414,-95.89696502685547,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+    [174] = {shape="Normal", cframe=CFrame.new(-23.826141357421875,-91.15186309814453,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+    [155] = {shape="Normal", cframe=CFrame.new(-20.267316818237305,-91.15186309814453,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+    [197] = {shape="Normal", cframe=CFrame.new(-53.364906311035156,-66.80855560302734,86.28460693359375,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [224] = {shape="Normal", cframe=CFrame.new(-51.87399673461914,-77.16840362548828,77.72432708740234,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [212] = {shape="Normal", cframe=CFrame.new(-53.68663024902344,-68.5324935913086,88.73491668701172,1,0,0,0,0.7342872023582458,-0.6788389086723328,0,0.6788389086723328,0.7342872023582458)},
+    [220] = {shape="Normal", cframe=CFrame.new(-48.146724700927734,-71.69444274902344,82.78456115722656,-1,0,0,0,0.7342872023582458,0.6788389086723328,0,0.6788389086723328,-0.7342871427536011)},
+    [130] = {shape="Normal", cframe=CFrame.new(-79.69161987304688,-87.59453582763672,86.4108657836914,-1,0,0,0,1,0,0,0,-1)},
+    [170] = {shape="Normal", cframe=CFrame.new(-25.01241683959961,-95.89696502685547,85.91017150878906,-1,0,0,0,1,0,0,0,-1)},
+}
+
+local pending = 0
+for id, def in pairs(partDefs) do
+    pending = pending + 1
+    task.spawn(function()
+        local success, part = pcall(function()
+            return endpoint:InvokeServer("CreatePart", def.shape, def.cframe, workspace)
+        end)
+        if success and part then
+            P[id] = part
+            syncAnchor(endpoint, part, true)
+        end
+        pending = pending - 1
+    end)
+end
+while pending > 0 do
+    task.wait()
+end
+
+local resizeBatch = {}
+if P[6] then resizeBatch[#resizeBatch+1] = {Part = P[6], CFrame = P[6].CFrame, Size = Vector3.new(6.939990043640137,49.000003814697266,5.7699971199035645)} end
+if P[7] then resizeBatch[#resizeBatch+1] = {Part = P[7], CFrame = P[7].CFrame, Size = Vector3.new(15.649998664855957,1.9199998378753662,12.339999198913574)} end
+if P[8] then resizeBatch[#resizeBatch+1] = {Part = P[8], CFrame = P[8].CFrame, Size = Vector3.new(6.150003433227539,2.6399989128112793,0.39000019431114197)} end
+if P[9] then resizeBatch[#resizeBatch+1] = {Part = P[9], CFrame = P[9].CFrame, Size = Vector3.new(5.619997024536133,5.06000280380249,0.24000000953674316)} end
+if P[10] then resizeBatch[#resizeBatch+1] = {Part = P[10], CFrame = P[10].CFrame, Size = Vector3.new(9.540000915527344,1,0.3800002932548523)} end
+if P[11] then resizeBatch[#resizeBatch+1] = {Part = P[11], CFrame = P[11].CFrame, Size = Vector3.new(0.28000298142433167,2.2799994945526123,6.009995937347412)} end
+if P[12] then resizeBatch[#resizeBatch+1] = {Part = P[12], CFrame = P[12].CFrame, Size = Vector3.new(0.6800029277801514,2.5799992084503174,5.940000057220459)} end
+if P[13] then resizeBatch[#resizeBatch+1] = {Part = P[13], CFrame = P[13].CFrame, Size = Vector3.new(5.619997024536133,5.069998264312744,0.24000000953674316)} end
+if P[14] then resizeBatch[#resizeBatch+1] = {Part = P[14], CFrame = P[14].CFrame, Size = Vector3.new(6.300003528594971,6.300003528594971,6.300003528594971)} end
+if P[15] then resizeBatch[#resizeBatch+1] = {Part = P[15], CFrame = P[15].CFrame, Size = Vector3.new(7.98000431060791,1.5499998331069946,6.770003795623779)} end
+if P[16] then resizeBatch[#resizeBatch+1] = {Part = P[16], CFrame = P[16].CFrame, Size = Vector3.new(0.3399968147277832,5.200005054473877,5.349999904632568)} end
+if P[17] then resizeBatch[#resizeBatch+1] = {Part = P[17], CFrame = P[17].CFrame, Size = Vector3.new(0.35999998450279236,5.0200018882751465,5.419996738433838)} end
+if P[18] then resizeBatch[#resizeBatch+1] = {Part = P[18], CFrame = P[18].CFrame, Size = Vector3.new(5.940002918243408,2.9899985790252686,0.7000001072883606)} end
+if P[20] then resizeBatch[#resizeBatch+1] = {Part = P[20], CFrame = P[20].CFrame, Size = Vector3.new(6.939990043640137,49.000003814697266,5.7699971199035645)} end
+if P[21] then resizeBatch[#resizeBatch+1] = {Part = P[21], CFrame = P[21].CFrame, Size = Vector3.new(15.649998664855957,1.9199998378753662,12.339999198913574)} end
+if P[22] then resizeBatch[#resizeBatch+1] = {Part = P[22], CFrame = P[22].CFrame, Size = Vector3.new(0.28000298142433167,2.2799994945526123,6.009995937347412)} end
+if P[23] then resizeBatch[#resizeBatch+1] = {Part = P[23], CFrame = P[23].CFrame, Size = Vector3.new(5.619997024536133,5.069998264312744,0.24000000953674316)} end
+if P[24] then resizeBatch[#resizeBatch+1] = {Part = P[24], CFrame = P[24].CFrame, Size = Vector3.new(0.35999998450279236,5.0200018882751465,5.419996738433838)} end
+if P[25] then resizeBatch[#resizeBatch+1] = {Part = P[25], CFrame = P[25].CFrame, Size = Vector3.new(5.619997024536133,5.06000280380249,0.24000000953674316)} end
+if P[26] then resizeBatch[#resizeBatch+1] = {Part = P[26], CFrame = P[26].CFrame, Size = Vector3.new(0.6800029277801514,2.5799992084503174,5.940000057220459)} end
+if P[27] then resizeBatch[#resizeBatch+1] = {Part = P[27], CFrame = P[27].CFrame, Size = Vector3.new(6.150003433227539,2.6399989128112793,0.39000019431114197)} end
+if P[28] then resizeBatch[#resizeBatch+1] = {Part = P[28], CFrame = P[28].CFrame, Size = Vector3.new(0.3399968147277832,5.200005054473877,5.349999904632568)} end
+if P[29] then resizeBatch[#resizeBatch+1] = {Part = P[29], CFrame = P[29].CFrame, Size = Vector3.new(5.940002918243408,2.9899985790252686,0.7000001072883606)} end
+if P[30] then resizeBatch[#resizeBatch+1] = {Part = P[30], CFrame = P[30].CFrame, Size = Vector3.new(9.540000915527344,1,0.3800002932548523)} end
+if P[31] then resizeBatch[#resizeBatch+1] = {Part = P[31], CFrame = P[31].CFrame, Size = Vector3.new(7.98000431060791,1.5499998331069946,6.770003795623779)} end
+if P[32] then resizeBatch[#resizeBatch+1] = {Part = P[32], CFrame = P[32].CFrame, Size = Vector3.new(6.300003528594971,6.300003528594971,6.300003528594971)} end
+if P[34] then resizeBatch[#resizeBatch+1] = {Part = P[34], CFrame = P[34].CFrame, Size = Vector3.new(0.28000298142433167,2.2799994945526123,6.009995937347412)} end
+if P[35] then resizeBatch[#resizeBatch+1] = {Part = P[35], CFrame = P[35].CFrame, Size = Vector3.new(6.150003433227539,2.6399989128112793,0.39000019431114197)} end
+if P[36] then resizeBatch[#resizeBatch+1] = {Part = P[36], CFrame = P[36].CFrame, Size = Vector3.new(15.649998664855957,1.9199998378753662,12.339999198913574)} end
+if P[37] then resizeBatch[#resizeBatch+1] = {Part = P[37], CFrame = P[37].CFrame, Size = Vector3.new(6.939990043640137,49.000003814697266,5.7699971199035645)} end
+if P[38] then resizeBatch[#resizeBatch+1] = {Part = P[38], CFrame = P[38].CFrame, Size = Vector3.new(0.6800029277801514,2.5799992084503174,5.940000057220459)} end
+if P[39] then resizeBatch[#resizeBatch+1] = {Part = P[39], CFrame = P[39].CFrame, Size = Vector3.new(6.300003528594971,6.300003528594971,6.300003528594971)} end
+if P[40] then resizeBatch[#resizeBatch+1] = {Part = P[40], CFrame = P[40].CFrame, Size = Vector3.new(0.35999998450279236,5.0200018882751465,5.419996738433838)} end
+if P[41] then resizeBatch[#resizeBatch+1] = {Part = P[41], CFrame = P[41].CFrame, Size = Vector3.new(9.540000915527344,1,0.3800002932548523)} end
+if P[42] then resizeBatch[#resizeBatch+1] = {Part = P[42], CFrame = P[42].CFrame, Size = Vector3.new(5.619997024536133,5.06000280380249,0.24000000953674316)} end
+if P[43] then resizeBatch[#resizeBatch+1] = {Part = P[43], CFrame = P[43].CFrame, Size = Vector3.new(7.98000431060791,1.5499998331069946,6.770003795623779)} end
+if P[44] then resizeBatch[#resizeBatch+1] = {Part = P[44], CFrame = P[44].CFrame, Size = Vector3.new(5.619997024536133,5.069998264312744,0.24000000953674316)} end
+if P[45] then resizeBatch[#resizeBatch+1] = {Part = P[45], CFrame = P[45].CFrame, Size = Vector3.new(0.3399968147277832,5.200005054473877,5.349999904632568)} end
+if P[46] then resizeBatch[#resizeBatch+1] = {Part = P[46], CFrame = P[46].CFrame, Size = Vector3.new(5.940002918243408,2.9899985790252686,0.7000001072883606)} end
+if P[48] then resizeBatch[#resizeBatch+1] = {Part = P[48], CFrame = P[48].CFrame, Size = Vector3.new(15.649998664855957,1.9199998378753662,12.339999198913574)} end
+if P[49] then resizeBatch[#resizeBatch+1] = {Part = P[49], CFrame = P[49].CFrame, Size = Vector3.new(5.619997024536133,5.06000280380249,0.24000000953674316)} end
+if P[50] then resizeBatch[#resizeBatch+1] = {Part = P[50], CFrame = P[50].CFrame, Size = Vector3.new(9.540000915527344,1,0.3800002932548523)} end
+if P[51] then resizeBatch[#resizeBatch+1] = {Part = P[51], CFrame = P[51].CFrame, Size = Vector3.new(6.300003528594971,6.300003528594971,6.300003528594971)} end
+if P[52] then resizeBatch[#resizeBatch+1] = {Part = P[52], CFrame = P[52].CFrame, Size = Vector3.new(0.35999998450279236,5.0200018882751465,5.419996738433838)} end
+if P[53] then resizeBatch[#resizeBatch+1] = {Part = P[53], CFrame = P[53].CFrame, Size = Vector3.new(6.939990043640137,49.000003814697266,5.7699971199035645)} end
+if P[54] then resizeBatch[#resizeBatch+1] = {Part = P[54], CFrame = P[54].CFrame, Size = Vector3.new(5.940002918243408,2.9899985790252686,0.7000001072883606)} end
+if P[55] then resizeBatch[#resizeBatch+1] = {Part = P[55], CFrame = P[55].CFrame, Size = Vector3.new(5.619997024536133,5.069998264312744,0.24000000953674316)} end
+if P[56] then resizeBatch[#resizeBatch+1] = {Part = P[56], CFrame = P[56].CFrame, Size = Vector3.new(0.28000298142433167,2.2799994945526123,6.009995937347412)} end
+if P[57] then resizeBatch[#resizeBatch+1] = {Part = P[57], CFrame = P[57].CFrame, Size = Vector3.new(0.6800029277801514,2.5799992084503174,5.940000057220459)} end
+if P[58] then resizeBatch[#resizeBatch+1] = {Part = P[58], CFrame = P[58].CFrame, Size = Vector3.new(0.3399968147277832,5.200005054473877,5.349999904632568)} end
+if P[59] then resizeBatch[#resizeBatch+1] = {Part = P[59], CFrame = P[59].CFrame, Size = Vector3.new(6.150003433227539,2.6399989128112793,0.39000019431114197)} end
+if P[60] then resizeBatch[#resizeBatch+1] = {Part = P[60], CFrame = P[60].CFrame, Size = Vector3.new(7.98000431060791,1.5499998331069946,6.770003795623779)} end
+if P[61] then resizeBatch[#resizeBatch+1] = {Part = P[61], CFrame = P[61].CFrame, Size = Vector3.new(14.129987716674805,4.400000095367432,2.4899990558624268)} end
+if P[62] then resizeBatch[#resizeBatch+1] = {Part = P[62], CFrame = P[62].CFrame, Size = Vector3.new(0.27000051736831665,0.25000011920928955,0.7500005960464478)} end
+if P[63] then resizeBatch[#resizeBatch+1] = {Part = P[63], CFrame = P[63].CFrame, Size = Vector3.new(51.07002258300781,1.2099997997283936,65.4999771118164)} end
+if P[64] then resizeBatch[#resizeBatch+1] = {Part = P[64], CFrame = P[64].CFrame, Size = Vector3.new(0.19999967515468597,0.27000001072883606,0.5600008368492126)} end
+if P[65] then resizeBatch[#resizeBatch+1] = {Part = P[65], CFrame = P[65].CFrame, Size = Vector3.new(15.930002212524414,2.0899996757507324,0.4200000762939453)} end
+if P[66] then resizeBatch[#resizeBatch+1] = {Part = P[66], CFrame = P[66].CFrame, Size = Vector3.new(91.84000396728516,3.539999485015869,114.60002136230469)} end
+if P[67] then resizeBatch[#resizeBatch+1] = {Part = P[67], CFrame = P[67].CFrame, Size = Vector3.new(48.91999435424805,21.67999839782715,1.2700001001358032)} end
+if P[68] then resizeBatch[#resizeBatch+1] = {Part = P[68], CFrame = P[68].CFrame, Size = Vector3.new(0.27000051736831665,0.25000011920928955,0.7500005960464478)} end
+if P[69] then resizeBatch[#resizeBatch+1] = {Part = P[69], CFrame = P[69].CFrame, Size = Vector3.new(50.39000701904297,1,49.4000129699707)} end
+if P[70] then resizeBatch[#resizeBatch+1] = {Part = P[70], CFrame = P[70].CFrame, Size = Vector3.new(24.6299991607666,17.060001373291016,0.5400000214576721)} end
+if P[71] then resizeBatch[#resizeBatch+1] = {Part = P[71], CFrame = P[71].CFrame, Size = Vector3.new(49.6099853515625,4.769999980926514,5.160000324249268)} end
+if P[72] then resizeBatch[#resizeBatch+1] = {Part = P[72], CFrame = P[72].CFrame, Size = Vector3.new(0.16999997198581696,0.16000013053417206,1.4700000286102295)} end
+if P[73] then resizeBatch[#resizeBatch+1] = {Part = P[73], CFrame = P[73].CFrame, Size = Vector3.new(0.19999967515468597,0.27000001072883606,0.5600008368492126)} end
+if P[74] then resizeBatch[#resizeBatch+1] = {Part = P[74], CFrame = P[74].CFrame, Size = Vector3.new(0.19999967515468597,0.27000001072883606,0.5600008368492126)} end
+if P[75] then resizeBatch[#resizeBatch+1] = {Part = P[75], CFrame = P[75].CFrame, Size = Vector3.new(42.150001525878906,2.869999408721924,2)} end
+if P[76] then resizeBatch[#resizeBatch+1] = {Part = P[76], CFrame = P[76].CFrame, Size = Vector3.new(15.140002250671387,2.0899996757507324,0.4400000274181366)} end
+if P[77] then resizeBatch[#resizeBatch+1] = {Part = P[77], CFrame = P[77].CFrame, Size = Vector3.new(0.16999997198581696,0.16000013053417206,1.4700000286102295)} end
+if P[78] then resizeBatch[#resizeBatch+1] = {Part = P[78], CFrame = P[78].CFrame, Size = Vector3.new(35.2700080871582,1.6299995183944702,38.30998229980469)} end
+if P[79] then resizeBatch[#resizeBatch+1] = {Part = P[79], CFrame = P[79].CFrame, Size = Vector3.new(19.56000518798828,17.160017013549805,2)} end
+if P[80] then resizeBatch[#resizeBatch+1] = {Part = P[80], CFrame = P[80].CFrame, Size = Vector3.new(15.930002212524414,2.0899996757507324,0.4200000762939453)} end
+if P[81] then resizeBatch[#resizeBatch+1] = {Part = P[81], CFrame = P[81].CFrame, Size = Vector3.new(0.2999999523162842,0.41000017523765564,1.4700000286102295)} end
+if P[82] then resizeBatch[#resizeBatch+1] = {Part = P[82], CFrame = P[82].CFrame, Size = Vector3.new(49.45998764038086,1.2999999523162842,11.480000495910645)} end
+if P[83] then resizeBatch[#resizeBatch+1] = {Part = P[83], CFrame = P[83].CFrame, Size = Vector3.new(11.420000076293945,18.680004119873047,1.2700001001358032)} end
+if P[84] then resizeBatch[#resizeBatch+1] = {Part = P[84], CFrame = P[84].CFrame, Size = Vector3.new(15.930002212524414,2.0899996757507324,0.4200000762939453)} end
+if P[85] then resizeBatch[#resizeBatch+1] = {Part = P[85], CFrame = P[85].CFrame, Size = Vector3.new(0.19999967515468597,0.27000001072883606,0.5600008368492126)} end
+if P[86] then resizeBatch[#resizeBatch+1] = {Part = P[86], CFrame = P[86].CFrame, Size = Vector3.new(0.2999999523162842,0.41000017523765564,1.4700000286102295)} end
+if P[87] then resizeBatch[#resizeBatch+1] = {Part = P[87], CFrame = P[87].CFrame, Size = Vector3.new(6.600001811981201,8.730008125305176,0.9700000286102295)} end
+if P[88] then resizeBatch[#resizeBatch+1] = {Part = P[88], CFrame = P[88].CFrame, Size = Vector3.new(2.140002727508545,2.869999408721924,44.54999542236328)} end
+if P[89] then resizeBatch[#resizeBatch+1] = {Part = P[89], CFrame = P[89].CFrame, Size = Vector3.new(18.390003204345703,17.160017013549805,2)} end
+if P[90] then resizeBatch[#resizeBatch+1] = {Part = P[90], CFrame = P[90].CFrame, Size = Vector3.new(38.87999725341797,3.3899991512298584,41.56000900268555)} end
+if P[91] then resizeBatch[#resizeBatch+1] = {Part = P[91], CFrame = P[91].CFrame, Size = Vector3.new(0.27000051736831665,0.25000011920928955,0.7500005960464478)} end
+if P[92] then resizeBatch[#resizeBatch+1] = {Part = P[92], CFrame = P[92].CFrame, Size = Vector3.new(1.7299997806549072,21.67999839782715,49.62998580932617)} end
+if P[93] then resizeBatch[#resizeBatch+1] = {Part = P[93], CFrame = P[93].CFrame, Size = Vector3.new(42.18000411987305,2.869999408721924,2.200000762939453)} end
+if P[94] then resizeBatch[#resizeBatch+1] = {Part = P[94], CFrame = P[94].CFrame, Size = Vector3.new(2.260006904602051,2.869999408721924,43.29999542236328)} end
+if P[95] then resizeBatch[#resizeBatch+1] = {Part = P[95], CFrame = P[95].CFrame, Size = Vector3.new(23.349987030029297,1,1)} end
+if P[96] then resizeBatch[#resizeBatch+1] = {Part = P[96], CFrame = P[96].CFrame, Size = Vector3.new(33.99000930786133,33.99000930786133,33.99000930786133)} end
+if P[97] then resizeBatch[#resizeBatch+1] = {Part = P[97], CFrame = P[97].CFrame, Size = Vector3.new(48.91999435424805,21.67999839782715,1.2700001001358032)} end
+if P[98] then resizeBatch[#resizeBatch+1] = {Part = P[98], CFrame = P[98].CFrame, Size = Vector3.new(11.420000076293945,18.680004119873047,1.2700001001358032)} end
+if P[100] then resizeBatch[#resizeBatch+1] = {Part = P[100], CFrame = P[100].CFrame, Size = Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982)} end
+if P[106] then resizeBatch[#resizeBatch+1] = {Part = P[106], CFrame = P[106].CFrame, Size = Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982)} end
+if P[114] then resizeBatch[#resizeBatch+1] = {Part = P[114], CFrame = P[114].CFrame, Size = Vector3.new(2.3722140789031982,4.7444281578063965,2.3722140789031982)} end
+if P[115] then resizeBatch[#resizeBatch+1] = {Part = P[115], CFrame = P[115].CFrame, Size = Vector3.new(4.7444281578063965,4.7444281578063965,2.3722140789031982)} end
+if P[202] then resizeBatch[#resizeBatch+1] = {Part = P[202], CFrame = P[202].CFrame, Size = Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227)} end
+if P[142] then resizeBatch[#resizeBatch+1] = {Part = P[142], CFrame = P[142].CFrame, Size = Vector3.new(4.7444281578063965,4.7444281578063965,2.3722140789031982)} end
+if P[260] then resizeBatch[#resizeBatch+1] = {Part = P[260], CFrame = P[260].CFrame, Size = Vector3.new(16.054718017578125,16.69000244140625,0.5)} end
+if P[258] then resizeBatch[#resizeBatch+1] = {Part = P[258], CFrame = P[258].CFrame, Size = Vector3.new(16.054718017578125,16.69000244140625,0.5)} end
+if P[241] then resizeBatch[#resizeBatch+1] = {Part = P[241], CFrame = P[241].CFrame, Size = Vector3.new(3.7272729873657227,7.454545974731445,3.7272729873657227)} end
+if P[172] then resizeBatch[#resizeBatch+1] = {Part = P[172], CFrame = P[172].CFrame, Size = Vector3.new(4.745099067687988,4.745099067687988,2.372549533843994)} end
+if P[226] then resizeBatch[#resizeBatch+1] = {Part = P[226], CFrame = P[226].CFrame, Size = Vector3.new(7.454545974731445,7.454545974731445,3.7272729873657227)} end
+if P[225] then resizeBatch[#resizeBatch+1] = {Part = P[225], CFrame = P[225].CFrame, Size = Vector3.new(3.7272729873657227,7.454545974731445,3.7272729873657227)} end
+if P[222] then resizeBatch[#resizeBatch+1] = {Part = P[222], CFrame = P[222].CFrame, Size = Vector3.new(7.454545974731445,7.454545974731445,3.7272729873657227)} end
+if P[243] then resizeBatch[#resizeBatch+1] = {Part = P[243], CFrame = P[243].CFrame, Size = Vector3.new(7.454545974731445,3.7272729873657227,3.7272729873657227)} end
+if P[192] then resizeBatch[#resizeBatch+1] = {Part = P[192], CFrame = P[192].CFrame, Size = Vector3.new(7.454543113708496,6.7090911865234375,7.454546928405762)} end
+if P[256] then resizeBatch[#resizeBatch+1] = {Part = P[256], CFrame = P[256].CFrame, Size = Vector3.new(12,1,12)} end
+if P[147] then resizeBatch[#resizeBatch+1] = {Part = P[147], CFrame = P[147].CFrame, Size = Vector3.new(2.3722140789031982,4.7444281578063965,2.3722140789031982)} end
+if P[194] then resizeBatch[#resizeBatch+1] = {Part = P[194], CFrame = P[194].CFrame, Size = Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227)} end
+if P[193] then resizeBatch[#resizeBatch+1] = {Part = P[193], CFrame = P[193].CFrame, Size = Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227)} end
+if P[146] then resizeBatch[#resizeBatch+1] = {Part = P[146], CFrame = P[146].CFrame, Size = Vector3.new(2.3722140789031982,4.7444281578063965,2.3722140789031982)} end
+if P[189] then resizeBatch[#resizeBatch+1] = {Part = P[189], CFrame = P[189].CFrame, Size = Vector3.new(2.372549533843994,4.745099067687988,2.372549533843994)} end
+if P[144] then resizeBatch[#resizeBatch+1] = {Part = P[144], CFrame = P[144].CFrame, Size = Vector3.new(2.3722140789031982,4.7444281578063965,2.3722140789031982)} end
+if P[157] then resizeBatch[#resizeBatch+1] = {Part = P[157], CFrame = P[157].CFrame, Size = Vector3.new(4.745099067687988,2.372549533843994,2.372549533843994)} end
+if P[171] then resizeBatch[#resizeBatch+1] = {Part = P[171], CFrame = P[171].CFrame, Size = Vector3.new(2.372549533843994,4.745099067687988,2.372549533843994)} end
+if P[174] then resizeBatch[#resizeBatch+1] = {Part = P[174], CFrame = P[174].CFrame, Size = Vector3.new(4.745099067687988,4.745099067687988,2.372549533843994)} end
+if P[155] then resizeBatch[#resizeBatch+1] = {Part = P[155], CFrame = P[155].CFrame, Size = Vector3.new(2.372549533843994,4.745099067687988,2.372549533843994)} end
+if P[197] then resizeBatch[#resizeBatch+1] = {Part = P[197], CFrame = P[197].CFrame, Size = Vector3.new(7.454543113708496,6.7090911865234375,7.454546928405762)} end
+if P[224] then resizeBatch[#resizeBatch+1] = {Part = P[224], CFrame = P[224].CFrame, Size = Vector3.new(3.7272729873657227,7.454545974731445,3.7272729873657227)} end
+if P[212] then resizeBatch[#resizeBatch+1] = {Part = P[212], CFrame = P[212].CFrame, Size = Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227)} end
+if P[220] then resizeBatch[#resizeBatch+1] = {Part = P[220], CFrame = P[220].CFrame, Size = Vector3.new(3.7272729873657227,7.454545974731445,3.7272729873657227)} end
+if P[130] then resizeBatch[#resizeBatch+1] = {Part = P[130], CFrame = P[130].CFrame, Size = Vector3.new(4.7444281578063965,2.3722140789031982,2.3722140789031982)} end
+if P[170] then resizeBatch[#resizeBatch+1] = {Part = P[170], CFrame = P[170].CFrame, Size = Vector3.new(2.372549533843994,4.745099067687988,2.372549533843994)} end
+batchResize(endpoint, resizeBatch)
+local materialBatch = {}
+if P[6] then materialBatch[#materialBatch+1] = {Part = P[6], Material = Enum.Material.Concrete} end
+if P[7] then materialBatch[#materialBatch+1] = {Part = P[7], Material = Enum.Material.Concrete} end
+if P[8] then materialBatch[#materialBatch+1] = {Part = P[8], Material = Enum.Material.Metal} end
+if P[9] then materialBatch[#materialBatch+1] = {Part = P[9], Material = Enum.Material.WoodPlanks} end
+if P[10] then materialBatch[#materialBatch+1] = {Part = P[10], Material = Enum.Material.Marble} end
+if P[11] then materialBatch[#materialBatch+1] = {Part = P[11], Material = Enum.Material.Metal} end
+if P[12] then materialBatch[#materialBatch+1] = {Part = P[12], Material = Enum.Material.Concrete} end
+if P[13] then materialBatch[#materialBatch+1] = {Part = P[13], Material = Enum.Material.WoodPlanks} end
+if P[14] then materialBatch[#materialBatch+1] = {Part = P[14], Material = Enum.Material.Marble} end
+if P[15] then materialBatch[#materialBatch+1] = {Part = P[15], Material = Enum.Material.Cobblestone} end
+if P[16] then materialBatch[#materialBatch+1] = {Part = P[16], Material = Enum.Material.WoodPlanks} end
+if P[17] then materialBatch[#materialBatch+1] = {Part = P[17], Material = Enum.Material.WoodPlanks} end
+if P[18] then materialBatch[#materialBatch+1] = {Part = P[18], Material = Enum.Material.Concrete} end
+if P[20] then materialBatch[#materialBatch+1] = {Part = P[20], Material = Enum.Material.Concrete} end
+if P[21] then materialBatch[#materialBatch+1] = {Part = P[21], Material = Enum.Material.Concrete} end
+if P[22] then materialBatch[#materialBatch+1] = {Part = P[22], Material = Enum.Material.Metal} end
+if P[23] then materialBatch[#materialBatch+1] = {Part = P[23], Material = Enum.Material.WoodPlanks} end
+if P[24] then materialBatch[#materialBatch+1] = {Part = P[24], Material = Enum.Material.WoodPlanks} end
+if P[25] then materialBatch[#materialBatch+1] = {Part = P[25], Material = Enum.Material.WoodPlanks} end
+if P[26] then materialBatch[#materialBatch+1] = {Part = P[26], Material = Enum.Material.Concrete} end
+if P[27] then materialBatch[#materialBatch+1] = {Part = P[27], Material = Enum.Material.Metal} end
+if P[28] then materialBatch[#materialBatch+1] = {Part = P[28], Material = Enum.Material.WoodPlanks} end
+if P[29] then materialBatch[#materialBatch+1] = {Part = P[29], Material = Enum.Material.Concrete} end
+if P[30] then materialBatch[#materialBatch+1] = {Part = P[30], Material = Enum.Material.Marble} end
+if P[31] then materialBatch[#materialBatch+1] = {Part = P[31], Material = Enum.Material.Cobblestone} end
+if P[32] then materialBatch[#materialBatch+1] = {Part = P[32], Material = Enum.Material.Marble} end
+if P[34] then materialBatch[#materialBatch+1] = {Part = P[34], Material = Enum.Material.Metal} end
+if P[35] then materialBatch[#materialBatch+1] = {Part = P[35], Material = Enum.Material.Metal} end
+if P[36] then materialBatch[#materialBatch+1] = {Part = P[36], Material = Enum.Material.Concrete} end
+if P[37] then materialBatch[#materialBatch+1] = {Part = P[37], Material = Enum.Material.Concrete} end
+if P[38] then materialBatch[#materialBatch+1] = {Part = P[38], Material = Enum.Material.Concrete} end
+if P[39] then materialBatch[#materialBatch+1] = {Part = P[39], Material = Enum.Material.Marble} end
+if P[40] then materialBatch[#materialBatch+1] = {Part = P[40], Material = Enum.Material.WoodPlanks} end
+if P[41] then materialBatch[#materialBatch+1] = {Part = P[41], Material = Enum.Material.Marble} end
+if P[42] then materialBatch[#materialBatch+1] = {Part = P[42], Material = Enum.Material.WoodPlanks} end
+if P[43] then materialBatch[#materialBatch+1] = {Part = P[43], Material = Enum.Material.Cobblestone} end
+if P[44] then materialBatch[#materialBatch+1] = {Part = P[44], Material = Enum.Material.WoodPlanks} end
+if P[45] then materialBatch[#materialBatch+1] = {Part = P[45], Material = Enum.Material.WoodPlanks} end
+if P[46] then materialBatch[#materialBatch+1] = {Part = P[46], Material = Enum.Material.Concrete} end
+if P[48] then materialBatch[#materialBatch+1] = {Part = P[48], Material = Enum.Material.Concrete} end
+if P[49] then materialBatch[#materialBatch+1] = {Part = P[49], Material = Enum.Material.WoodPlanks} end
+if P[50] then materialBatch[#materialBatch+1] = {Part = P[50], Material = Enum.Material.Marble} end
+if P[51] then materialBatch[#materialBatch+1] = {Part = P[51], Material = Enum.Material.Marble} end
+if P[52] then materialBatch[#materialBatch+1] = {Part = P[52], Material = Enum.Material.WoodPlanks} end
+if P[53] then materialBatch[#materialBatch+1] = {Part = P[53], Material = Enum.Material.Concrete} end
+if P[54] then materialBatch[#materialBatch+1] = {Part = P[54], Material = Enum.Material.Concrete} end
+if P[55] then materialBatch[#materialBatch+1] = {Part = P[55], Material = Enum.Material.WoodPlanks} end
+if P[56] then materialBatch[#materialBatch+1] = {Part = P[56], Material = Enum.Material.Metal} end
+if P[57] then materialBatch[#materialBatch+1] = {Part = P[57], Material = Enum.Material.Concrete} end
+if P[58] then materialBatch[#materialBatch+1] = {Part = P[58], Material = Enum.Material.WoodPlanks} end
+if P[59] then materialBatch[#materialBatch+1] = {Part = P[59], Material = Enum.Material.Metal} end
+if P[60] then materialBatch[#materialBatch+1] = {Part = P[60], Material = Enum.Material.Cobblestone} end
+if P[61] then materialBatch[#materialBatch+1] = {Part = P[61], Material = Enum.Material.Concrete} end
+if P[62] then materialBatch[#materialBatch+1] = {Part = P[62], Material = Enum.Material.Metal} end
+if P[63] then materialBatch[#materialBatch+1] = {Part = P[63], Material = Enum.Material.Marble} end
+if P[64] then materialBatch[#materialBatch+1] = {Part = P[64], Material = Enum.Material.Metal} end
+if P[65] then materialBatch[#materialBatch+1] = {Part = P[65], Material = Enum.Material.Wood} end
+if P[66] then materialBatch[#materialBatch+1] = {Part = P[66], Material = Enum.Material.Concrete} end
+if P[67] then materialBatch[#materialBatch+1] = {Part = P[67], Material = Enum.Material.Concrete} end
+if P[68] then materialBatch[#materialBatch+1] = {Part = P[68], Material = Enum.Material.Metal} end
+if P[69] then materialBatch[#materialBatch+1] = {Part = P[69], Material = Enum.Material.Concrete} end
+if P[70] then materialBatch[#materialBatch+1] = {Part = P[70], Material = Enum.Material.Concrete} end
+if P[71] then materialBatch[#materialBatch+1] = {Part = P[71], Material = Enum.Material.Concrete} end
+if P[72] then materialBatch[#materialBatch+1] = {Part = P[72], Material = Enum.Material.Metal} end
+if P[73] then materialBatch[#materialBatch+1] = {Part = P[73], Material = Enum.Material.Metal} end
+if P[74] then materialBatch[#materialBatch+1] = {Part = P[74], Material = Enum.Material.Metal} end
+if P[75] then materialBatch[#materialBatch+1] = {Part = P[75], Material = Enum.Material.WoodPlanks} end
+if P[76] then materialBatch[#materialBatch+1] = {Part = P[76], Material = Enum.Material.Wood} end
+if P[77] then materialBatch[#materialBatch+1] = {Part = P[77], Material = Enum.Material.Metal} end
+if P[78] then materialBatch[#materialBatch+1] = {Part = P[78], Material = Enum.Material.Cobblestone} end
+if P[79] then materialBatch[#materialBatch+1] = {Part = P[79], Material = Enum.Material.Concrete} end
+if P[80] then materialBatch[#materialBatch+1] = {Part = P[80], Material = Enum.Material.Wood} end
+if P[81] then materialBatch[#materialBatch+1] = {Part = P[81], Material = Enum.Material.Metal} end
+if P[82] then materialBatch[#materialBatch+1] = {Part = P[82], Material = Enum.Material.Concrete} end
+if P[83] then materialBatch[#materialBatch+1] = {Part = P[83], Material = Enum.Material.Concrete} end
+if P[84] then materialBatch[#materialBatch+1] = {Part = P[84], Material = Enum.Material.Wood} end
+if P[85] then materialBatch[#materialBatch+1] = {Part = P[85], Material = Enum.Material.Metal} end
+if P[86] then materialBatch[#materialBatch+1] = {Part = P[86], Material = Enum.Material.Metal} end
+if P[87] then materialBatch[#materialBatch+1] = {Part = P[87], Material = Enum.Material.Metal} end
+if P[88] then materialBatch[#materialBatch+1] = {Part = P[88], Material = Enum.Material.WoodPlanks} end
+if P[89] then materialBatch[#materialBatch+1] = {Part = P[89], Material = Enum.Material.Concrete} end
+if P[90] then materialBatch[#materialBatch+1] = {Part = P[90], Material = Enum.Material.Cobblestone} end
+if P[91] then materialBatch[#materialBatch+1] = {Part = P[91], Material = Enum.Material.Metal} end
+if P[92] then materialBatch[#materialBatch+1] = {Part = P[92], Material = Enum.Material.Concrete} end
+if P[93] then materialBatch[#materialBatch+1] = {Part = P[93], Material = Enum.Material.WoodPlanks} end
+if P[94] then materialBatch[#materialBatch+1] = {Part = P[94], Material = Enum.Material.WoodPlanks} end
+if P[95] then materialBatch[#materialBatch+1] = {Part = P[95], Material = Enum.Material.Marble} end
+if P[96] then materialBatch[#materialBatch+1] = {Part = P[96], Material = Enum.Material.Marble} end
+if P[97] then materialBatch[#materialBatch+1] = {Part = P[97], Material = Enum.Material.Concrete} end
+if P[98] then materialBatch[#materialBatch+1] = {Part = P[98], Material = Enum.Material.Concrete} end
+if P[100] then materialBatch[#materialBatch+1] = {Part = P[100], Material = Enum.Material.Plastic} end
+if P[106] then materialBatch[#materialBatch+1] = {Part = P[106], Material = Enum.Material.Plastic} end
+if P[114] then materialBatch[#materialBatch+1] = {Part = P[114], Material = Enum.Material.Plastic} end
+if P[115] then materialBatch[#materialBatch+1] = {Part = P[115], Material = Enum.Material.Plastic} end
+if P[202] then materialBatch[#materialBatch+1] = {Part = P[202], Material = Enum.Material.Plastic} end
+if P[142] then materialBatch[#materialBatch+1] = {Part = P[142], Material = Enum.Material.Plastic} end
+if P[260] then materialBatch[#materialBatch+1] = {Part = P[260], Material = Enum.Material.Plastic} end
+if P[258] then materialBatch[#materialBatch+1] = {Part = P[258], Material = Enum.Material.Plastic} end
+if P[241] then materialBatch[#materialBatch+1] = {Part = P[241], Material = Enum.Material.Plastic} end
+if P[172] then materialBatch[#materialBatch+1] = {Part = P[172], Material = Enum.Material.Plastic} end
+if P[226] then materialBatch[#materialBatch+1] = {Part = P[226], Material = Enum.Material.Plastic} end
+if P[225] then materialBatch[#materialBatch+1] = {Part = P[225], Material = Enum.Material.Plastic} end
+if P[222] then materialBatch[#materialBatch+1] = {Part = P[222], Material = Enum.Material.Plastic} end
+if P[243] then materialBatch[#materialBatch+1] = {Part = P[243], Material = Enum.Material.Plastic} end
+if P[192] then materialBatch[#materialBatch+1] = {Part = P[192], Material = Enum.Material.Plastic} end
+if P[256] then materialBatch[#materialBatch+1] = {Part = P[256], Material = Enum.Material.Plastic} end
+if P[147] then materialBatch[#materialBatch+1] = {Part = P[147], Material = Enum.Material.Plastic} end
+if P[194] then materialBatch[#materialBatch+1] = {Part = P[194], Material = Enum.Material.Plastic} end
+if P[193] then materialBatch[#materialBatch+1] = {Part = P[193], Material = Enum.Material.Plastic} end
+if P[146] then materialBatch[#materialBatch+1] = {Part = P[146], Material = Enum.Material.Plastic} end
+if P[189] then materialBatch[#materialBatch+1] = {Part = P[189], Material = Enum.Material.Plastic} end
+if P[144] then materialBatch[#materialBatch+1] = {Part = P[144], Material = Enum.Material.Plastic} end
+if P[157] then materialBatch[#materialBatch+1] = {Part = P[157], Material = Enum.Material.Plastic} end
+if P[171] then materialBatch[#materialBatch+1] = {Part = P[171], Material = Enum.Material.Plastic} end
+if P[174] then materialBatch[#materialBatch+1] = {Part = P[174], Material = Enum.Material.Plastic} end
+if P[155] then materialBatch[#materialBatch+1] = {Part = P[155], Material = Enum.Material.Plastic} end
+if P[197] then materialBatch[#materialBatch+1] = {Part = P[197], Material = Enum.Material.Plastic} end
+if P[224] then materialBatch[#materialBatch+1] = {Part = P[224], Material = Enum.Material.Plastic} end
+if P[212] then materialBatch[#materialBatch+1] = {Part = P[212], Material = Enum.Material.Plastic} end
+if P[220] then materialBatch[#materialBatch+1] = {Part = P[220], Material = Enum.Material.Plastic} end
+if P[130] then materialBatch[#materialBatch+1] = {Part = P[130], Material = Enum.Material.Plastic} end
+if P[170] then materialBatch[#materialBatch+1] = {Part = P[170], Material = Enum.Material.Plastic} end
+batchMaterial(endpoint, materialBatch)
+local transparencyBatch = {}
+if P[142] then transparencyBatch[#transparencyBatch+1] = {Part = P[142], Transparency = 1} end
+if P[172] then transparencyBatch[#transparencyBatch+1] = {Part = P[172], Transparency = 1} end
+if P[222] then transparencyBatch[#transparencyBatch+1] = {Part = P[222], Transparency = 1} end
+batchMaterial(endpoint, transparencyBatch)
+local reflectanceBatch = {}
+batchMaterial(endpoint, reflectanceBatch)
+local colorBatch = {}
+if P[6] then colorBatch[#colorBatch+1] = {Part = P[6], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[7] then colorBatch[#colorBatch+1] = {Part = P[7], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[8] then colorBatch[#colorBatch+1] = {Part = P[8], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[9] then colorBatch[#colorBatch+1] = {Part = P[9], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[10] then colorBatch[#colorBatch+1] = {Part = P[10], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[11] then colorBatch[#colorBatch+1] = {Part = P[11], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[12] then colorBatch[#colorBatch+1] = {Part = P[12], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[13] then colorBatch[#colorBatch+1] = {Part = P[13], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[14] then colorBatch[#colorBatch+1] = {Part = P[14], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[15] then colorBatch[#colorBatch+1] = {Part = P[15], Color = Color3.new(0.35686275362968445,0.364705890417099,0.4117647111415863), UnionColoring = false} end
+if P[16] then colorBatch[#colorBatch+1] = {Part = P[16], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[17] then colorBatch[#colorBatch+1] = {Part = P[17], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[18] then colorBatch[#colorBatch+1] = {Part = P[18], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[20] then colorBatch[#colorBatch+1] = {Part = P[20], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[21] then colorBatch[#colorBatch+1] = {Part = P[21], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[22] then colorBatch[#colorBatch+1] = {Part = P[22], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[23] then colorBatch[#colorBatch+1] = {Part = P[23], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[24] then colorBatch[#colorBatch+1] = {Part = P[24], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[25] then colorBatch[#colorBatch+1] = {Part = P[25], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[26] then colorBatch[#colorBatch+1] = {Part = P[26], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[27] then colorBatch[#colorBatch+1] = {Part = P[27], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[28] then colorBatch[#colorBatch+1] = {Part = P[28], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[29] then colorBatch[#colorBatch+1] = {Part = P[29], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[30] then colorBatch[#colorBatch+1] = {Part = P[30], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[31] then colorBatch[#colorBatch+1] = {Part = P[31], Color = Color3.new(0.35686275362968445,0.364705890417099,0.4117647111415863), UnionColoring = false} end
+if P[32] then colorBatch[#colorBatch+1] = {Part = P[32], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[34] then colorBatch[#colorBatch+1] = {Part = P[34], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[35] then colorBatch[#colorBatch+1] = {Part = P[35], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[36] then colorBatch[#colorBatch+1] = {Part = P[36], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[37] then colorBatch[#colorBatch+1] = {Part = P[37], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[38] then colorBatch[#colorBatch+1] = {Part = P[38], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[39] then colorBatch[#colorBatch+1] = {Part = P[39], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[40] then colorBatch[#colorBatch+1] = {Part = P[40], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[41] then colorBatch[#colorBatch+1] = {Part = P[41], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[42] then colorBatch[#colorBatch+1] = {Part = P[42], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[43] then colorBatch[#colorBatch+1] = {Part = P[43], Color = Color3.new(0.35686275362968445,0.364705890417099,0.4117647111415863), UnionColoring = false} end
+if P[44] then colorBatch[#colorBatch+1] = {Part = P[44], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[45] then colorBatch[#colorBatch+1] = {Part = P[45], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[46] then colorBatch[#colorBatch+1] = {Part = P[46], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[48] then colorBatch[#colorBatch+1] = {Part = P[48], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[49] then colorBatch[#colorBatch+1] = {Part = P[49], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[50] then colorBatch[#colorBatch+1] = {Part = P[50], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[51] then colorBatch[#colorBatch+1] = {Part = P[51], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[52] then colorBatch[#colorBatch+1] = {Part = P[52], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[53] then colorBatch[#colorBatch+1] = {Part = P[53], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[54] then colorBatch[#colorBatch+1] = {Part = P[54], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[55] then colorBatch[#colorBatch+1] = {Part = P[55], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[56] then colorBatch[#colorBatch+1] = {Part = P[56], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[57] then colorBatch[#colorBatch+1] = {Part = P[57], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[58] then colorBatch[#colorBatch+1] = {Part = P[58], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[59] then colorBatch[#colorBatch+1] = {Part = P[59], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[60] then colorBatch[#colorBatch+1] = {Part = P[60], Color = Color3.new(0.35686275362968445,0.364705890417099,0.4117647111415863), UnionColoring = false} end
+if P[61] then colorBatch[#colorBatch+1] = {Part = P[61], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[62] then colorBatch[#colorBatch+1] = {Part = P[62], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[63] then colorBatch[#colorBatch+1] = {Part = P[63], Color = Color3.new(0.8039215803146362,0.8039215803146362,0.8039215803146362), UnionColoring = false} end
+if P[64] then colorBatch[#colorBatch+1] = {Part = P[64], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[65] then colorBatch[#colorBatch+1] = {Part = P[65], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[66] then colorBatch[#colorBatch+1] = {Part = P[66], Color = Color3.new(0.6235294342041016,0.6313725709915161,0.6745098233222961), UnionColoring = false} end
+if P[67] then colorBatch[#colorBatch+1] = {Part = P[67], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[68] then colorBatch[#colorBatch+1] = {Part = P[68], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[69] then colorBatch[#colorBatch+1] = {Part = P[69], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[70] then colorBatch[#colorBatch+1] = {Part = P[70], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[71] then colorBatch[#colorBatch+1] = {Part = P[71], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[72] then colorBatch[#colorBatch+1] = {Part = P[72], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[73] then colorBatch[#colorBatch+1] = {Part = P[73], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[74] then colorBatch[#colorBatch+1] = {Part = P[74], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[75] then colorBatch[#colorBatch+1] = {Part = P[75], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[76] then colorBatch[#colorBatch+1] = {Part = P[76], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[77] then colorBatch[#colorBatch+1] = {Part = P[77], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[78] then colorBatch[#colorBatch+1] = {Part = P[78], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[79] then colorBatch[#colorBatch+1] = {Part = P[79], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[80] then colorBatch[#colorBatch+1] = {Part = P[80], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[81] then colorBatch[#colorBatch+1] = {Part = P[81], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[82] then colorBatch[#colorBatch+1] = {Part = P[82], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[83] then colorBatch[#colorBatch+1] = {Part = P[83], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[84] then colorBatch[#colorBatch+1] = {Part = P[84], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[85] then colorBatch[#colorBatch+1] = {Part = P[85], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[86] then colorBatch[#colorBatch+1] = {Part = P[86], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[87] then colorBatch[#colorBatch+1] = {Part = P[87], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[88] then colorBatch[#colorBatch+1] = {Part = P[88], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[89] then colorBatch[#colorBatch+1] = {Part = P[89], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[90] then colorBatch[#colorBatch+1] = {Part = P[90], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[91] then colorBatch[#colorBatch+1] = {Part = P[91], Color = Color3.new(0.38823530077934265,0.37254902720451355,0.3843137323856354), UnionColoring = false} end
+if P[92] then colorBatch[#colorBatch+1] = {Part = P[92], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[93] then colorBatch[#colorBatch+1] = {Part = P[93], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[94] then colorBatch[#colorBatch+1] = {Part = P[94], Color = Color3.new(0.4117647111415863,0.4000000059604645,0.3607843220233917), UnionColoring = false} end
+if P[95] then colorBatch[#colorBatch+1] = {Part = P[95], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[96] then colorBatch[#colorBatch+1] = {Part = P[96], Color = Color3.new(0.4941176474094391,0.40784314274787903,0.24705882370471954), UnionColoring = false} end
+if P[97] then colorBatch[#colorBatch+1] = {Part = P[97], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[98] then colorBatch[#colorBatch+1] = {Part = P[98], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[100] then colorBatch[#colorBatch+1] = {Part = P[100], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[106] then colorBatch[#colorBatch+1] = {Part = P[106], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[114] then colorBatch[#colorBatch+1] = {Part = P[114], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[115] then colorBatch[#colorBatch+1] = {Part = P[115], Color = Color3.new(0.9176470637321472,0.7215686440467834,0.572549045085907), UnionColoring = false} end
+if P[202] then colorBatch[#colorBatch+1] = {Part = P[202], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[142] then colorBatch[#colorBatch+1] = {Part = P[142], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[260] then colorBatch[#colorBatch+1] = {Part = P[260], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[258] then colorBatch[#colorBatch+1] = {Part = P[258], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[241] then colorBatch[#colorBatch+1] = {Part = P[241], Color = Color3.new(0.6823529601097107,0.4745098054409027,0.4000000059604645), UnionColoring = false} end
+if P[172] then colorBatch[#colorBatch+1] = {Part = P[172], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[226] then colorBatch[#colorBatch+1] = {Part = P[226], Color = Color3.new(0.6823529601097107,0.4745098054409027,0.4000000059604645), UnionColoring = false} end
+if P[225] then colorBatch[#colorBatch+1] = {Part = P[225], Color = Color3.new(0.6823529601097107,0.4745098054409027,0.4000000059604645), UnionColoring = false} end
+if P[222] then colorBatch[#colorBatch+1] = {Part = P[222], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[243] then colorBatch[#colorBatch+1] = {Part = P[243], Color = Color3.new(0.6823529601097107,0.4745098054409027,0.4000000059604645), UnionColoring = false} end
+if P[192] then colorBatch[#colorBatch+1] = {Part = P[192], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[256] then colorBatch[#colorBatch+1] = {Part = P[256], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[147] then colorBatch[#colorBatch+1] = {Part = P[147], Color = Color3.new(0.9176470637321472,0.7215686440467834,0.572549045085907), UnionColoring = false} end
+if P[194] then colorBatch[#colorBatch+1] = {Part = P[194], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[193] then colorBatch[#colorBatch+1] = {Part = P[193], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[146] then colorBatch[#colorBatch+1] = {Part = P[146], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[189] then colorBatch[#colorBatch+1] = {Part = P[189], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[144] then colorBatch[#colorBatch+1] = {Part = P[144], Color = Color3.new(0.9176470637321472,0.7215686440467834,0.572549045085907), UnionColoring = false} end
+if P[157] then colorBatch[#colorBatch+1] = {Part = P[157], Color = Color3.new(0.003921568859368563,0.20000000298023224,0.9803921580314636), UnionColoring = false} end
+if P[171] then colorBatch[#colorBatch+1] = {Part = P[171], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[174] then colorBatch[#colorBatch+1] = {Part = P[174], Color = Color3.new(0.003921568859368563,0.062745101749897,0.08627451211214066), UnionColoring = false} end
+if P[155] then colorBatch[#colorBatch+1] = {Part = P[155], Color = Color3.new(0.06666667014360428,0.06666667014360428,0.06666667014360428), UnionColoring = false} end
+if P[197] then colorBatch[#colorBatch+1] = {Part = P[197], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[224] then colorBatch[#colorBatch+1] = {Part = P[224], Color = Color3.new(0.6823529601097107,0.4745098054409027,0.4000000059604645), UnionColoring = false} end
+if P[212] then colorBatch[#colorBatch+1] = {Part = P[212], Color = Color3.new(0.6392157077789307,0.6352941393852234,0.6470588445663452), UnionColoring = false} end
+if P[220] then colorBatch[#colorBatch+1] = {Part = P[220], Color = Color3.new(0.6823529601097107,0.4745098054409027,0.4000000059604645), UnionColoring = false} end
+if P[130] then colorBatch[#colorBatch+1] = {Part = P[130], Color = Color3.new(0.9176470637321472,0.7215686440467834,0.572549045085907), UnionColoring = false} end
+if P[170] then colorBatch[#colorBatch+1] = {Part = P[170], Color = Color3.new(0,0.003921568859368563,0.9647058844566345), UnionColoring = false} end
+batchColor(endpoint, colorBatch)
+local collisionBatch = {}
+if P[6] then collisionBatch[#collisionBatch+1] = {Part = P[6], CanCollide = true} end
+if P[7] then collisionBatch[#collisionBatch+1] = {Part = P[7], CanCollide = true} end
+if P[8] then collisionBatch[#collisionBatch+1] = {Part = P[8], CanCollide = true} end
+if P[9] then collisionBatch[#collisionBatch+1] = {Part = P[9], CanCollide = true} end
+if P[10] then collisionBatch[#collisionBatch+1] = {Part = P[10], CanCollide = true} end
+if P[11] then collisionBatch[#collisionBatch+1] = {Part = P[11], CanCollide = true} end
+if P[12] then collisionBatch[#collisionBatch+1] = {Part = P[12], CanCollide = true} end
+if P[13] then collisionBatch[#collisionBatch+1] = {Part = P[13], CanCollide = true} end
+if P[14] then collisionBatch[#collisionBatch+1] = {Part = P[14], CanCollide = true} end
+if P[15] then collisionBatch[#collisionBatch+1] = {Part = P[15], CanCollide = true} end
+if P[16] then collisionBatch[#collisionBatch+1] = {Part = P[16], CanCollide = true} end
+if P[17] then collisionBatch[#collisionBatch+1] = {Part = P[17], CanCollide = true} end
+if P[18] then collisionBatch[#collisionBatch+1] = {Part = P[18], CanCollide = true} end
+if P[20] then collisionBatch[#collisionBatch+1] = {Part = P[20], CanCollide = true} end
+if P[21] then collisionBatch[#collisionBatch+1] = {Part = P[21], CanCollide = true} end
+if P[22] then collisionBatch[#collisionBatch+1] = {Part = P[22], CanCollide = true} end
+if P[23] then collisionBatch[#collisionBatch+1] = {Part = P[23], CanCollide = true} end
+if P[24] then collisionBatch[#collisionBatch+1] = {Part = P[24], CanCollide = true} end
+if P[25] then collisionBatch[#collisionBatch+1] = {Part = P[25], CanCollide = true} end
+if P[26] then collisionBatch[#collisionBatch+1] = {Part = P[26], CanCollide = true} end
+if P[27] then collisionBatch[#collisionBatch+1] = {Part = P[27], CanCollide = true} end
+if P[28] then collisionBatch[#collisionBatch+1] = {Part = P[28], CanCollide = true} end
+if P[29] then collisionBatch[#collisionBatch+1] = {Part = P[29], CanCollide = true} end
+if P[30] then collisionBatch[#collisionBatch+1] = {Part = P[30], CanCollide = true} end
+if P[31] then collisionBatch[#collisionBatch+1] = {Part = P[31], CanCollide = true} end
+if P[32] then collisionBatch[#collisionBatch+1] = {Part = P[32], CanCollide = true} end
+if P[34] then collisionBatch[#collisionBatch+1] = {Part = P[34], CanCollide = true} end
+if P[35] then collisionBatch[#collisionBatch+1] = {Part = P[35], CanCollide = true} end
+if P[36] then collisionBatch[#collisionBatch+1] = {Part = P[36], CanCollide = true} end
+if P[37] then collisionBatch[#collisionBatch+1] = {Part = P[37], CanCollide = true} end
+if P[38] then collisionBatch[#collisionBatch+1] = {Part = P[38], CanCollide = true} end
+if P[39] then collisionBatch[#collisionBatch+1] = {Part = P[39], CanCollide = true} end
+if P[40] then collisionBatch[#collisionBatch+1] = {Part = P[40], CanCollide = true} end
+if P[41] then collisionBatch[#collisionBatch+1] = {Part = P[41], CanCollide = true} end
+if P[42] then collisionBatch[#collisionBatch+1] = {Part = P[42], CanCollide = true} end
+if P[43] then collisionBatch[#collisionBatch+1] = {Part = P[43], CanCollide = true} end
+if P[44] then collisionBatch[#collisionBatch+1] = {Part = P[44], CanCollide = true} end
+if P[45] then collisionBatch[#collisionBatch+1] = {Part = P[45], CanCollide = true} end
+if P[46] then collisionBatch[#collisionBatch+1] = {Part = P[46], CanCollide = true} end
+if P[48] then collisionBatch[#collisionBatch+1] = {Part = P[48], CanCollide = true} end
+if P[49] then collisionBatch[#collisionBatch+1] = {Part = P[49], CanCollide = true} end
+if P[50] then collisionBatch[#collisionBatch+1] = {Part = P[50], CanCollide = true} end
+if P[51] then collisionBatch[#collisionBatch+1] = {Part = P[51], CanCollide = true} end
+if P[52] then collisionBatch[#collisionBatch+1] = {Part = P[52], CanCollide = true} end
+if P[53] then collisionBatch[#collisionBatch+1] = {Part = P[53], CanCollide = true} end
+if P[54] then collisionBatch[#collisionBatch+1] = {Part = P[54], CanCollide = true} end
+if P[55] then collisionBatch[#collisionBatch+1] = {Part = P[55], CanCollide = true} end
+if P[56] then collisionBatch[#collisionBatch+1] = {Part = P[56], CanCollide = true} end
+if P[57] then collisionBatch[#collisionBatch+1] = {Part = P[57], CanCollide = true} end
+if P[58] then collisionBatch[#collisionBatch+1] = {Part = P[58], CanCollide = true} end
+if P[59] then collisionBatch[#collisionBatch+1] = {Part = P[59], CanCollide = true} end
+if P[60] then collisionBatch[#collisionBatch+1] = {Part = P[60], CanCollide = true} end
+if P[61] then collisionBatch[#collisionBatch+1] = {Part = P[61], CanCollide = true} end
+if P[62] then collisionBatch[#collisionBatch+1] = {Part = P[62], CanCollide = true} end
+if P[63] then collisionBatch[#collisionBatch+1] = {Part = P[63], CanCollide = true} end
+if P[64] then collisionBatch[#collisionBatch+1] = {Part = P[64], CanCollide = true} end
+if P[65] then collisionBatch[#collisionBatch+1] = {Part = P[65], CanCollide = true} end
+if P[66] then collisionBatch[#collisionBatch+1] = {Part = P[66], CanCollide = true} end
+if P[67] then collisionBatch[#collisionBatch+1] = {Part = P[67], CanCollide = true} end
+if P[68] then collisionBatch[#collisionBatch+1] = {Part = P[68], CanCollide = true} end
+if P[69] then collisionBatch[#collisionBatch+1] = {Part = P[69], CanCollide = true} end
+if P[70] then collisionBatch[#collisionBatch+1] = {Part = P[70], CanCollide = true} end
+if P[71] then collisionBatch[#collisionBatch+1] = {Part = P[71], CanCollide = true} end
+if P[72] then collisionBatch[#collisionBatch+1] = {Part = P[72], CanCollide = true} end
+if P[73] then collisionBatch[#collisionBatch+1] = {Part = P[73], CanCollide = true} end
+if P[74] then collisionBatch[#collisionBatch+1] = {Part = P[74], CanCollide = true} end
+if P[75] then collisionBatch[#collisionBatch+1] = {Part = P[75], CanCollide = true} end
+if P[76] then collisionBatch[#collisionBatch+1] = {Part = P[76], CanCollide = true} end
+if P[77] then collisionBatch[#collisionBatch+1] = {Part = P[77], CanCollide = true} end
+if P[78] then collisionBatch[#collisionBatch+1] = {Part = P[78], CanCollide = true} end
+if P[79] then collisionBatch[#collisionBatch+1] = {Part = P[79], CanCollide = true} end
+if P[80] then collisionBatch[#collisionBatch+1] = {Part = P[80], CanCollide = true} end
+if P[81] then collisionBatch[#collisionBatch+1] = {Part = P[81], CanCollide = true} end
+if P[82] then collisionBatch[#collisionBatch+1] = {Part = P[82], CanCollide = true} end
+if P[83] then collisionBatch[#collisionBatch+1] = {Part = P[83], CanCollide = true} end
+if P[84] then collisionBatch[#collisionBatch+1] = {Part = P[84], CanCollide = true} end
+if P[85] then collisionBatch[#collisionBatch+1] = {Part = P[85], CanCollide = true} end
+if P[86] then collisionBatch[#collisionBatch+1] = {Part = P[86], CanCollide = true} end
+if P[87] then collisionBatch[#collisionBatch+1] = {Part = P[87], CanCollide = true} end
+if P[88] then collisionBatch[#collisionBatch+1] = {Part = P[88], CanCollide = true} end
+if P[89] then collisionBatch[#collisionBatch+1] = {Part = P[89], CanCollide = true} end
+if P[90] then collisionBatch[#collisionBatch+1] = {Part = P[90], CanCollide = true} end
+if P[91] then collisionBatch[#collisionBatch+1] = {Part = P[91], CanCollide = true} end
+if P[92] then collisionBatch[#collisionBatch+1] = {Part = P[92], CanCollide = true} end
+if P[93] then collisionBatch[#collisionBatch+1] = {Part = P[93], CanCollide = true} end
+if P[94] then collisionBatch[#collisionBatch+1] = {Part = P[94], CanCollide = true} end
+if P[95] then collisionBatch[#collisionBatch+1] = {Part = P[95], CanCollide = true} end
+if P[96] then collisionBatch[#collisionBatch+1] = {Part = P[96], CanCollide = true} end
+if P[97] then collisionBatch[#collisionBatch+1] = {Part = P[97], CanCollide = true} end
+if P[98] then collisionBatch[#collisionBatch+1] = {Part = P[98], CanCollide = true} end
+if P[100] then collisionBatch[#collisionBatch+1] = {Part = P[100], CanCollide = false} end
+if P[106] then collisionBatch[#collisionBatch+1] = {Part = P[106], CanCollide = false} end
+if P[114] then collisionBatch[#collisionBatch+1] = {Part = P[114], CanCollide = true} end
+if P[115] then collisionBatch[#collisionBatch+1] = {Part = P[115], CanCollide = true} end
+if P[202] then collisionBatch[#collisionBatch+1] = {Part = P[202], CanCollide = false} end
+if P[142] then collisionBatch[#collisionBatch+1] = {Part = P[142], CanCollide = false} end
+if P[260] then collisionBatch[#collisionBatch+1] = {Part = P[260], CanCollide = true} end
+if P[258] then collisionBatch[#collisionBatch+1] = {Part = P[258], CanCollide = true} end
+if P[241] then collisionBatch[#collisionBatch+1] = {Part = P[241], CanCollide = true} end
+if P[172] then collisionBatch[#collisionBatch+1] = {Part = P[172], CanCollide = false} end
+if P[226] then collisionBatch[#collisionBatch+1] = {Part = P[226], CanCollide = true} end
+if P[225] then collisionBatch[#collisionBatch+1] = {Part = P[225], CanCollide = true} end
+if P[222] then collisionBatch[#collisionBatch+1] = {Part = P[222], CanCollide = false} end
+if P[243] then collisionBatch[#collisionBatch+1] = {Part = P[243], CanCollide = true} end
+if P[192] then collisionBatch[#collisionBatch+1] = {Part = P[192], CanCollide = false} end
+if P[256] then collisionBatch[#collisionBatch+1] = {Part = P[256], CanCollide = true} end
+if P[147] then collisionBatch[#collisionBatch+1] = {Part = P[147], CanCollide = true} end
+if P[194] then collisionBatch[#collisionBatch+1] = {Part = P[194], CanCollide = false} end
+if P[193] then collisionBatch[#collisionBatch+1] = {Part = P[193], CanCollide = false} end
+if P[146] then collisionBatch[#collisionBatch+1] = {Part = P[146], CanCollide = true} end
+if P[189] then collisionBatch[#collisionBatch+1] = {Part = P[189], CanCollide = true} end
+if P[144] then collisionBatch[#collisionBatch+1] = {Part = P[144], CanCollide = true} end
+if P[157] then collisionBatch[#collisionBatch+1] = {Part = P[157], CanCollide = true} end
+if P[171] then collisionBatch[#collisionBatch+1] = {Part = P[171], CanCollide = true} end
+if P[174] then collisionBatch[#collisionBatch+1] = {Part = P[174], CanCollide = true} end
+if P[155] then collisionBatch[#collisionBatch+1] = {Part = P[155], CanCollide = true} end
+if P[197] then collisionBatch[#collisionBatch+1] = {Part = P[197], CanCollide = false} end
+if P[224] then collisionBatch[#collisionBatch+1] = {Part = P[224], CanCollide = true} end
+if P[212] then collisionBatch[#collisionBatch+1] = {Part = P[212], CanCollide = false} end
+if P[220] then collisionBatch[#collisionBatch+1] = {Part = P[220], CanCollide = true} end
+if P[130] then collisionBatch[#collisionBatch+1] = {Part = P[130], CanCollide = true} end
+if P[170] then collisionBatch[#collisionBatch+1] = {Part = P[170], CanCollide = true} end
+batchCollision(endpoint, collisionBatch)
+local lockTasks, nameTasks = {}, {}
+
+if P[6] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[6], true) end) end
+if P[7] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[7], true) end) end
+if P[8] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[8], true) end) end
+if P[9] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[9], true) end) end
+if P[10] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[10], true) end) end
+if P[11] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[11], true) end) end
+if P[12] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[12], true) end) end
+if P[13] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[13], true) end) end
+if P[14] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[14], true) end) end
+if P[15] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[15], true) end) end
+if P[16] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[16], true) end) end
+if P[17] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[17], true) end) end
+if P[18] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[18], true) end) end
+if P[20] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[20], true) end) end
+if P[21] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[21], true) end) end
+if P[22] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[22], true) end) end
+if P[23] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[23], true) end) end
+if P[24] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[24], true) end) end
+if P[25] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[25], true) end) end
+if P[26] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[26], true) end) end
+if P[27] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[27], true) end) end
+if P[28] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[28], true) end) end
+if P[29] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[29], true) end) end
+if P[30] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[30], true) end) end
+if P[31] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[31], true) end) end
+if P[32] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[32], true) end) end
+if P[34] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[34], true) end) end
+if P[35] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[35], true) end) end
+if P[36] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[36], true) end) end
+if P[37] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[37], true) end) end
+if P[38] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[38], true) end) end
+if P[39] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[39], true) end) end
+if P[40] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[40], true) end) end
+if P[41] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[41], true) end) end
+if P[42] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[42], true) end) end
+if P[43] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[43], true) end) end
+if P[44] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[44], true) end) end
+if P[45] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[45], true) end) end
+if P[46] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[46], true) end) end
+if P[48] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[48], true) end) end
+if P[49] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[49], true) end) end
+if P[50] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[50], true) end) end
+if P[51] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[51], true) end) end
+if P[52] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[52], true) end) end
+if P[53] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[53], true) end) end
+if P[54] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[54], true) end) end
+if P[55] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[55], true) end) end
+if P[56] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[56], true) end) end
+if P[57] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[57], true) end) end
+if P[58] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[58], true) end) end
+if P[59] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[59], true) end) end
+if P[60] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[60], true) end) end
+if P[61] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[61], true) end) end
+if P[62] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[62], true) end) end
+if P[63] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[63], true) end) end
+if P[64] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[64], true) end) end
+if P[65] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[65], true) end) end
+if P[66] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[66], true) end) end
+if P[67] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[67], true) end) end
+if P[68] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[68], true) end) end
+if P[69] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[69], true) end) end
+if P[70] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[70], true) end) end
+if P[71] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[71], true) end) end
+if P[71] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[71], "Wedge") end) end
+if P[72] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[72], true) end) end
+if P[73] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[73], true) end) end
+if P[74] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[74], true) end) end
+if P[75] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[75], true) end) end
+if P[76] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[76], true) end) end
+if P[77] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[77], true) end) end
+if P[78] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[78], true) end) end
+if P[79] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[79], true) end) end
+if P[80] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[80], true) end) end
+if P[81] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[81], true) end) end
+if P[82] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[82], true) end) end
+if P[83] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[83], true) end) end
+if P[84] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[84], true) end) end
+if P[85] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[85], true) end) end
+if P[86] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[86], true) end) end
+if P[87] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[87], true) end) end
+if P[88] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[88], true) end) end
+if P[89] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[89], true) end) end
+if P[90] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[90], true) end) end
+if P[91] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[91], true) end) end
+if P[92] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[92], true) end) end
+if P[93] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[93], true) end) end
+if P[94] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[94], true) end) end
+if P[95] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[95], true) end) end
+if P[96] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[96], true) end) end
+if P[97] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[97], true) end) end
+if P[98] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[98], true) end) end
+if P[100] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[100], true) end) end
+if P[100] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[100], "Handle") end) end
+if P[106] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[106], true) end) end
+if P[106] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[106], "Handle") end) end
+if P[114] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[114], true) end) end
+if P[114] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[114], "Right Leg") end) end
+if P[115] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[115], true) end) end
+if P[115] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[115], "Torso") end) end
+if P[202] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[202], true) end) end
+if P[202] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[202], "Handle") end) end
+if P[142] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[142], true) end) end
+if P[142] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[142], "HumanoidRootPart") end) end
+if P[260] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[260], true) end) end
+if P[260] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[260], "DecalPart") end) end
+if P[258] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[258], true) end) end
+if P[258] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[258], "DecalPart") end) end
+if P[241] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[241], true) end) end
+if P[241] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[241], "Right Arm") end) end
+if P[172] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[172], true) end) end
+if P[172] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[172], "HumanoidRootPart") end) end
+if P[226] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[226], true) end) end
+if P[226] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[226], "Torso") end) end
+if P[225] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[225], true) end) end
+if P[225] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[225], "Right Leg") end) end
+if P[222] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[222], true) end) end
+if P[222] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[222], "HumanoidRootPart") end) end
+if P[243] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[243], true) end) end
+if P[243] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[243], "Head") end) end
+if P[192] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[192], true) end) end
+if P[192] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[192], "Handle") end) end
+if P[256] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[256], true) end) end
+if P[256] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[256], "SpawnLocation") end) end
+if P[147] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[147], true) end) end
+if P[147] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[147], "Left Arm") end) end
+if P[194] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[194], true) end) end
+if P[194] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[194], "Handle") end) end
+if P[193] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[193], true) end) end
+if P[193] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[193], "Handle") end) end
+if P[146] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[146], true) end) end
+if P[146] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[146], "Left Leg") end) end
+if P[189] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[189], true) end) end
+if P[189] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[189], "Right Arm") end) end
+if P[144] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[144], true) end) end
+if P[144] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[144], "Right Arm") end) end
+if P[157] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[157], true) end) end
+if P[157] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[157], "Head") end) end
+if P[171] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[171], true) end) end
+if P[171] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[171], "Left Leg") end) end
+if P[174] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[174], true) end) end
+if P[174] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[174], "Torso") end) end
+if P[155] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[155], true) end) end
+if P[155] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[155], "Left Arm") end) end
+if P[197] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[197], true) end) end
+if P[197] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[197], "Handle") end) end
+if P[224] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[224], true) end) end
+if P[224] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[224], "Left Leg") end) end
+if P[212] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[212], true) end) end
+if P[212] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[212], "Handle") end) end
+if P[220] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[220], true) end) end
+if P[220] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[220], "Left Arm") end) end
+if P[130] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[130], true) end) end
+if P[130] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[130], "Head") end) end
+if P[170] then lockTasks[#lockTasks+1] = task.spawn(function() setLocked(endpoint, P[170], true) end) end
+if P[170] then nameTasks[#nameTasks+1] = task.spawn(function() setName(endpoint, P[170], "Right Leg") end) end
+task.wait(0.2)
+if P[106] then
+    task.spawn(function()
+        createMesh(endpoint, P[106])
+        syncMeshType(endpoint, P[106], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[106], Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982))
+        syncMeshOffset(endpoint, P[106], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[106], "rbxassetid://18856354877")
+        syncMeshTexture(endpoint, P[106], "rbxassetid://18856356322")
+    end)
+end
+if P[130] then
+    task.spawn(function()
+        createMesh(endpoint, P[130])
+        syncMeshType(endpoint, P[130], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[130], Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982))
+        syncMeshOffset(endpoint, P[130], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[130], "rbxassetid://84012766026169")
+        syncMeshTexture(endpoint, P[130], "rbxassetid://138482205111830")
+    end)
+end
+if P[157] then
+    task.spawn(function()
+        createMesh(endpoint, P[157])
+        syncMeshType(endpoint, P[157], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[157], Vector3.new(2.372549533843994,2.372549533843994,2.372549533843994))
+        syncMeshOffset(endpoint, P[157], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[157], "rbxassetid://128604392599185")
+        syncMeshTexture(endpoint, P[157], "rbxassetid://127544890203042")
+    end)
+end
+if P[197] then
+    task.spawn(function()
+        createMesh(endpoint, P[197])
+        syncMeshType(endpoint, P[197], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[197], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[197], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[197], "http://www.roblox.com/asset/?id=76056263")
+        syncMeshTexture(endpoint, P[197], "http://www.roblox.com/asset/?id=323471838 ")
+    end)
+end
+if P[202] then
+    task.spawn(function()
+        createMesh(endpoint, P[202])
+        syncMeshType(endpoint, P[202], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[202], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[202], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[202], "rbxassetid://93397775140900")
+        syncMeshTexture(endpoint, P[202], "rbxassetid://89543741788896")
+    end)
+end
+if P[212] then
+    task.spawn(function()
+        createMesh(endpoint, P[212])
+        syncMeshType(endpoint, P[212], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[212], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[212], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[212], "rbxassetid://10568721128")
+        syncMeshTexture(endpoint, P[212], "rbxassetid://10568717446")
+    end)
+end
+if P[243] then
+    task.spawn(function()
+        createMesh(endpoint, P[243])
+        syncMeshType(endpoint, P[243], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[243], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[243], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[243], "https://assetdelivery.roblox.com/v1/asset/?id=14629524054")
+        syncMeshTexture(endpoint, P[243], "rbxassetid://14629524062")
+    end)
+end
+if P[100] then
+    task.spawn(function()
+        createMesh(endpoint, P[100])
+        syncMeshType(endpoint, P[100], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[100], Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982))
+        syncMeshOffset(endpoint, P[100], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[100], "rbxassetid://18856354877")
+        syncMeshTexture(endpoint, P[100], "rbxassetid://18856356322")
+    end)
+end
+if P[192] then
+    task.spawn(function()
+        createMesh(endpoint, P[192])
+        syncMeshType(endpoint, P[192], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[192], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[192], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[192], "http://www.roblox.com/asset/?id=76056263")
+        syncMeshTexture(endpoint, P[192], "http://www.roblox.com/asset/?id=323471838 ")
+    end)
+end
+if P[193] then
+    task.spawn(function()
+        createMesh(endpoint, P[193])
+        syncMeshType(endpoint, P[193], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[193], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[193], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[193], "rbxassetid://93397775140900")
+        syncMeshTexture(endpoint, P[193], "rbxassetid://89543741788896")
+    end)
+end
+if P[194] then
+    task.spawn(function()
+        createMesh(endpoint, P[194])
+        syncMeshType(endpoint, P[194], Enum.MeshType.FileMesh)
+        syncMeshScale(endpoint, P[194], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
+        syncMeshOffset(endpoint, P[194], Vector3.new(0,0,0))
+        syncMeshId(endpoint, P[194], "rbxassetid://10568721128")
+        syncMeshTexture(endpoint, P[194], "rbxassetid://10568717446")
+    end)
+end
+task.wait(0.3)
+if P[115] then
+    task.spawn(function()
+        createDecal(endpoint, P[115], Enum.NormalId.Front)
+    end)
+end
+if P[130] then
+    task.spawn(function()
+        createDecal(endpoint, P[130], Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[130], "rbxasset://textures/face.png", Enum.NormalId.Front)
+    end)
+end
+if P[157] then
+    task.spawn(function()
+        createDecal(endpoint, P[157], Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[157], "rbxasset://textures/face.png", Enum.NormalId.Front)
+    end)
+end
+if P[174] then
+    task.spawn(function()
+        createDecal(endpoint, P[174], Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[174], "http://www.roblox.com/asset/?id=1745855", Enum.NormalId.Front)
+    end)
+end
+if P[226] then
+    task.spawn(function()
+        createDecal(endpoint, P[226], Enum.NormalId.Front)
+    end)
+end
+if P[243] then
+    task.spawn(function()
+        createDecal(endpoint, P[243], Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[243], "rbxasset://textures/face.png", Enum.NormalId.Front)
+    end)
+end
+if P[256] then
+    task.spawn(function()
+        createDecal(endpoint, P[256], Enum.NormalId.Top)
+        setDecalTexture(endpoint, P[256], "rbxasset://textures/SpawnLocation.png", Enum.NormalId.Top)
+    end)
+end
+if P[258] then
+    task.spawn(function()
+        createDecal(endpoint, P[258], Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[258], "rbxassetid://90506874663587", Enum.NormalId.Front)
+    end)
+end
+if P[260] then
+    task.spawn(function()
+        createDecal(endpoint, P[260], Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[260], "rbxassetid://90506874663587", Enum.NormalId.Front)
+    end)
+end
+task.wait(0.3)
+local G = {}
+task.spawn(function()
+    G[191] = createGroup(endpoint, "Model", workspace, {220,222,224,225,226,241,243})
+    setName(endpoint, G[191], "Natenea1254")
+end)
+task.spawn(function()
+    G[149] = createGroup(endpoint, "Model", workspace, {155,157,170,171,172,174,189})
+    setName(endpoint, G[149], "anonymoos11i11i1")
+end)
+task.spawn(function()
+    G[19] = createGroup(endpoint, "Model", workspace, {20,21,22,23,24,25,26,27,28,29,30,31,32})
+end)
+task.spawn(function()
+    G[47] = createGroup(endpoint, "Model", workspace, {48,49,50,51,52,53,54,55,56,57,58,59,60})
+end)
+task.spawn(function()
+    G[33] = createGroup(endpoint, "Model", workspace, {34,35,36,37,38,39,40,41,42,43,44,45,46})
+end)
+task.spawn(function()
+    G[99] = createGroup(endpoint, "Model", workspace, {114,115,130,142,144,146,147})
+    setName(endpoint, G[99], "1_wxaa")
+end)
+task.spawn(function()
+    G[5] = createGroup(endpoint, "Model", workspace, {6,7,8,9,10,11,12,13,14,15,16,17,18})
+end)
+task.spawn(function()
+    G[4] = createGroup(endpoint, "Model", workspace, {61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98})
+end)
+task.wait(0.3)
+task.wait(0.5)
+local missed = {}
+for id, part in pairs(P) do
+    if part and not part.Anchored then
+        missed[#missed+1] = {Part = part, Anchored = true}
+    end
+end
+if #missed > 0 then
+    print("Fixing", #missed, "missed anchor(s)...")
+    for i = 1, #missed, 100 do
+        local chunk = {}
+        for j = i, math.min(i+99, #missed) do
+            chunk[#chunk+1] = missed[j]
+        end
+        endpoint:InvokeServer("SyncAnchor", chunk)
+        task.wait()
+    end
+end
+
+RequestCommand:InvokeServer(";res all")
+task.wait(0.2)
+RequestCommand:InvokeServer(";re all")
