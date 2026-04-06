@@ -1031,8 +1031,8 @@ if P[106] then
         syncMeshType(endpoint, P[106], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[106], Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982))
         syncMeshOffset(endpoint, P[106], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[106], "rbxassetid://18856354877")
-        syncMeshTexture(endpoint, P[106], "rbxassetid://18856356322")
+        syncMeshId(endpoint, P[106], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[106], "rbxassetid://103776926419888")
     end)
 end
 if P[130] then
@@ -1041,8 +1041,8 @@ if P[130] then
         syncMeshType(endpoint, P[130], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[130], Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982))
         syncMeshOffset(endpoint, P[130], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[130], "rbxassetid://84012766026169")
-        syncMeshTexture(endpoint, P[130], "rbxassetid://138482205111830")
+        syncMeshId(endpoint, P[130], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[130], "rbxassetid://103776926419888")
     end)
 end
 if P[157] then
@@ -1051,8 +1051,8 @@ if P[157] then
         syncMeshType(endpoint, P[157], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[157], Vector3.new(2.372549533843994,2.372549533843994,2.372549533843994))
         syncMeshOffset(endpoint, P[157], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[157], "rbxassetid://128604392599185")
-        syncMeshTexture(endpoint, P[157], "rbxassetid://127544890203042")
+        syncMeshId(endpoint, P[157], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[157], "rbxassetid://103776926419888")
     end)
 end
 if P[197] then
@@ -1071,8 +1071,8 @@ if P[202] then
         syncMeshType(endpoint, P[202], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[202], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
         syncMeshOffset(endpoint, P[202], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[202], "rbxassetid://93397775140900")
-        syncMeshTexture(endpoint, P[202], "rbxassetid://89543741788896")
+        syncMeshId(endpoint, P[202], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[202], "rbxassetid://103776926419888")
     end)
 end
 if P[212] then
@@ -1082,7 +1082,7 @@ if P[212] then
         syncMeshScale(endpoint, P[212], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
         syncMeshOffset(endpoint, P[212], Vector3.new(0,0,0))
         syncMeshId(endpoint, P[212], "rbxassetid://10568721128")
-        syncMeshTexture(endpoint, P[212], "rbxassetid://10568717446")
+        syncMeshTexture(endpoint, P[212], "rbxassetid://103776926419888")
     end)
 end
 if P[243] then
@@ -1092,7 +1092,7 @@ if P[243] then
         syncMeshScale(endpoint, P[243], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
         syncMeshOffset(endpoint, P[243], Vector3.new(0,0,0))
         syncMeshId(endpoint, P[243], "https://assetdelivery.roblox.com/v1/asset/?id=14629524054")
-        syncMeshTexture(endpoint, P[243], "rbxassetid://14629524062")
+        syncMeshTexture(endpoint, P[243], "rbxassetid://103776926419888")
     end)
 end
 if P[100] then
@@ -1101,8 +1101,8 @@ if P[100] then
         syncMeshType(endpoint, P[100], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[100], Vector3.new(2.3722140789031982,2.3722140789031982,2.3722140789031982))
         syncMeshOffset(endpoint, P[100], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[100], "rbxassetid://18856354877")
-        syncMeshTexture(endpoint, P[100], "rbxassetid://18856356322")
+        syncMeshId(endpoint, P[100], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[100], "rbxassetid://103776926419888")
     end)
 end
 if P[192] then
@@ -1121,8 +1121,8 @@ if P[193] then
         syncMeshType(endpoint, P[193], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[193], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
         syncMeshOffset(endpoint, P[193], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[193], "rbxassetid://93397775140900")
-        syncMeshTexture(endpoint, P[193], "rbxassetid://89543741788896")
+        syncMeshId(endpoint, P[193], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[193], "rbxassetid://103776926419888")
     end)
 end
 if P[194] then
@@ -1131,8 +1131,8 @@ if P[194] then
         syncMeshType(endpoint, P[194], Enum.MeshType.FileMesh)
         syncMeshScale(endpoint, P[194], Vector3.new(3.7272729873657227,3.7272729873657227,3.7272729873657227))
         syncMeshOffset(endpoint, P[194], Vector3.new(0,0,0))
-        syncMeshId(endpoint, P[194], "rbxassetid://10568721128")
-        syncMeshTexture(endpoint, P[194], "rbxassetid://10568717446")
+        syncMeshId(endpoint, P[194], "rbxassetid://103776926419888")
+        syncMeshTexture(endpoint, P[194], "rbxassetid://103776926419888")
     end)
 end
 task.wait(0.3)
@@ -1179,13 +1179,13 @@ end
 if P[258] then
     task.spawn(function()
         createDecal(endpoint, P[258], Enum.NormalId.Front)
-        setDecalTexture(endpoint, P[258], "rbxassetid://90506874663587", Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[258], "rbxassetid://103776926419888", Enum.NormalId.Front)
     end)
 end
 if P[260] then
     task.spawn(function()
         createDecal(endpoint, P[260], Enum.NormalId.Front)
-        setDecalTexture(endpoint, P[260], "rbxassetid://90506874663587", Enum.NormalId.Front)
+        setDecalTexture(endpoint, P[260], "rbxassetid://103776926419888", Enum.NormalId.Front)
     end)
 end
 task.wait(0.3)
