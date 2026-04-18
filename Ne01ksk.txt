@@ -1,106 +1,47 @@
+local remote = game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t")
+local selectedPlayer = nil 
+
+local mensagens = {
+	"",
+	"",
+	"N",
+	"NE",
+	"NEY",
+	"NEYM",
+	"NEYMA",
+	"NEYMAR",
+	"NEYMAR H",
+	"NEYMAR HUB ",
+	"NEYMAR HUB B",
+	"NEYMAR HUB BR",
+	"NEYMAR HUB BRO",
+	"NEYMAR HUB BROO",
+	"NEYMAR HUB BROOK",
+	"NEYMAR HUB BROOKH",
+	"NEYMAR HUB BROOKHA",
+	"NEYMAR HUB BROOKHAV",
+	"NEYMAR HUB BROOKHAVE",
+	"NEYMAR HUB BROOKHAVEN",
+	"NEYMAR HUB BROOKHAVEN",
+	"NEYMAR HUB BROOKHAVEN",
+}
+
+
+for _, mensagem in ipairs(mensagens) do
+	remote:FireServer("RolePlayBio", mensagem)
+	wait(0.1)
+end
+
 local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/077/refs/heads/main/NeymarGUI.txt"))()
 workspace.FallenPartsDestroyHeight = -math.huge
 
 local Window = Libary:MakeWindow({
     Title = "NEYMAR HUB",
     SubTitle = "by: Kdkjdnde",
-    LoadText = "Best Arabic script",
-    Flags = "ismail_Broookhaven"
+    LoadText = "Neymar The Best",
+    Flags = "Hassanein_Broookhaven"
 })
 Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://81886512783938", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
-})
-local InfoTab = Window:MakeTab({ 
-    Title = "حقوق", 
-    Icon = "rbxassetid://81886512783938" 
-})
-
-function InfoTab:AddImageUsers(Configs)
-
-    local Image1 = Configs.Image1 or ""
-    local Image2 = Configs.Image2 or ""
-    local Image3 = Configs.Image3 or ""
-
-    local Copy1 = Configs.Copy1 or ""
-    local Copy2 = Configs.Copy2 or ""
-    local Copy3 = Configs.Copy3 or ""
-
-    local Background = Configs.Background or ""
-
-    local Container = self.Container or self.Content or self.Page
-
-    if not Container then
-        warn("Container not found in this UI library")
-        return
-    end
-
-    local Holder = Create("Frame", Container, {
-        Size = UDim2.new(1,0,0,220),
-        BackgroundColor3 = Theme["Color Hub 2"],
-        BorderSizePixel = 0
-    })
-
-    Create("UICorner", Holder, {
-        CornerRadius = UDim.new(0,12)
-    })
-
-    local BgImage = Create("ImageLabel", Holder, {
-        Size = UDim2.new(1,0,0,120),
-        BackgroundTransparency = 1,
-        Image = Background
-    })
-
-    local function MakeUser(Pos, Img, CopyText)
-
-        local Image = Create("ImageLabel", Holder, {
-            Size = UDim2.new(0,60,0,60),
-            Position = Pos,
-            BackgroundTransparency = 1,
-            Image = Img
-        })
-
-        Create("UICorner", Image, {
-            CornerRadius = UDim.new(1,0)
-        })
-
-        local Button = Create("TextButton", Holder, {
-            Size = UDim2.new(0,70,0,28),
-            Position = UDim2.new(Pos.X.Scale, Pos.X.Offset-5, 0, 150),
-            BackgroundColor3 = Theme["Color Button"],
-            Text = "Copy",
-            Font = Enum.Font.GothamBold,
-            TextSize = 14,
-            TextColor3 = Theme["Color Text"],
-            BorderSizePixel = 0
-        })
-
-        Create("UICorner", Button, {
-            CornerRadius = UDim.new(0,6)
-        })
-
-        Button.MouseButton1Click:Connect(function()
-            if setclipboard then
-                setclipboard(CopyText)
-            end
-        end)
-
-    end
-
-    MakeUser(UDim2.new(0.2,-30,0,80), Image1, Copy1)
-    MakeUser(UDim2.new(0.5,-30,0,80), Image2, Copy2)
-    MakeUser(UDim2.new(0.8,-30,0,80), Image3, Copy3)
-
-end
-
-InfoTab:AddImageUsers({
-    Background = "rbxassetid://125602848737897",
-
-    Image1 = "rbxassetid://125602848737897",
-    Image2 = "rbxassetid://125602848737897",
-    Image3 = "rbxassetid://125602848737897",
-
-    Copy1 = "Neymar",
-    Copy2 = "WLV27",
-    Copy3 = "WLV66"
 })
