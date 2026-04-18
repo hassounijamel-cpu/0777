@@ -11,12 +11,89 @@ Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://81886512783938", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
-local NewTab = Window:MakeTab({ 
+local InfoTab = Window:MakeTab({ 
     Title = "حقوق", 
     Icon = "rbxassetid://81886512783938" 
 })
 
-AddImageUsers(NewTab.Container or NewTab.Content or NewTab.Page, {
+function InfoTab:AddImageUsers(Configs)
+
+    local Image1 = Configs.Image1 or ""
+    local Image2 = Configs.Image2 or ""
+    local Image3 = Configs.Image3 or ""
+
+    local Copy1 = Configs.Copy1 or ""
+    local Copy2 = Configs.Copy2 or ""
+    local Copy3 = Configs.Copy3 or ""
+
+    local Background = Configs.Background or ""
+
+    local Container = self.Container or self.Content or self.Page
+
+    if not Container then
+        warn("Container not found in this UI library")
+        return
+    end
+
+    local Holder = Create("Frame", Container, {
+        Size = UDim2.new(1,0,0,220),
+        BackgroundColor3 = Theme["Color Hub 2"],
+        BorderSizePixel = 0
+    })
+
+    Create("UICorner", Holder, {
+        CornerRadius = UDim.new(0,12)
+    })
+
+    local BgImage = Create("ImageLabel", Holder, {
+        Size = UDim2.new(1,0,0,120),
+        BackgroundTransparency = 1,
+        Image = Background
+    })
+
+    local function MakeUser(Pos, Img, CopyText)
+
+        local Image = Create("ImageLabel", Holder, {
+            Size = UDim2.new(0,60,0,60),
+            Position = Pos,
+            BackgroundTransparency = 1,
+            Image = Img
+        })
+
+        Create("UICorner", Image, {
+            CornerRadius = UDim.new(1,0)
+        })
+
+        local Button = Create("TextButton", Holder, {
+            Size = UDim2.new(0,70,0,28),
+            Position = UDim2.new(Pos.X.Scale, Pos.X.Offset-5, 0, 150),
+            BackgroundColor3 = Theme["Color Button"],
+            Text = "Copy",
+            Font = Enum.Font.GothamBold,
+            TextSize = 14,
+            TextColor3 = Theme["Color Text"],
+            BorderSizePixel = 0
+        })
+
+        Create("UICorner", Button, {
+            CornerRadius = UDim.new(0,6)
+        })
+
+        Button.MouseButton1Click:Connect(function()
+            if setclipboard then
+                setclipboard(CopyText)
+            end
+        end)
+
+    end
+
+    MakeUser(UDim2.new(0.2,-30,0,80), Image1, Copy1)
+    MakeUser(UDim2.new(0.5,-30,0,80), Image2, Copy2)
+    MakeUser(UDim2.new(0.8,-30,0,80), Image3, Copy3)
+
+end
+
+InfoTab:AddImageUsers({
     Background = "rbxassetid://125602848737897",
 
     Image1 = "rbxassetid://125602848737897",
