@@ -11,28 +11,17 @@ Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://81886512783938", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
--- 1. جلب صورة حسابك (Kdkjdnde) تلقائياً
-local userId = game.Players:GetUserIdFromNameAsync("Kdkjdnde")
-local userIcon = game:GetService("Players"):GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
-
--- 2. الإشعار الترحيبي (المستطيل الصغير)
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Kdkjdnde", 
-    Text = "script by: Neymar",
-    Icon = userIcon,
-    Duration = 5
+-- إنشاء التاب
+local InfoTab = Window:MakeTab({ 
+    Title = "حقوق", 
+    Icon = "rbxassetid://81886512783938" 
 })
 
--- 3. إنشاء التبويب
-local InfoTab = Window:MakeTab({
-    Title = "حقوق",
-    Icon = "rbxassetid://81886512783938"
-})
-
--- 4. إدراج الوظيفة اللي أرسلتها داخل التبويب
+-- إضافة الفنكشن للتاب
 function InfoTab:AddImageUsers(Configs)
-    local Title = Configs.Title or "Kdkjdnde"
-    local Background = Configs.Background or "rbxassetid://6023426926" -- خلفية افتراضية
+
+    local Title = Configs.Title or "Users"
+    local Background = Configs.Background or ""
 
     local Image1 = Configs.Image1 or ""
     local Image2 = Configs.Image2 or ""
@@ -42,16 +31,21 @@ function InfoTab:AddImageUsers(Configs)
     local Copy2 = Configs.Copy2 or ""
     local Copy3 = Configs.Copy3 or ""
 
-    -- ملاحظة: يجب أن تكون Container و Create و Theme معرفة مسبقاً في سورس Redz V5 الأصلي
-    local Holder = Create("Frame", Container, {
+    local Holder = Create("Frame", InfoTab.Container or Container, {
         Size = UDim2.new(1,0,0,220),
         BackgroundColor3 = Theme["Color Hub 2"],
         BorderColor3 = Theme["Color Stroke"],
         BorderSizePixel = 2
     })
 
-    Create("UICorner", Holder, { CornerRadius = UDim.new(0,12) })
-    Create("UIStroke", Holder, { Color = Theme["Color Stroke"], Thickness = 1.5 })
+    Create("UICorner", Holder, {
+        CornerRadius = UDim.new(0,12)
+    })
+
+    Create("UIStroke", Holder, {
+        Color = Theme["Color Stroke"],
+        Thickness = 1.5
+    })
 
     local BgImage = Create("ImageLabel", Holder, {
         Size = UDim2.new(1,0,0,120),
@@ -59,9 +53,12 @@ function InfoTab:AddImageUsers(Configs)
         Image = Background
     })
 
-    Create("UICorner", BgImage, { CornerRadius = UDim.new(0,12) })
+    Create("UICorner", BgImage, {
+        CornerRadius = UDim.new(0,12)
+    })
 
     local function MakeUser(Pos, Img, CopyText)
+
         local Image = Create("ImageLabel", Holder, {
             Size = UDim2.new(0,60,0,60),
             Position = Pos,
@@ -69,8 +66,14 @@ function InfoTab:AddImageUsers(Configs)
             Image = Img
         })
 
-        Create("UICorner", Image, { CornerRadius = UDim.new(1,0) })
-        Create("UIStroke", Image, { Color = Theme["Color Stroke"], Thickness = 1.5 })
+        Create("UICorner", Image, {
+            CornerRadius = UDim.new(1,0)
+        })
+
+        Create("UIStroke", Image, {
+            Color = Theme["Color Stroke"],
+            Thickness = 1.5
+        })
 
         local Button = Create("TextButton", Holder, {
             Size = UDim2.new(0,70,0,28),
@@ -83,29 +86,48 @@ function InfoTab:AddImageUsers(Configs)
             BorderSizePixel = 0
         })
 
-        Create("UICorner", Button, { CornerRadius = UDim.new(0,6) })
-        Create("UIStroke", Button, { Color = Theme["Color Stroke"], Thickness = 1.2 })
+        Create("UICorner", Button, {
+            CornerRadius = UDim.new(0,6)
+        })
 
-        Button.MouseEnter:Connect(function() Button.BackgroundColor3 = Theme["Color Theme"] end)
-        Button.MouseLeave:Connect(function() Button.BackgroundColor3 = Theme["Color Button"] end)
-        Button.MouseButton1Click:Connect(function() setclipboard(CopyText) end)
+        Create("UIStroke", Button, {
+            Color = Theme["Color Stroke"],
+            Thickness = 1.2
+        })
+
+        Button.MouseEnter:Connect(function()
+            Button.BackgroundColor3 = Theme["Color Theme"]
+        end)
+
+        Button.MouseLeave:Connect(function()
+            Button.BackgroundColor3 = Theme["Color Button"]
+        end)
+
+        Button.MouseButton1Click:Connect(function()
+            if setclipboard then
+                setclipboard(CopyText)
+            end
+        end)
+
     end
 
     MakeUser(UDim2.new(0.2,-30,0,80), Image1, Copy1)
     MakeUser(UDim2.new(0.5,-30,0,80), Image2, Copy2)
     MakeUser(UDim2.new(0.8,-30,0,80), Image3, Copy3)
+
 end
 
--- 5. تشغيل الوظيفة وتعبئة البيانات
+-- استخدام الفنكشن داخل التاب
 InfoTab:AddImageUsers({
-    Title = "Kdkjdnde",
-    Image1 = userIcon,             -- صورتك أنت
-    Image2 = "rbxassetid://81886512783938", -- آيدي صورة نيمار
-    Image3 = userIcon,             -- صورة تكرارية أو اتركها فارغة
-    Copy1 = "Kdkjdnde Profile",
-    Copy2 = "Neymar Script",
-    Copy3 = "Script by Neymar"
-})
+    Title = "حقوق",
 
--- إضافة النص الجانبي الصغير
-InfoTab:AddSection({ Name = "script by: Neymar" })
+    Background = "rbxassetid://125602848737897",
+
+    Image1 = "rbxassetid://125602848737897",
+    Image2 = "rbxassetid://125602848737897",
+    Image3 = "rbxassetid://125602848737897",
+
+    Copy1 = "Neymar",
+    Copy2 = "WLV27",
+    Copy3 = "WLV66"
+})
