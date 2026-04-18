@@ -1,0 +1,39 @@
+local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/077/refs/heads/main/NeymarGUI.txt"))()
+workspace.FallenPartsDestroyHeight = -math.huge
+
+local Window = Libary:MakeWindow({
+    Title = "NEYMAR HUB",
+    SubTitle = "by: Kdkjdnde",
+    LoadText = "Best Arabic script",
+    Flags = "ismail_Broookhaven"
+})
+Window:AddMinimizeButton({
+    Button = { Image = "rbxassetid://81886512783938", BackgroundTransparency = 0 },
+    Corner = { CornerRadius = UDim.new(35, 1) },
+})
+-- كود لجلب صورة البروفايل الخاصة بحساب Kdkjdnde تلقائياً
+local userId = game.Players:GetUserIdFromNameAsync("Kdkjdnde")
+local thumbType = Enum.ThumbnailType.HeadShot
+local thumbSize = Enum.ThumbnailSize.Size100x100
+local content, isReady = game.Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+
+-- إظهار المستطيل الصغير (الإشعار) مع الصورة والاسم والحقوق
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Kdkjdnde", 
+    Text = "Script by: Neymar",
+    Icon = content, -- هنا تظهر صورة بروفايل حسابك تلقائياً
+    Duration = 5
+})
+
+-- إضافة تبويب الحقوق لواجهة Redz V5
+local InfoTab = Window:MakeTab({
+    Title = "حقوق",
+    Icon = "rbxassetid://81886512783938"
+})
+
+-- تنظيم المعلومات داخل التبويب
+InfoTab:AddSection({
+	Name = "Owner: Kdkjdnde"
+})
+
+InfoTab:AddLabel("Script by: Neymar")
