@@ -82,3 +82,254 @@ InfoTab:AddButton({
     end
 })
 
+local NameTab = Window:MakeTab({ Title = "تلوين الاسم", Icon = "rbxassetid://10747830374" })
+NameTab:AddSection({ Name = "تلوين الاسم والبابو          ", Icon = "rbxassetid://10709782758" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local NameRemote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eColo1r")
+
+local t = 0
+local rainbowSpeed = 2 
+local nameRainbow = false
+local bioRainbow = false
+local nameFast = false
+local bioFast = false
+
+local function updateRainbow(dt)
+    t += dt
+    local speed = rainbowSpeed
+    if nameFast then speed = 20 end
+    local r = math.sin(t * speed) * 0.5 + 0.5
+    local g = math.sin(t * speed + 2) * 0.5 + 0.5
+    local b = math.sin(t * speed + 4) * 0.5 + 0.5
+    local rainbow = Color3.new(r, g, b)
+
+    if nameRainbow or nameFast then
+        NameRemote:FireServer("PickingRPNameColor", rainbow)
+    end
+    if bioRainbow or bioFast then
+        NameRemote:FireServer("PickingRPBioColor", rainbow)
+    end
+end
+
+RunService.RenderStepped:Connect(function(dt)
+    updateRainbow(dt)
+end)
+NameTab:AddSlider({
+    Name = "سرعة التلوين",
+    Min = 0.1,
+    Max = 1000,
+    Default = 2,
+    Increment = 0.1,
+    Callback = function(value)
+        rainbowSpeed = value
+    end
+})
+NameTab:AddToggle({
+    Name = "تلوين الاسم",
+    Default = false,
+    Callback = function(state)
+        nameRainbow = state
+    end
+})
+NameTab:AddToggle({
+    Name = "تلوين البايو",
+    Default = false,
+    Callback = function(state)
+        bioRainbow = state
+    end
+})
+NameTab:AddSection({ Name = "اشياء لـ الاسم والبابو          ", Icon = "rbxassetid://10723345088" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eTex1t")
+
+local selectedBio = ""
+local selectedName = ""
+
+NameTab:AddTextBox({
+    Name = "اكتب شتريد في البايو هنا",
+    Description = "",
+    PlaceholderText = "اكتب هنا…",
+    Callback = function(Value)
+        selectedBio = Value
+    end
+})
+
+NameTab:AddTextBox({
+    Name = "اكتب شتريد في الاسم هنا",
+    Description = "",
+    PlaceholderText = "اكتب هنا…",
+    Callback = function(Value)
+        selectedName = Value
+    end
+})
+
+local bioTypingLoop = false
+local bioBackLoop = false
+local nameTypingLoop = false
+local nameBackLoop = false
+
+local function AnimateLoop(remoteName, getText, reverseFlag, stateRef)
+    task.spawn(function()
+        while stateRef() do
+            local text = getText()
+            if text ~= "" then
+                local buffer = ""
+                for i = 1, #text do
+                    if not stateRef() then return end
+                    buffer = string.sub(text, 1, i)
+                    Remote:FireServer(remoteName, buffer)
+                    task.wait(0.1)
+                end
+
+                if reverseFlag then
+                    for i = #text, 1, -1 do
+                        if not stateRef() then return end
+                        buffer = string.sub(text, 1, i)
+                        Remote:FireServer(remoteName, buffer)
+                        task.wait(0.1)
+                    end
+                end
+            else
+                task.wait(0.2)
+            end
+        end
+    end)
+end
+
+NameTab:AddToggle({
+    Name = "تخلي البايو عادي",
+    Default = false,
+    Callback = function(state)
+        bioTypingLoop = state
+        if state then
+            AnimateLoop("RolePlayBio", function() return selectedBio end, false, function() return bioTypingLoop end)
+        end
+    end
+})
+
+NameTab:AddToggle({
+    Name = "تخلي البايو سريع",
+    Default = false,
+    Callback = function(state)
+        bioBackLoop = state
+        if state then
+            AnimateLoop("RolePlayBio", function() return selectedBio end, true, function() return bioBackLoop end)
+        end
+    end
+})
+
+NameTab:AddToggle({
+    Name = "تخلي الاسم عادي",
+    Default = false,
+    Callback = function(state)
+        nameTypingLoop = state
+        if state then
+            AnimateLoop("RolePlayName", function() return selectedName end, false, function() return nameTypingLoop end)
+        end
+    end
+})
+NameTab:AddToggle({
+    Name = "تخلي اسمك سريع",
+    Default = false,
+    Callback = function(state)
+        nameBackLoop = state
+        if state then
+            AnimateLoop("RolePlayName", function() return selectedName end, true, function() return nameBackLoop end)
+        end
+    end
+})
+NameTab:AddSection({ Name = "سبام اسماء          ", Icon = "rbxassetid://10734933966" })
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Player = Players.LocalPlayer
+
+local NameSpamActive = false 
+local SpamSpeed = 1
+local Name1, Name2, Name3, Name4, Name5 = "", "", "", "", ""
+
+NameTab:AddTextBox({Name = "الاسم 1", Default = "", TextDisappear = true, Callback = function(v) Name1 = v end})
+NameTab:AddTextBox({Name = "الاسم 2", Default = "", TextDisappear = true, Callback = function(v) Name2 = v end})
+NameTab:AddTextBox({Name = "الاسم 3", Default = "", TextDisappear = true, Callback = function(v) Name3 = v end})
+NameTab:AddTextBox({Name = "الاسم 4", Default = "", TextDisappear = true, Callback = function(v) Name4 = v end})
+NameTab:AddTextBox({Name = "الاسم 5", Default = "", TextDisappear = true, Callback = function(v) Name5 = v end})
+
+NameTab:AddSlider({
+	Name = "سرعة سبام الاسماء",
+	Min = 1,
+	Max = 150,
+	Default = 5,
+	Increment = 1,
+	Callback = function(v)
+		SpamSpeed = v
+	end
+})
+NameTab:AddToggle({
+    Name = "تشغيل سبام الاسماء",
+    Default = false,
+    Callback = function(state)
+        NameSpamActive = state
+        if NameSpamActive then
+            task.spawn(function()
+                while NameSpamActive do
+                    local names = {Name1, Name2, Name3, Name4, Name5}
+                    for _, name in ipairs(names) do
+                        if not NameSpamActive then break end
+                        if name ~= "" then
+                            ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer("RolePlayName", name)
+                            task.wait(1 / SpamSpeed)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+NameTab:AddSection({ Name = "سبام بايو          ", Icon = "rbxassetid://10734933966" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local BioSpamActive = false
+local Bio1, Bio2, Bio3, Bio4, Bio5 = "", "", "", "", ""
+local SpamSpeed = 1
+
+NameTab:AddTextBox({Name = "البايو 1", Default = "", TextDisappear = true, Callback = function(v) Bio1 = v end})
+NameTab:AddTextBox({Name = "البايو 2", Default = "", TextDisappear = true, Callback = function(v) Bio2 = v end})
+NameTab:AddTextBox({Name = "البايو 3", Default = "", TextDisappear = true, Callback = function(v) Bio3 = v end})
+NameTab:AddTextBox({Name = "البايو 4", Default = "", TextDisappear = true, Callback = function(v) Bio4 = v end})
+NameTab:AddTextBox({Name = "البايو 5", Default = "", TextDisappear = true, Callback = function(v) Bio5 = v end})
+
+NameTab:AddSlider({
+    Name = "سرعة سبام البايو",
+    Min = 1,
+    Max = 150,
+    Default = 5,
+    Increase = 1,
+    Callback = function(v)
+        SpamSpeed = v
+    end
+})
+NameTab:AddToggle({
+    Name = "تشغيل سبام البايو",
+    Default = false,
+    Callback = function(state)
+        BioSpamActive = state
+        if state then
+            task.spawn(function()
+                while BioSpamActive do
+                    for _, bio in ipairs({Bio1, Bio2, Bio3, Bio4, Bio5}) do
+                        if not BioSpamActive then break end
+                        if bio ~= "" then
+                            pcall(function()
+                                ReplicatedStorage:WaitForChild("RE")
+                                    :WaitForChild("1RPNam1eTex1t")
+                                    :FireServer("RolePlayBio", bio)
+                            end)
+                            task.wait(1 / SpamSpeed)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
