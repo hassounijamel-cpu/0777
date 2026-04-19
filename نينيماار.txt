@@ -9927,7 +9927,7 @@ Tab11:AddButton({
     end
 })
 
-local SkyboxTab = Window:MakeTab({ Title = "SKYBOX", Icon = "rbxassetid://10709805838" })
+local Section = Tab11:AddSection({"الك"})
 
 local skyboxEnabled = false
 local skyboxTrack = nil
@@ -9972,7 +9972,7 @@ local function stopAllAnimations()
         end
     end
 end
-SkyboxTab:AddToggle({
+Tab11:AddToggle({
     Name = "V1",
     Default = false,
     Callback = function(value)
@@ -10088,7 +10088,7 @@ local function stopFlashAnimations()
     end
 end
 
-SkyboxTab:AddToggle({
+Tab11:AddToggle({
     Name = "V2",
     Default = false,
     Callback = function(value)
@@ -10253,7 +10253,7 @@ local function StopEverything()
 	end
 end
 
-SkyboxTab:AddToggle({
+Tab11:AddToggle({
 	Name = "v3",
 	Default = false,
 	Callback = function(Value)
