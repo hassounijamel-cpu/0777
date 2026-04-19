@@ -9852,7 +9852,7 @@ game:GetService("ReplicatedStorage").RE:FindFirstChild("1NoMoto1rVehicle1s"):Fir
 
 end })
 
-local Tab11 = Window:MakeTab({"سكربتات تفيدك", "scroll"})
+local Tab11 = Window:MakeTab({"سكربتات و SKYBOX", "scroll"})
 Tab11:AddButton({
     Name = "سكربت مؤثرات vip ",
     Description = "تضهر للكل",
@@ -9927,7 +9927,7 @@ Tab11:AddButton({
     end
 })
 
-local Section = Tab11:AddSection({"الك"})
+local Section = Tab11:AddSection({"SKYBOX"})
 
 local skyboxEnabled = false
 local skyboxTrack = nil
