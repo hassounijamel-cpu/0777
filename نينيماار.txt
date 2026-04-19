@@ -9851,7 +9851,8 @@ local args = {
 game:GetService("ReplicatedStorage").RE:FindFirstChild("1NoMoto1rVehicle1s"):FireServer(unpack(args))
 
 end })
-local Tab11 = Window:MakeTab({"سكربتات", "scroll"})
+
+local Tab11 = Window:MakeTab({"سكربتات تفيدك", "scroll"})
 Tab11:AddButton({
     Name = "سكربت مؤثرات vip ",
     Description = "تضهر للكل",
@@ -9861,16 +9862,6 @@ Tab11:AddButton({
 })
 
 Tab11:AddButton({
-    Name = "سكربت لابواب",
-    Description = "سكربتي",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/sukuna355/testeismail333/refs/heads/main/Protected_8660142218887189.lua"))()
-    end
-})
-
-
-
-Tab11:AddButton({
     Name = "سكربت صملة",
     Description = "vr7",
     Callback = function()
@@ -9878,10 +9869,10 @@ Tab11:AddButton({
     end
 })
 
-local Section = Tab11:AddSection({"سكربتات مطورين عرب"})
+local Section = Tab11:AddSection({"الك"})
 
 Tab11:AddButton({
-    Name = "جيون",
+    Name = "رقصات",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/joygril/Brookhaven-RP-JG-Hub/refs/heads/main/Jeon-The-Best.txt"))()
@@ -9889,18 +9880,18 @@ Tab11:AddButton({
 })
 
 Tab11:AddButton({
-    Name = "بوجي",
-    Description = "ugix",
+    Name = "حظن",
+    Description = "تحظن الناس و حبيبتك",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Lx8Lx/UgiX1/refs/heads/main/UgiX.txt"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/martinng5/martin/refs/heads/main/martin.lua.txt"))()
     end
 })
 
 Tab11:AddButton({
-    Name = "F2",
-    Description = "سكربت المطور محمد",
+    Name = "jerk",
+    Description = "ضرب جلغ",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/MS7top/F2/refs/heads/main/F2.txt"))()
+        loadstring(game:HttpGet("https://pastefy.app/YZoglOyJ/raw"))()
     end
 })
 
@@ -9914,8 +9905,24 @@ Tab11:AddButton({
 
 Tab11:AddButton({
     Name = "r4d",
-    Description = "مافيه فايدة",
+    Description = "تخريب",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/M1ZZ001/BrookhavenR4D/main/Brookhaven%20R4D%20Script"))()
+    end
+})
+
+Tab11:AddButton({
+    Name = "shift lock",
+    Description = "قفل للاعب و الشاشة",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Sector9922/SECTOR-SHIFT-LOCK/main/SECTOR%20SHIFT%20LOCK"))()
+    end
+})
+
+Tab11:AddButton({
+    Name = "رقصات",
+    Description = "رقصات تظهر للناس",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Rtx-graphics-25102"))()
     end
 })
