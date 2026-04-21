@@ -926,3 +926,141 @@ Tab4:AddButton({
     end
 })
 
+local Section = Tab4:AddSection({"المؤاثرات"})
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ApplyEmmiter = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("ApplyEmmiter")
+
+local particleData = {
+    {display="أبيض مجاني",server="0002FreeWhite",asset="rbxassetid://18635845425"},
+    {display="أصفر مجاني",server="0003FreeYellow",asset="rbxassetid://18635841291"},
+    {display="برتقالي مجاني",server="0004FreeOrange",asset="rbxassetid://18635859639"},
+    {display="أخضر مجاني",server="0005FreeGreen",asset="rbxassetid://18635848788"},
+    {display="أزرق مجاني",server="0006FreeBlue",asset="rbxassetid://18635847163"},
+    {display="بنفسجي مجاني",server="0007FreePurple",asset="rbxassetid://18635843697"},
+    {display="وردي مجاني",server="0008FreePink",asset="rbxassetid://18635852477"},
+    {display="أحمر مجاني",server="0009FreeRed",asset="rbxassetid://18635837646"},
+
+    {display="قلوب صفراء",server="001HeartsYellow",asset="rbxassetid://18635672195"},
+    {display="قلوب خضراء",server="002HeartsGreen",asset="rbxassetid://18635727693"},
+    {display="قلوب زرقاء",server="003HeartsBlue",asset="rbxassetid://18635732186"},
+    {display="قلوب بنفسجية",server="004HeartsPurple",asset="rbxassetid://18635723426"},
+    {display="قلوب وردية",server="005HeartsPink",asset="rbxassetid://18635726250"},
+    {display="قلوب حمراء",server="006HeartsRed",asset="rbxassetid://18635729673"},
+
+    {display="نقاط برتقالية",server="010DotsOrange",asset="rbxassetid://18637252424"},
+    {display="نقاط صفراء",server="011DotsYellow",asset="rbxassetid://18637263004"},
+    {display="نقاط بيضاء",server="012DotsWhite",asset="rbxassetid://18637254199"},
+    {display="نقاط خضراء",server="013DotsGreen",asset="rbxassetid://18637265264"},
+    {display="نقاط زرقاء",server="014DotsBlue",asset="rbxassetid://18637256859"},
+    {display="نقاط بنفسجية",server="015DotsPurple",asset="rbxassetid://18637261058"},
+    {display="نقاط وردية",server="016DotsPink",asset="rbxassetid://18637259328"},
+    {display="نقاط حمراء",server="017DotsRed",asset="rbxassetid://18637267290"},
+
+    {display="وميض أبيض",server="020TwinkleWhite",asset="rbxassetid://18637115654"},
+    {display="وميض أصفر",server="021TwinkleYellow",asset="rbxassetid://18637118923"},
+    {display="وميض أخضر",server="022TwinkleGreen",asset="rbxassetid://18637151114"},
+    {display="وميض بنفسجي",server="023TwinklePurple",asset="rbxassetid://18637153880"},
+    {display="وميض وردي",server="024TwinklePink",asset="rbxassetid://18637157071"},
+    {display="وميض أحمر",server="025TwinkleRed",asset="rbxassetid://18637155247"},
+
+    {display="نار بيضاء",server="030FireWhite",asset="rbxassetid://18637074370"},
+    {display="نار برتقالية",server="031FireOrange",asset="rbxassetid://18637025451"},
+    {display="نار خضراء",server="032FireGreen",asset="rbxassetid://18637078598"},
+    {display="نار زرقاء",server="033FireBlue",asset="rbxassetid://18637076370"},
+    {display="نار بنفسجية",server="034FirePurple",asset="rbxassetid://18637070174"},
+    {display="نار سوداء",server="035FireBlack",asset="rbxassetid://18637072603"},
+
+    {display="قلوب صغيرة صفراء",server="040SmallHeartsYellow",asset="rbxassetid://18637339451"},
+    {display="قلوب صغيرة خضراء",server="041SmallHeartsGreen",asset="rbxassetid://18637337576"},
+    {display="قلوب صغيرة زرقاء",server="042SmallHeartsBlue",asset="rbxassetid://18637345162"},
+    {display="قلوب صغيرة بنفسجية",server="043SmallHeartsPurple",asset="rbxassetid://18637335865"},
+    {display="قلوب صغيرة وردية",server="044SmallHeartsPink",asset="rbxassetid://18637343416"},
+    {display="قلوب صغيرة حمراء",server="045SmallHeartsRed",asset="rbxassetid://18637341847"},
+
+    {display="شرارات بيضاء",server="050SparksWhite",asset="rbxassetid://18637383085"},
+    {display="شرارات خضراء",server="051SparksGreen",asset="rbxassetid://18637385236"},
+    {display="شرارات زرقاء",server="052SparksBlue",asset="rbxassetid://18637386856"},
+    {display="شرارات بنفسجية",server="053SparksPurple",asset="rbxassetid://18637442447"},
+    {display="شرارات وردية",server="054SparksPink",asset="rbxassetid://18637445897"},
+    {display="شرارات حمراء",server="055SparksRed",asset="rbxassetid://18637447550"},
+
+    {display="فقاعات بيضاء",server="060BubbleWhite",asset="rbxassetid://18637495023"},
+    {display="فقاعات خضراء",server="061BubbleGreen",asset="rbxassetid://18637493072"},
+    {display="فقاعات زرقاء",server="062BubbleBlue",asset="rbxassetid://18637499282"},
+    {display="فقاعات بنفسجية",server="063BubblePurple",asset="rbxassetid://18637497343"},
+    {display="فقاعات حمراء",server="064BubbleRed",asset="rbxassetid://18637500927"},
+
+    {display="موسيقى بيضاء",server="070MusicWhite",asset="rbxassetid://18637675173"},
+    {display="موسيقى خضراء",server="071MusicGreen",asset="rbxassetid://18637677789"},
+    {display="موسيقى زرقاء",server="072MusicBlue",asset="rbxassetid://18637680960"},
+    {display="موسيقى بنفسجية",server="073MusicPurple",asset="rbxassetid://18637679384"},
+    {display="موسيقى حمراء",server="074MusicRed",asset="rbxassetid://18637672698"},
+
+    {display="دخان أبيض",server="080SmokeWhite",asset="rbxassetid://18637791748"},
+    {display="دخان أصفر",server="081SmokeYellow",asset="rbxassetid://18637800482"},
+    {display="دخان برتقالي",server="082SmokeOrange",asset="rbxassetid://18637793920"},
+    {display="دخان أخضر",server="083SmokeGreen",asset="rbxassetid://18637789299"},
+    {display="دخان أزرق",server="084SmokeBlue",asset="rbxassetid://18637803021"},
+    {display="دخان بنفسجي",server="085SmokePurple",asset="rbxassetid://18637813360"},
+    {display="دخان أحمر",server="086SmokeRed",asset="rbxassetid://18637796598"},
+    {display="دخان أسود",server="087SmokeBlack",asset="rbxassetid://18637798529"},
+
+    {display="نجوم بيضاء",server="090StarWhite",asset="rbxassetid://18637942956"},
+    {display="نجوم برتقالية",server="091StarOrange",asset="rbxassetid://18637946172"},
+    {display="نجوم خضراء",server="092StarGreen",asset="rbxassetid://18637934500"},
+    {display="نجوم زرقاء",server="093StarBlue",asset="rbxassetid://18637940338"},
+    {display="نجوم بنفسجية",server="094StarPurple",asset="rbxassetid://18637944796"},
+    {display="نجوم وردية",server="095StarPink",asset="rbxassetid://18637947820"},
+    {display="نجوم حمراء",server="096StarRed",asset="rbxassetid://18637949457"},
+}
+
+local Categories = {
+    ["مجاني"] = {}
+}
+
+for _, v in ipairs(particleData) do
+    if v.display:find("مجاني") then
+        table.insert(Categories["مجاني"], v)
+    else
+        local cat = v.display:match("^(%S+)")
+        Categories[cat] = Categories[cat] or {}
+        table.insert(Categories[cat], v)
+    end
+end
+
+local Selected = {}
+
+for cat, items in pairs(Categories) do
+    local options = {}
+    for _, v in ipairs(items) do
+        table.insert(options, v.display)
+    end
+
+    Tab4:AddDropdown({
+        Name = cat .. " | المؤثرات",
+        Options = options,
+        Default = options[1],
+        Callback = function(val)
+            for _, v in ipairs(items) do
+                if v.display == val then
+                    Selected[cat] = v
+                    break
+                end
+            end
+        end
+    })
+
+    Tab4:AddButton({
+        Name = "تفعيل " .. cat,
+        Callback = function()
+            local v = Selected[cat]
+            if v then
+                ApplyEmmiter:InvokeServer(
+                    v.asset:gsub("rbxassetid://", ""),
+                    v.server
+                )
+            end
+        end
+    })
+end
