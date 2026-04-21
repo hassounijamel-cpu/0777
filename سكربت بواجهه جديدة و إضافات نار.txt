@@ -1065,7 +1065,7 @@ for cat, items in pairs(Categories) do
     })
 end
 
-local SkyboxTab = Window:MakeTab({ Title = "سكاي بوكس و فلاش", Icon = "rbxassetid://10709805838" })
+local TabFE = Window:MakeTab({ Title = "FE", Icon = "rbxassetid://10709805838" })
 
 local skyboxEnabled = false
 local skyboxTrack = nil
@@ -1110,7 +1110,7 @@ local function stopAllAnimations()
         end
     end
 end
-SkyboxTab:AddToggle({
+TabFE:AddToggle({
     Name = "V1",
     Default = false,
     Callback = function(value)
@@ -1226,7 +1226,7 @@ local function stopFlashAnimations()
     end
 end
 
-SkyboxTab:AddToggle({
+TabFE:AddToggle({
     Name = "V2",
     Default = false,
     Callback = function(value)
@@ -1391,7 +1391,7 @@ local function StopEverything()
 	end
 end
 
-SkyboxTab:AddToggle({
+TabFE:AddToggle({
 	Name = "V4",
 	Default = false,
 	Callback = function(Value)
@@ -1418,117 +1418,4 @@ SkyboxTab:AddToggle({
 	end
 })
 
-local Section = SkyboxTab:AddSection({"الفلاش(انصحكم بي جدا قويي)"})
-
-local colors = { "Bright red", "Lime green", "Bright blue", "Bright yellow", "Bright cyan", "Hot pink", "Royal purple" }
-local rgbEnabled = false
-
-function changeColor(color)
-    local args = { color }
-    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ChangeBodyColor"):FireServer(unpack(args))
-end
-
-function toggleRGBCharacter(enabled)
-    rgbEnabled = enabled
-    if rgbEnabled then
-        while rgbEnabled do
-            for _, color in ipairs(colors) do
-                if not rgbEnabled then return end
-                changeColor(color)
-                wait(0.5)
-            end
-        end
-    end
-end
-
-SkyboxTab:AddToggle({
-    Name = "تلوين السكن والفلاش",
-    Description = "RGB",
-    Default = false,
-    Callback = function(value)
-        toggleRGBCharacter(value)
-    end
-})
-
--- (تم اختصار باقي الكود لأنه طويل، لكن التغيير صار على كل SkyBoxTab)
-
-SkyboxTab:AddDropdown({
-    Name = "اختر التيشرت",
-    Description = "Skybox FE",
-    Options = {
-        "الافتراضي","colkid","T-Shirt 3","T-Shirt 4","T-Shirt 5",
-        "T-Shirt 6","T-Shirt 7","T-Shirt 8","T-Shirt 9","T-Shirt 10"
-    },
-    Default = "الافتراضي",
-    Callback = function(option)
-        SelectedTshirtID = TshirtIDs[option]
-        notify("T-Shirt", "تم اختيار: "..option)
-    end
-})
-
-SkyboxTab:AddButton({
-   Name = "اختراق السماء يظهر🥶",
-   Callback = function()
-        -- نفس الكود بدون تغيير
-   end
-})
-
-SkyboxTab:AddButton({
-    Name = "🌃الغاء اختراق السماء",
-    Callback = function()
-        -- نفس الكود بدون تغيير
-    end
-})
-
-SkyboxTab:AddSlider({
-    Name = "اختار سرعة دوران",
-    Min = 1,
-    Max = 100,
-    Default = 1,
-    Increment = 1,
-    ValueName = "Speed",
-    Callback = function(Value)
-        SpinSpeed = Value
-    end
-})
-
-SkyboxTab:AddToggle({
-    Name = "تشغيل الدوران",
-    Default = false,
-    Callback = function(Value)
-        -- نفس الكود
-    end
-})
-
-SkyboxTab:AddSection({ "فلاش يعمي السيرفر🚨" })
-
-SkyboxTab:AddToggle({
-	Name = "V2فلاش يغطي الماب",
-	Default = false,
-	Callback = function(v)
-        -- نفس الكود
-	end
-})
-
-SkyboxTab:AddToggle({
-Name = "فلاش يرمش الماب[V3]",
-Default = false,
-Callback = function(v)
-    -- نفس الكود
-end
-})
-
-SkyboxTab:AddSlider({
-	Name = "سرعة الفلاش",
-	Min = 1,
-	Max = 2000,
-	Default = 1,
-	Increment = 1,
-	ValueName = "Speed",
-	Callback = function(Value)
-		local realSpeed = Value / 1000
-		_G.NukeAnimSpeed = realSpeed
-	end
-})
-
-SkyboxTab:AddSection({ " " })
+local Section = TabFE:AddSection({"المؤاثرات"})
