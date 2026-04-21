@@ -1419,3 +1419,72 @@ TabFE:AddToggle({
 })
 
 local Section = TabFE:AddSection({"المؤاثرات"})
+
+TabFE = Window:MakeTab({"التحولات", "rbxassetid://121106070017957"})
+Buttons = {
+{"ناروتو","","https://raw.githubusercontent.com/mxskf/Legal/refs/heads/main/Dboas"},
+{"باتمان","","https://raw.githubusercontent.com/mxskf/Legal/refs/heads/main/Dboas89"},
+{"سونيك","","https://raw.githubusercontent.com/mxskf/Legal/refs/heads/main/Dboas86"},
+{"بانيسو","","https://raw.githubusercontent.com/BRENOPOOF/yyyyyyyface/refs/heads/main/Main.txt"},
+{"مورتي","","https://raw.githubusercontent.com/repositoryredzlib/Mortyyyyyy/refs/heads/main/Main.txt"},
+{"ريك سانشيز","","https://raw.githubusercontent.com/BRENOPOOF/rick-Sanchez-/refs/heads/main/Main.txt"},
+{"راعي البقر","","https://raw.githubusercontent.com/BRENOPOOF/wjsj/refs/heads/main/Main.txt"},
+{"قيست 666","","https://raw.githubusercontent.com/lyrarepositorio-afk/swsw/refs/heads/main/Main.txt"},
+{"اوبيتو","","https://cdn.authguard.org/virtual-file/c47b8a12ca6c4cef840280dafd893e7d"},
+{"شادو","","https://raw.githubusercontent.com/267266273ffsfs/Shadow/refs/heads/main/Main.txt"},
+{"قونر","يظهر للناس","https://raw.githubusercontent.com/lyrarepositorio-afk/GONER/refs/heads/main/Main.txt"},
+{"نولي","يظهر للناس","https://raw.githubusercontent.com/lyrarepositorio-afk/gubby/refs/heads/main/Main.txt"},
+{"تيوبرس","يظهر للناس","https://raw.githubusercontent.com/BRENOPOOF/1222/refs/heads/main/Main.txt"},
+{"يد مقطوعة","في مسلسل وينزداي","https://raw.githubusercontent.com/BRENOPOOF/slafiznotedio/refs/heads/main/Main.txt"},
+{"C00LKIDD","كولكيد","https://raw.githubusercontent.com/repositoryredzlib/xzzxsx/refs/heads/main/Main.txt"},
+{"سكربت الرقصات المشهور","","https://raw.githubusercontent.com/Gazer-Ha/Free-emote/refs/heads/main/Delta%20mad%20stuffs"},
+{"هيروبراين","يظهر للناس","https://raw.githubusercontent.com/lyrarepositorio-afk/hEROBRINE/refs/heads/main/Main.txt"},
+{"قطة الكرتون","","https://raw.githubusercontent.com/lyrarepositorio-afk/cartoon-cat/refs/heads/main/Main.txt"},
+{"الاومنيتريكس","","https://raw.githubusercontent.com/267266273ffsfs/Ominitrix/refs/heads/main/Main.txt"},
+{"كاموي * ترونو","","https://raw.githubusercontent.com/267266273ffsfs/kamui/refs/heads/main/Main.txt"},
+{"ضرب*18","","https://raw.githubusercontent.com/yeahblxr/Scripts/refs/heads/main/Edge.lua"},
+{"سكربت مشيات ورقصات","","https://rawscripts.net/raw/Universal-Script-AFEM-Max-Open-Alpha-50210"},
+{"القاتل","","https://raw.githubusercontent.com/267266273ffsfs/Jeff/refs/heads/main/Main.txt"}
+}
+
+for _,v in ipairs(Buttons) do
+TabFE:AddButton({
+Name = v[1],
+Desc = v[2],
+Callback = function()
+pcall(function()
+loadstring(game:HttpGet(v[3]))()
+end)
+end
+})
+end
+
+
+TabFE:AddButton({
+Name = "جون دي",
+Description = "",
+Callback = function()
+pcall(function()
+
+ChangeBodyColor = ReplicatedStorage.Remotes.ChangeBodyColor
+ChangeCharacterBody = ReplicatedStorage.Remotes.ChangeCharacterBody
+Wear = ReplicatedStorage.Remotes.Wear
+
+ChangeBodyColor:FireServer("Really black")
+
+ChangeCharacterBody:InvokeServer({
+0,0,0,0,0,0
+})
+
+Wear:InvokeServer(119700638189201)
+Wear:InvokeServer(82561279414761)
+Wear:InvokeServer(108099676910294)
+Wear:InvokeServer(82861921093234)
+Wear:InvokeServer(124476454384081)
+Wear:InvokeServer(5319900634)
+Wear:InvokeServer(5319909330)
+Wear:InvokeServer(5319922112)
+
+end)
+end
+})
