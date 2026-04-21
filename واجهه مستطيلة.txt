@@ -1490,7 +1490,7 @@ task.spawn(function()
 
     local imagesPerGroup = 10
     local groupTime = 2
-    local interval = groupTime / imagesPerGroup -- 0.2 ثانية لكل صورة
+    local interval = groupTime / imagesPerGroup -- 0.1 ثانية لكل صورة
 
     while true do
         WindowBackground.Image = images[i]
