@@ -1418,9 +1418,8 @@ TabFE:AddToggle({
 	end
 })
 
-local Section = TabFE:AddSection({"المؤاثرات"})
+local Section = TabFE:AddSection({"التحولات"})
 
-TabFE = Window:MakeTab({"التحولات", "rbxassetid://121106070017957"})
 Buttons = {
 {"ناروتو","","https://raw.githubusercontent.com/mxskf/Legal/refs/heads/main/Dboas"},
 {"باتمان","","https://raw.githubusercontent.com/mxskf/Legal/refs/heads/main/Dboas89"},
