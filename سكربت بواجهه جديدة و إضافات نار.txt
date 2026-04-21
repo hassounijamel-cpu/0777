@@ -1487,3 +1487,507 @@ Wear:InvokeServer(5319922112)
 end)
 end
 })
+
+Tablag = Window:MakeTab({ 
+Title = "لاق السيرفر", 
+Icon = "rbxassetid://10723415903" })
+Tablag:AddSection({
+    Name = "ايقاف السيرفر"
+})
+
+Tablag:AddToggle({
+  Name = "ايقاف الانترنت والوقت سريع جدا!",
+  Callback = function(Ddos)
+if Ddos then
+    local fireXPath = workspace.WorkspaceCom["001_DayCare"].Tools.FireX
+
+    tools = "FireX"
+    lagserver = true
+
+    if workspace:FindFirstChild("Camera") then
+        workspace:FindFirstChild("Camera"):Destroy()
+    end
+
+    wait(0.1)
+
+    if workspace:FindFirstChild("Camera") then
+        workspace:FindFirstChild("Camera"):Destroy()
+    end
+
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+        fireXPath.CFrame + Vector3.new(0,-15,0)
+
+    task.wait(0.2)
+
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+    ddos = true
+
+    for i=1,700 do
+        task.wait()
+
+        if ddos == false then
+            local args = {
+                [1] = "ClearAllTools"
+            }
+
+            cleartoolremote:FireServer(unpack(args))
+            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9999,-475,9999)
+            return
+        end
+
+        if workspace:FindFirstChild("Camera") then
+            workspace:FindFirstChild("Camera"):Destroy()
+        end
+
+        if game.Players.LocalPlayer.Character:FindFirstChild(tools) then
+            game.Players.LocalPlayer.Character:FindFirstChild(tools):Destroy()
+        end
+
+        if ddos == false then
+            return
+        end
+
+        fireclickdetector(workspace.WorkspaceCom["001_DayCare"].Tools.FireX.ClickDetector,0)
+    end
+
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-475,0)
+    else
+    ddos = false
+    lagserver = false
+    shutdownserver = false
+end
+  end
+})
+
+Tablag:AddToggle({
+  Name = "اغلاق واطفاء السيرفر",
+  Callback = function(state)
+if state then
+    local fireXPath = workspace.WorkspaceCom["001_DayCare"].Tools.FireX
+
+    tools = "Iphone"
+    lagserver = true
+
+    if workspace:FindFirstChild("Camera") then
+        workspace:FindFirstChild("Camera"):Destroy()
+    end
+
+    wait(0.1)
+
+    if workspace:FindFirstChild("Camera") then
+        workspace:FindFirstChild("Camera"):Destroy()
+    end
+
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+        fireXPath.CFrame + Vector3.new(0,-15,0)
+
+    task.wait(0.2)
+
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+    ddos = true
+
+    for i=1,700 do
+        task.wait()
+
+        if ddos == false then
+            local args = {
+                [1] = "ClearAllTools"
+            }
+
+            cleartoolremote:FireServer(unpack(args))
+            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9999,-475,9999)
+            return
+        end
+
+        if workspace:FindFirstChild("Camera") then
+            workspace:FindFirstChild("Camera"):Destroy()
+        end
+
+        if game.Players.LocalPlayer.Character:FindFirstChild(tools) then
+            game.Players.LocalPlayer.Character:FindFirstChild(tools):Destroy()
+        end
+
+        if ddos == false then
+            return
+        end
+
+        fireclickdetector(workspace.WorkspaceCom["001_DayCare"].Tools.FireX.ClickDetector,0)
+    end
+
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-475,0)
+ 
+    else ddos = false
+    lagserver = false
+    shutdownserver = false 
+end
+  end
+})
+Tablag:AddSection({
+    Name = "لاق باص"
+})
+ runLag = false
+local lagCoroutine
+Tablag:AddToggle({
+    Name = "لاق باص(الافضل)",
+    Default = false,
+    Callback = function(Value)
+        runLag = Value
+
+        if runLag then
+             Players = game:GetService("Players")  
+             ReplicatedStorage = game:GetService("ReplicatedStorage")  
+             LocalPlayer = Players.LocalPlayer  
+
+            if not LocalPlayer then  
+                warn("LocalPlayer não encontrado.")  
+                return  
+            end  
+
+             character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()  
+             humanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)  
+            if not humanoidRootPart then  
+                warn("HumanoidRootPart não encontrado.")  
+                return  
+            end  
+
+             function GetBus()  
+                 vehicles = workspace:FindFirstChild("Vehicles")  
+                if vehicles then  
+                    return vehicles:FindFirstChild(LocalPlayer.Name .. "Car")  
+                end  
+                return nil  
+            end  
+
+             remoteEvent = ReplicatedStorage:FindFirstChild("RE")  
+            if not remoteEvent then  
+                warn("RemoteEvent 'RE' não encontrado em ReplicatedStorage.")  
+                return  
+            end  
+
+            if not remoteEvent:FindFirstChild("1Ca1r") then  
+                warn("Evento filho '1Ca1r' não encontrado dentro de 'RE'.")  
+                return  
+            end  
+
+            lagCoroutine = coroutine.wrap(function()  
+                while runLag do  
+                    local success, err = pcall(function()  
+                        humanoidRootPart.CFrame = CFrame.new(1118.81, 75.998, -1138.61)  
+                         bus = GetBus()  
+                        remoteEvent["1Ca1r"]:FireServer("PickingCar", "SchoolBus")  
+                    end)  
+
+                    if not success then  
+                        warn("Erro ao executar lag loop: " .. tostring(err))  
+                        runLag = false  
+                        break  
+                    end  
+
+                    task.wait(0)
+                end  
+            end)  
+            lagCoroutine()
+        end
+    end
+})
+
+LagToggles = { Phone = false, Bomb = false }
+
+function clickNormally(object)
+    local clickDetector = object:FindFirstChildWhichIsA("ClickDetector")
+    if clickDetector then
+        pcall(fireclickdetector, clickDetector)
+    end
+end
+Tablag:AddSection({
+    Name = "لاق لابتوب+لاق هاتف"
+})
+Tablag:AddToggle({
+    Name = "لاق بالهاتف(V2)",
+    Default = false,
+    Callback = function(state)
+        LagToggles.Phone = state
+
+        if not state then return end
+
+        local phonePath =
+            workspace:FindFirstChild("WorkspaceCom")
+            and workspace.WorkspaceCom:FindFirstChild("001_CommercialStores")
+            and workspace.WorkspaceCom["001_CommercialStores"]:FindFirstChild("CommercialStorage1")
+            and workspace.WorkspaceCom["001_CommercialStores"].CommercialStorage1:FindFirstChild("Store")
+            and workspace.WorkspaceCom["001_CommercialStores"].CommercialStorage1.Store:FindFirstChild("Tools")
+            and workspace.WorkspaceCom["001_CommercialStores"].CommercialStorage1.Store.Tools:FindFirstChild("Iphone")
+        if not phonePath then
+            local buyButton =
+                workspace.WorkspaceCom["001_CommercialStores"]
+                .CommercialPlot1Buttons
+                .Commercial1Store1
+
+            if buyButton then
+                clickNormally(buyButton)
+                task.wait(0.2)
+            end
+        end
+
+        task.spawn(function()
+            local player = game.Players.LocalPlayer
+
+            while LagToggles.Phone do
+                local char = player.Character
+                local root = char and char:FindFirstChild("HumanoidRootPart")
+
+                if not root then
+                    task.wait()
+                    continue
+                end
+                if not phonePath or not phonePath.Parent then
+                    phonePath =
+                        workspace.WorkspaceCom["001_CommercialStores"]
+                        .CommercialStorage1.Store.Tools:FindFirstChild("Iphone")
+                end
+
+                if phonePath then
+                    root.CFrame = phonePath.CFrame
+
+                    for i = 1, 6 do
+                        clickNormally(phonePath)
+                    end
+                end
+
+                task.wait(0.05)
+            end
+        end)
+    end
+})
+local LaptopLoop = false
+Tablag:AddToggle({
+    Name = "لاق باللابتوب",
+    Default = false,
+    Callback = function(state)
+        LaptopLoop = state
+        if not state then return end
+
+         player = game.Players.LocalPlayer
+
+        task.spawn(function()
+            while LaptopLoop do
+                 char = player.Character
+                 root = char and char:FindFirstChild("HumanoidRootPart")
+                if not root then
+                    task.wait()
+                    continue
+                end
+
+                 laptop =
+                    workspace.WorkspaceCom["001_CommercialStores"]
+                    .CommercialStorage1.Store.Tools.Laptop
+
+             clickDetector = laptop and laptop:FindFirstChild("ClickDetector")
+
+                if laptop and clickDetector then
+                    root.CFrame = laptop.CFrame
+                    fireclickdetector(clickDetector)
+                end
+
+                task.wait(0.05)
+            end
+        end)
+    end
+})
+Tablag:AddButton({
+    Name = "تفعيل متجر الهواتف",
+    Callback = function()
+         Players = game:GetService("Players")
+         Workspace = game:GetService("Workspace")
+         player = Players.LocalPlayer
+
+
+         char = player.Character or player.CharacterAdded:Wait()
+         root = char:WaitForChild("HumanoidRootPart")
+
+        root.CFrame = CFrame.new(-130.48, 20.84, 237.21)
+        task.wait(0.2)
+        local button = Workspace:FindFirstChild("WorkspaceCom")
+        if button then
+            button = button:FindFirstChild("001_CommercialStores")
+            if button then
+                button = button:FindFirstChild("CommercialPlot1Buttons")
+                if button then
+                    button = button:FindFirstChild("Commercial1Store1")
+                    if button then
+                         clickDet = button:FindFirstChildOfClass("ClickDetector")
+                        if clickDet then
+                            fireclickdetector(clickDet)
+                        end
+                    end
+                end
+            end
+        end
+    end
+})
+Tablag:AddParagraph({
+    Title = "ملاحظة",
+    Text = "انتظر 20 ثانية لظهور تأثير اللاق"
+})
+Tablag:AddSection("لاق قنابل")
+Tablag:AddToggle({
+    Name = "لاق قنابل",
+    Default = false,
+    Callback = function(state)
+        LagToggles.Bomb = state
+        if state then
+             Player = game.Players.LocalPlayer
+             Character = Player.Character or Player.CharacterAdded:Wait()
+             RootPart = Character:WaitForChild("HumanoidRootPart")
+             ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+             Bomb = workspace:FindFirstChild("WorkspaceCom")
+                and workspace.WorkspaceCom:FindFirstChild("001_CriminalWeapons")
+                and workspace.WorkspaceCom["001_CriminalWeapons"]:FindFirstChild("GiveTools")
+                and workspace.WorkspaceCom["001_CriminalWeapons"].GiveTools:FindFirstChild("Bomb")
+
+            if not Bomb or not Bomb:FindFirstChild("ClickDetector") then
+                Tablag:AddNotification({
+                    Name = "خطأ",
+                    Content = "القنبلة غير موجودة!",
+                    Time = 5
+                })
+                return
+            end
+            task.spawn(function()
+                while LagToggles.Bomb and Bomb and RootPart do
+                    pcall(function()
+                        RootPart.CFrame = Bomb.CFrame
+                        fireclickdetector(Bomb.ClickDetector)
+                    end)
+                    task.wait(0.0001)
+                end
+            end)
+
+        
+            task.spawn(function()
+                while LagToggles.Bomb do
+                    pcall(function()
+                         VirtualInputManager = game:GetService("VirtualInputManager")
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, true, game, 0)
+                        task.wait(1.5)
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, false, game, 0)
+
+                         args = { [1] = "Bomb" .. Player.Name }
+                         BombServer = ReplicatedStorage:FindFirstChild("RE"):FindFirstChild("1Blo1wBomb1sServe1r")
+                        if BombServer then
+                            BombServer:FireServer(unpack(args))
+                        end
+                    end)
+                    task.wait(1.5)
+                end
+            end)
+        end
+    end
+})
+FireXLoop = false
+Tablag:AddToggle({
+    Name = "تجميع FireX",
+    Default = false,
+    Callback = function(state)
+        FireXLoop = state
+        if not state then return end
+
+        task.spawn(function()
+             Players = game:GetService("Players")
+             player = Players.LocalPlayer
+
+            while FireXLoop do   
+                 char = player.Character or player.CharacterAdded:Wait()
+                 root = char:FindFirstChild("HumanoidRootPart")
+                if not root then
+                    task.wait()
+                    continue
+                end           
+                 fireXPath =
+                    workspace.WorkspaceCom["001_DayCare"]
+                    .Tools.FireX
+
+                 clickDetector = fireXPath:FindFirstChild("ClickDetector")
+
+                if fireXPath and clickDetector then
+                
+                    root.CFrame = fireXPath.CFrame
+                    
+                    fireclickdetector(clickDetector)
+                end
+
+                task.wait(0.01)
+            end
+        end)
+    end
+})
+Tablag:AddParagraph({
+    Title = "ملاحظة",
+    Text = "انتظر 35 ثانية لظهور تأثير اللاق"
+})
+LagToggles = { Sniper = false }
+Tablag:AddSection("لاق سنايبر")
+Tablag:AddToggle({
+    Name = "لاق سنايبر",
+    Default = false,
+    Callback = function(state)
+        LagToggles.Sniper = state
+        if state then
+            Player = game.Players.LocalPlayer
+            Character = Player.Character or Player.CharacterAdded:Wait()
+            RootPart = Character:WaitForChild("HumanoidRootPart")
+             ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+            Sniper =
+                workspace:FindFirstChild("WorkspaceCom")
+                and workspace.WorkspaceCom:FindFirstChild("001_CriminalWeapons")
+                and workspace.WorkspaceCom["001_CriminalWeapons"]:FindFirstChild("GiveTools")
+                and workspace.WorkspaceCom["001_CriminalWeapons"].GiveTools:FindFirstChild("Sniper")
+
+            if not Sniper or not Sniper:FindFirstChild("ClickDetector") then
+                Tablag:AddNotification({
+                    Name = "خطأ",
+                    Content = "السنايبر غير موجود!",
+                    Time = 5
+                })
+                return
+            end
+
+            task.spawn(function()
+                while LagToggles.Sniper and Sniper and RootPart do
+                    pcall(function()
+                        RootPart.CFrame = Sniper.CFrame
+                        fireclickdetector(Sniper.ClickDetector)
+                    end)
+                    task.wait(0.0001)
+                end
+            end)
+
+
+            task.spawn(function()
+                while LagToggles.Sniper do
+                    pcall(function()
+                         VirtualInputManager = game:GetService("VirtualInputManager")
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, true, game, 0)
+                        task.wait(0.2)
+                        VirtualInputManager:SendMouseButtonEvent(500, 500, 0, false, game, 0)
+
+                         sniperRemote =
+                            ReplicatedStorage:FindFirstChild("RE")
+                            and ReplicatedStorage.RE:FindFirstChild("1Sn1pe1rServe1r")
+
+                        if sniperRemote then
+                            sniperRemote:FireServer(Player.Name)
+                        end
+                    end)
+                    task.wait(0.3)
+                end
+            end)
+        end
+    end
+})
