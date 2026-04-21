@@ -1448,18 +1448,20 @@ function redzlib:MakeWindow(Configs)
     Name = "Hub"
 }), "Main")
 
+local TweenService = game:GetService("TweenService")
+
 local WindowBackground = Create("ImageLabel", MainFrame, {
     Name = "WindowBackground",
     Size = UDim2.new(1, 0, 1, 0),
     Position = UDim2.new(0, 0, 0, 0),
     BackgroundTransparency = 1,
     Image = "rbxassetid://100981783081760",
-    ImageTransparency = 0.2,
+    ImageTransparency = 0,
     ScaleType = Enum.ScaleType.Crop,
     ZIndex = 0
 })
 
--- قائمة الصور (19 صورة)
+-- الصور
 local images = {
     "rbxassetid://100981783081760",
     "rbxassetid://108476865946369",
@@ -1482,18 +1484,33 @@ local images = {
     "rbxassetid://102915841298448"
 }
 
--- تبديل سريع (نص ثانية)
+-- إعداد التوين (سرعة الفيد)
+local fadeTime = 0.25
+
 task.spawn(function()
     local i = 1
     while true do
+        -- fade out
+        local tweenOut = TweenService:Create(WindowBackground, TweenInfo.new(fadeTime), {
+            ImageTransparency = 1
+        })
+        tweenOut:Play()
+        tweenOut.Completed:Wait()
+
+        -- تغيير الصورة
         WindowBackground.Image = images[i]
+
+        -- fade in
+        local tweenIn = TweenService:Create(WindowBackground, TweenInfo.new(fadeTime), {
+            ImageTransparency = 0
+        })
+        tweenIn:Play()
+        tweenIn.Completed:Wait()
+
         i = i + 1
-        
         if i > #images then
             i = 1
         end
-        
-        task.wait(0.5) -- نص ثانية
     end
 end)
 
