@@ -1455,8 +1455,7 @@ local WindowBackground = Create("ImageLabel", MainFrame, {
     Size = UDim2.new(1, 0, 1, 0),
     Position = UDim2.new(0, 0, 0, 0),
     BackgroundTransparency = 1,
-    Image = "rbxassetid://100981783081760",
-    ImageTransparency = 0,
+    ImageTransparency = 0, -- 🚫 بدون شفافية
     ScaleType = Enum.ScaleType.Crop,
     ZIndex = 0
 })
@@ -1483,14 +1482,15 @@ local images = {
     "rbxassetid://102915841298448"
 }
 
--- 🔥 تحميل مسبق
+-- 🔥 preload
 ContentProvider:PreloadAsync(images)
 
--- 🎥 تشغيل مثل فيديو (30 FPS ثابتة)
 task.spawn(function()
     local i = 1
-    local fps = 30
-    local interval = 1 / fps
+
+    local imagesPerGroup = 10
+    local groupTime = 2
+    local interval = groupTime / imagesPerGroup -- 0.2 ثانية لكل صورة
 
     while true do
         WindowBackground.Image = images[i]
