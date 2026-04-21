@@ -35,11 +35,11 @@ end
 local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/077/refs/heads/main/NeymarGUI.txt"))()
 workspace.FallenPartsDestroyHeight = -math.huge
 
-local Window = Libary:MakeWindow({
-    Title = "NEYMAR HUB",
-    SubTitle = "by: Kdkjdnde",
-    LoadText = "Best Arabic script",
-    Flags = "neymar_Broookhaven"
+Window = Libary:MakeWindow({
+    Title = "Neymar Hub",
+    SubTitle = "By Neymar",
+    LoadText = "Neymar The Beast",
+    Flags = "NeymarHub_Brookhaven"
 })
 Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://99353410676626", BackgroundTransparency = 0 },
