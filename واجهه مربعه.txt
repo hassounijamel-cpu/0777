@@ -1449,7 +1449,6 @@ function redzlib:MakeWindow(Configs)
 }), "Main")
 
 local ContentProvider = game:GetService("ContentProvider")
-local RunService = game:GetService("RunService")
 
 local WindowBackground = Create("ImageLabel", MainFrame, {
     Name = "WindowBackground",
@@ -1483,18 +1482,14 @@ local images = {
     "rbxassetid://102915841298448"
 }
 
--- 🔥 تحميل مسبق كامل
+-- 🔥 preload مهم جداً
 ContentProvider:PreloadAsync(images)
 
--- 🎥 تشغيل الصور مثل فيديو
-local i = 1
-local lastSwitch = 0
-local fps = 30
+-- 🎥 تشغيل سلس بدون تقطيع
+task.spawn(function()
+    local i = 1
 
-RunService.RenderStepped:Connect(function()
-    local now = tick()
-
-    if now - lastSwitch >= (1 / fps) then
+    while true do
         WindowBackground.Image = images[i]
 
         i += 1
@@ -1502,7 +1497,7 @@ RunService.RenderStepped:Connect(function()
             i = 1
         end
 
-        lastSwitch = now
+        task.wait(0.04) -- حوالي 25 FPS (أفضل استقرار)
     end
 end)
 
@@ -1513,16 +1508,16 @@ Make("Gradient", MainFrame, {
 })
 
 ---------------------------------------------------
--- 🎯 نص NEYMAR HUB في المنتصف
+-- 🎯 نص NEYMAR HUB بدون تقطيع
 ---------------------------------------------------
 
 local Title = Create("TextLabel", MainFrame, {
-    Name = "Title",
     Size = UDim2.new(1, 0, 0.2, 0),
     Position = UDim2.new(0, 0, 0.4, 0),
     BackgroundTransparency = 1,
     Text = "NEYMAR HUB",
     TextScaled = true,
+    TextTransparency = 0,
     ZIndex = 10
 })
 
@@ -1532,7 +1527,6 @@ local fonts = {
     Enum.Font.SourceSansBold,
     Enum.Font.Fantasy,
     Enum.Font.Highway,
-    Enum.Font.Cartoon,
     Enum.Font.Code
 }
 
@@ -1542,46 +1536,24 @@ local colors = {
     Color3.fromRGB(0, 170, 255),
     Color3.fromRGB(255, 255, 0),
     Color3.fromRGB(255, 0, 255),
-    Color3.fromRGB(255, 255, 255),
     Color3.fromRGB(255, 120, 0)
 }
 
-local ti = 1
-local lastChange = 0
+task.spawn(function()
+    local i = 1
 
-RunService.RenderStepped:Connect(function()
-    local t = tick()
+    while true do
+        Title.Font = fonts[i]
+        Title.TextColor3 = colors[i]
 
-    if t - lastChange >= 0.5 then
-        Title.Font = fonts[ti]
-        Title.TextColor3 = colors[ti]
-
-        ti += 1
-        if ti > math.min(#fonts, #colors) then
-            ti = 1
+        i += 1
+        if i > #fonts then
+            i = 1
         end
 
-        lastChange = t
+        task.wait(0.5)
     end
 end)
-MakeDrag(MainFrame)
-
-local MainCorner = Make("Corner", MainFrame)
-
-local Components = Create("Folder", MainFrame, {
-    Name = "Components"
-})
-
-local DropdownHolder = Create("Folder", ScreenGui, {
-    Name = "Dropdown"
-})
-
-local Stroke = Create("UIStroke", MainFrame, {
-    Color = Color3.fromRGB(255, 255, 255),
-    Thickness = 2.5,
-    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-})
-
 local StrokeGradient = Create("UIGradient", Stroke, {
     Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),        -- أسود
