@@ -46,43 +46,12 @@ Window:AddMinimizeButton({
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
 
-InfoTab = Window:MakeTab({ 
-    Title = "الحقوق والرتب", 
-    Icon = "rbxassetid://10734985040" 
-})
+local InfoTab = Window:MakeTab({ Title = "الحقوق", Icon = "rbxassetid://125602848737897" })
 
-InfoTab:AddAnimatedButton({
-    Name = "demoz", 
-    Words = {"the", "best", "neymar", "the best", "1Iraq"},
-    Callback = function()
-        print("تم الضغط")
-    end
-})
 
-InfoTab:AddDiscordInvite({
-    Name = "Neymar",
-    Description = "تليجرام",
-    Logo = "rbxassetid://125602848737897",
-    Invite = "Wlv66",
-})
-
-InfoTab:AddDevCircle({
-    Devs = {
-        {Name = "Neymar", Id = 125602848737897}
-    }
-})
-
-InfoTab:AddSection({ "حسابي TikTok" })
-InfoTab:AddParagraph({
-    Title = "Neymar//حسنين",
-    Text = "@Wlv27"
-})
-InfoTab:AddParagraph({
-    Title = "Neymar//حسنين",
-    Text = "@wlv202"
-})
-InfoTab:AddSection({ "حسابات المطور حسنين روب" })
-InfoTab:AddParagraph({
-    Title = "Neymar//حسنين",
-    Text = "@Kdkjdnde"
-})
+InfoTab:AddSection({ "معلومات سكربت" })
+InfoTab:AddParagraph({ "Kdkjdnde المطور: نيمار حساب روب" })
+InfoTab:AddParagraph({ "TIK TOK: WLV22" })
+InfoTab:AddParagraph({ "GUI: NH" })
+InfoTab:AddParagraph({ "حسابي تلي" })
+InfoTab:AddParagraph({ "Telegram: @WLV66" })
