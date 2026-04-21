@@ -1497,7 +1497,7 @@ task.spawn(function()
             i = 1
         end
 
-        task.wait(0.04) -- حوالي 25 FPS (أفضل استقرار)
+        task.wait(0.08) -- حوالي 25 FPS (أفضل استقرار)
     end
 end)
 
@@ -1554,6 +1554,7 @@ task.spawn(function()
         task.wait(0.5)
     end
 end)
+
 local StrokeGradient = Create("UIGradient", Stroke, {
     Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),        -- أسود
