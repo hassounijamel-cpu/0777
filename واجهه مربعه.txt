@@ -40,7 +40,7 @@ Themes = {
 		Version = "1.2.0"
 	},
 	Save = {
-    UISize = {500, 300},
+    UISize = {500, 500},
     TabSize = 160,
     Theme = "Dark"   -- بدل "Darker"
  },
