@@ -594,3 +594,65 @@ TabAnti:AddToggle({
  enabled=v
     end
 })
+
+Tab = Window:MakeTab({ 
+    Title = "بحث السكربتات", 
+    Icon = "rbxassetid://10734985040" 
+})
+
+Tab:AddParagraph({"اضغط على الزر لتفعيل السكربت"})
+local HttpService = game:GetService("HttpService")
+local player = game.Players.LocalPlayer
+
+resultButtons = {}
+
+for i = 1, 10 do
+    resultButtons[i] = Tab:AddSquareButton({
+        Name = "---",
+        ImageId = 0,
+        Callback = function() end
+    })
+end
+
+function SearchWithUpdate(query)
+    if #query < 3 then return end
+
+    local success, response = pcall(function()
+        return game:HttpGet("https://scriptblox.com/api/script/search?q=" .. HttpService:UrlEncode(query) .. "&max=10")
+    end)
+    
+    if success then
+        local data = HttpService:JSONDecode(response)
+        if data and data.result and data.result.scripts then
+            for i = 1, 10 do
+                local scr = data.result.scripts[i]
+                if scr then
+                                       resultButtons[i]:Update({
+                        Name = scr.title,
+                        ImageId = 125602848737897, 
+                        Callback = function()
+                            print("Executing: " .. scr.title)
+                            loadstring(scr.script)()
+                        end
+                    })
+                else
+                    
+                    resultButtons[i]:Update({
+                        Name = "No Result",
+                        ImageId = 0,
+                        Callback = function() end
+                    })
+                end
+            end
+        end
+    end
+end
+Tab:Addghalitextbox({
+    Name = "Search",
+    Placeholder = "اكتب اسم السكربت هنا . . .",
+    Callback = function(txt)
+        task.spawn(function()
+            SearchWithUpdate(txt)
+        end)
+    end
+})
