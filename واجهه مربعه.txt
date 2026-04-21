@@ -1449,14 +1449,14 @@ function redzlib:MakeWindow(Configs)
 }), "Main")
 
 local ContentProvider = game:GetService("ContentProvider")
+local RunService = game:GetService("RunService")
 
 local WindowBackground = Create("ImageLabel", MainFrame, {
     Name = "WindowBackground",
     Size = UDim2.new(1, 0, 1, 0),
     Position = UDim2.new(0, 0, 0, 0),
     BackgroundTransparency = 1,
-    Image = "rbxassetid://100981783081760",
-    ImageTransparency = 0.1,
+    ImageTransparency = 0,
     ScaleType = Enum.ScaleType.Crop,
     ZIndex = 0
 })
@@ -1483,13 +1483,18 @@ local images = {
     "rbxassetid://102915841298448"
 }
 
--- 🔥 تحميل الصور قبل التشغيل
+-- 🔥 تحميل مسبق كامل
 ContentProvider:PreloadAsync(images)
 
--- 🚀 تشغيل سريع جداً
-task.spawn(function()
-    local i = 1
-    while true do
+-- 🎥 تشغيل الصور مثل فيديو
+local i = 1
+local lastSwitch = 0
+local fps = 30
+
+RunService.RenderStepped:Connect(function()
+    local now = tick()
+
+    if now - lastSwitch >= (1 / fps) then
         WindowBackground.Image = images[i]
 
         i += 1
@@ -1497,7 +1502,7 @@ task.spawn(function()
             i = 1
         end
 
-        task.wait(0.03) -- ~30 FPS (أقرب شي للفيديو)
+        lastSwitch = now
     end
 end)
 
@@ -1506,6 +1511,59 @@ Make("Corner", WindowBackground)
 Make("Gradient", MainFrame, {
     Rotation = 45
 })
+
+---------------------------------------------------
+-- 🎯 نص NEYMAR HUB في المنتصف
+---------------------------------------------------
+
+local Title = Create("TextLabel", MainFrame, {
+    Name = "Title",
+    Size = UDim2.new(1, 0, 0.2, 0),
+    Position = UDim2.new(0, 0, 0.4, 0),
+    BackgroundTransparency = 1,
+    Text = "NEYMAR HUB",
+    TextScaled = true,
+    ZIndex = 10
+})
+
+local fonts = {
+    Enum.Font.GothamBlack,
+    Enum.Font.Arcade,
+    Enum.Font.SourceSansBold,
+    Enum.Font.Fantasy,
+    Enum.Font.Highway,
+    Enum.Font.Cartoon,
+    Enum.Font.Code
+}
+
+local colors = {
+    Color3.fromRGB(255, 0, 0),
+    Color3.fromRGB(0, 255, 0),
+    Color3.fromRGB(0, 170, 255),
+    Color3.fromRGB(255, 255, 0),
+    Color3.fromRGB(255, 0, 255),
+    Color3.fromRGB(255, 255, 255),
+    Color3.fromRGB(255, 120, 0)
+}
+
+local ti = 1
+local lastChange = 0
+
+RunService.RenderStepped:Connect(function()
+    local t = tick()
+
+    if t - lastChange >= 0.5 then
+        Title.Font = fonts[ti]
+        Title.TextColor3 = colors[ti]
+
+        ti += 1
+        if ti > math.min(#fonts, #colors) then
+            ti = 1
+        end
+
+        lastChange = t
+    end
+end)
 MakeDrag(MainFrame)
 
 local MainCorner = Make("Corner", MainFrame)
