@@ -1448,31 +1448,62 @@ function redzlib:MakeWindow(Configs)
     Name = "Hub"
 }), "Main")
 
+local ContentProvider = game:GetService("ContentProvider")
+
 local WindowBackground = Create("ImageLabel", MainFrame, {
     Name = "WindowBackground",
     Size = UDim2.new(1, 0, 1, 0),
     Position = UDim2.new(0, 0, 0, 0),
     BackgroundTransparency = 1,
-    Image = "rbxassetid://125602848737897",
-    ImageTransparency = 0.2,
+    Image = "rbxassetid://100981783081760",
+    ImageTransparency = 0,
     ScaleType = Enum.ScaleType.Crop,
     ZIndex = 0
 })
 
--- الصور
-local image1 = "rbxassetid://125602848737897"
-local image2 = "rbxassetid://99353410676626" -- حط صورة ثانية
+local images = {
+    "rbxassetid://100981783081760",
+    "rbxassetid://108476865946369",
+    "rbxassetid://110118003232513",
+    "rbxassetid://137816312594867",
+    "rbxassetid://125449075637730",
+    "rbxassetid://130542926953862",
+    "rbxassetid://72277774344060",
+    "rbxassetid://70963164769734",
+    "rbxassetid://136409083119317",
+    "rbxassetid://117606145552740",
+    "rbxassetid://86519069169742",
+    "rbxassetid://82624517464542",
+    "rbxassetid://129799926108356",
+    "rbxassetid://109703994717548",
+    "rbxassetid://76075327966361",
+    "rbxassetid://108008329413177",
+    "rbxassetid://127945082628520",
+    "rbxassetid://133861307964637",
+    "rbxassetid://102915841298448"
+}
 
--- تبديل كل ثانيتين
+-- 🔥 تحميل مسبق
+ContentProvider:PreloadAsync(images)
+
+-- 🎥 تشغيل مثل فيديو (30 FPS ثابتة)
 task.spawn(function()
-	while true do
-		WindowBackground.Image = image1
-		task.wait(2)
-		
-		WindowBackground.Image = image2
-		task.wait(2)
-	end
+    local i = 1
+    local fps = 30
+    local interval = 1 / fps
+
+    while true do
+        WindowBackground.Image = images[i]
+
+        i += 1
+        if i > #images then
+            i = 1
+        end
+
+        task.wait(interval)
+    end
 end)
+
 Make("Corner", WindowBackground)
 
 Make("Gradient", MainFrame, {
