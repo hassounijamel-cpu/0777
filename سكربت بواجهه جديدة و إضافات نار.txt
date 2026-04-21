@@ -53,7 +53,7 @@ InfoTab = Window:MakeTab({
 
 InfoTab:AddAnimatedButton({
     Name = "demoz", 
-    Words = {"BEST", "FAST", "SAFE", "the best", "TOP 1"},
+    Words = {"the", "best", "neymar", "the best", "1Iraq"},
     Callback = function()
         print("تم الضغط")
     end
@@ -68,10 +68,7 @@ InfoTab:AddDiscordInvite({
 
 InfoTab:AddDevCircle({
     Devs = {
-        {Name = "Neymar", Id = 125602848737897},
-        {Name = "Sajwaad", Id = 5192983798},
-        {Name = "te998te", Id = 6177993827}, 
-	
+        {Name = "Neymar", Id = 125602848737897}
     }
 })
 
