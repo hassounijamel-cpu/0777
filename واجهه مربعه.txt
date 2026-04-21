@@ -40,7 +40,7 @@ Themes = {
 		Version = "1.2.0"
 	},
 	Save = {
-    UISize = {300, 300},
+    UISize = {400, 300},
     TabSize = 160,
     Theme = "Dark"   -- بدل "Darker"
  },
@@ -1448,7 +1448,7 @@ function redzlib:MakeWindow(Configs)
     Name = "Hub"
 }), "Main")
 
-local TweenService = game:GetService("TweenService")
+local ContentProvider = game:GetService("ContentProvider")
 
 local WindowBackground = Create("ImageLabel", MainFrame, {
     Name = "WindowBackground",
@@ -1456,12 +1456,11 @@ local WindowBackground = Create("ImageLabel", MainFrame, {
     Position = UDim2.new(0, 0, 0, 0),
     BackgroundTransparency = 1,
     Image = "rbxassetid://100981783081760",
-    ImageTransparency = 0,
+    ImageTransparency = 0.2,
     ScaleType = Enum.ScaleType.Crop,
     ZIndex = 0
 })
 
--- الصور
 local images = {
     "rbxassetid://100981783081760",
     "rbxassetid://108476865946369",
@@ -1484,33 +1483,21 @@ local images = {
     "rbxassetid://102915841298448"
 }
 
--- إعداد التوين (سرعة الفيد)
-local fadeTime = 0.25
+-- 🔥 تحميل الصور قبل التشغيل
+ContentProvider:PreloadAsync(images)
 
+-- 🚀 تشغيل سريع جداً
 task.spawn(function()
     local i = 1
     while true do
-        -- fade out
-        local tweenOut = TweenService:Create(WindowBackground, TweenInfo.new(fadeTime), {
-            ImageTransparency = 1
-        })
-        tweenOut:Play()
-        tweenOut.Completed:Wait()
-
-        -- تغيير الصورة
         WindowBackground.Image = images[i]
 
-        -- fade in
-        local tweenIn = TweenService:Create(WindowBackground, TweenInfo.new(fadeTime), {
-            ImageTransparency = 0
-        })
-        tweenIn:Play()
-        tweenIn.Completed:Wait()
-
-        i = i + 1
+        i += 1
         if i > #images then
             i = 1
         end
+
+        task.wait(0.03) -- ~30 FPS (أقرب شي للفيديو)
     end
 end)
 
