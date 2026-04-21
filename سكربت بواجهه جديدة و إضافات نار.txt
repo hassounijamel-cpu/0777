@@ -1420,9 +1420,6 @@ SkyboxTab:AddToggle({
 
 local Section = SkyboxTab:AddSection({"الفلاش(انصحكم بي جدا قويي)"})
 
-
-SkyboxTab = Window:MakeTab({ Title = "[SkyBox]فلاش ماب", Icon = "rbxassetid://13364900349" })
-
 local colors = { "Bright red", "Lime green", "Bright blue", "Bright yellow", "Bright cyan", "Hot pink", "Royal purple" }
 local rgbEnabled = false
 
