@@ -1,6 +1,6 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kllooep/Fjjzxda6/main/Tahakom74"))()
 
-local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/kllooep/Defjrfnxl/refs/heads/main/me h8766eist y6.txt"))()
+local Libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hassounijamel-cpu/0777/refs/heads/main/%D9%88%D8%A7%D8%AC%D9%87%D9%87%20%D9%85%D8%B3%D8%AA%D8%B7%D9%8A%D9%84%D8%A9.txt"))()
 
 Players = game:GetService("Players")
 Player = Players.LocalPlayer
