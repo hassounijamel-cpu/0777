@@ -1991,3 +1991,564 @@ Tablag:AddToggle({
         end
     end
 })
+
+local RbgTab = Window:MakeTab({ Title = "الاسماء و التلوين", Icon = "rbxassetid://10747830374" })
+RbgTab:AddSection({ Name = "تلوين الاسم والبابو          ", Icon = "rbxassetid://10709782758" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local NameRemote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eColo1r")
+
+local t = 0
+local rainbowSpeed = 2 
+local nameRainbow = false
+local bioRainbow = false
+local nameFast = false
+local bioFast = false
+
+local function updateRainbow(dt)
+    t += dt
+    local speed = rainbowSpeed
+    if nameFast then speed = 20 end
+    local r = math.sin(t * speed) * 0.5 + 0.5
+    local g = math.sin(t * speed + 2) * 0.5 + 0.5
+    local b = math.sin(t * speed + 4) * 0.5 + 0.5
+    local rainbow = Color3.new(r, g, b)
+
+    if nameRainbow or nameFast then
+        NameRemote:FireServer("PickingRPNameColor", rainbow)
+    end
+    if bioRainbow or bioFast then
+        NameRemote:FireServer("PickingRPBioColor", rainbow)
+    end
+end
+
+RunService.RenderStepped:Connect(function(dt)
+    updateRainbow(dt)
+end)
+RbgTab:AddSlider({
+    Name = "سرعة التلوين",
+    Min = 0.1,
+    Max = 1000,
+    Default = 2,
+    Increment = 0.1,
+    Callback = function(value)
+        rainbowSpeed = value
+    end
+})
+RbgTab:AddToggle({
+    Name = "تلوين الاسم",
+    Default = false,
+    Callback = function(state)
+        nameRainbow = state
+    end
+})
+RbgTab:AddToggle({
+    Name = "تلوين البايو",
+    Default = false,
+    Callback = function(state)
+        bioRainbow = state
+    end
+})
+RbgTab:AddSection({ Name = "زخرفة الاسم والبابو          ", Icon = "rbxassetid://10723345088" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eTex1t")
+
+local selectedBio = ""
+local selectedName = ""
+
+RbgTab:AddTextBox({
+    Name = "اكتب اي شي هنا في البايو هنا",
+    Description = "",
+    PlaceholderText = "(اكتب هناا)",
+    Callback = function(Value)
+        selectedBio = Value
+    end
+})
+
+RbgTab:AddTextBox({
+    Name = "اكتب اي شي هنا في الاسم هنا",
+    Description = "",
+    PlaceholderText = "(اكتب هناا)",
+    Callback = function(Value)
+        selectedName = Value
+    end
+})
+
+local bioTypingLoop = false
+local bioBackLoop = false
+local nameTypingLoop = false
+local nameBackLoop = false
+
+local function AnimateLoop(remoteName, getText, reverseFlag, stateRef)
+    task.spawn(function()
+        while stateRef() do
+            local text = getText()
+            if text ~= "" then
+                local buffer = ""
+                for i = 1, #text do
+                    if not stateRef() then return end
+                    buffer = string.sub(text, 1, i)
+                    Remote:FireServer(remoteName, buffer)
+                    task.wait(0.1)
+                end
+
+                if reverseFlag then
+                    for i = #text, 1, -1 do
+                        if not stateRef() then return end
+                        buffer = string.sub(text, 1, i)
+                        Remote:FireServer(remoteName, buffer)
+                        task.wait(0.1)
+                    end
+                end
+            else
+                task.wait(0.2)
+            end
+        end
+    end)
+end
+
+RbgTab:AddToggle({
+    Name = "تشغيل البايو عادي",
+    Default = false,
+    Callback = function(state)
+        bioTypingLoop = state
+        if state then
+            AnimateLoop("RolePlayBio", function() return selectedBio end, false, function() return bioTypingLoop end)
+        end
+    end
+})
+
+RbgTab:AddToggle({
+    Name = "تشغيل البايو سريع",
+    Default = false,
+    Callback = function(state)
+        bioBackLoop = state
+        if state then
+            AnimateLoop("RolePlayBio", function() return selectedBio end, true, function() return bioBackLoop end)
+        end
+    end
+})
+
+RbgTab:AddToggle({
+    Name = "تشغيل الاسم عادي",
+    Default = false,
+    Callback = function(state)
+        nameTypingLoop = state
+        if state then
+            AnimateLoop("RolePlayName", function() return selectedName end, false, function() return nameTypingLoop end)
+        end
+    end
+})
+RbgTab:AddToggle({
+    Name = "تشغيل الاسم سريع",
+    Default = false,
+    Callback = function(state)
+        nameBackLoop = state
+        if state then
+            AnimateLoop("RolePlayName", function() return selectedName end, true, function() return nameBackLoop end)
+        end
+    end
+})
+RbgTab:AddSection({ Name = "سبام اسماء          ", Icon = "rbxassetid://10734933966" })
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Player = Players.LocalPlayer
+
+local NameSpamActive = false 
+local SpamSpeed = 1
+local Name1, Name2, Name3, Name4, Name5 = "", "", "", "", ""
+
+RbgTab:AddTextBox({Name = "الاسم 1", Default = "", TextDisappear = true, Callback = function(v) Name1 = v end})
+RbgTab:AddTextBox({Name = "الاسم 2", Default = "", TextDisappear = true, Callback = function(v) Name2 = v end})
+RbgTab:AddTextBox({Name = "الاسم 3", Default = "", TextDisappear = true, Callback = function(v) Name3 = v end})
+RbgTab:AddTextBox({Name = "الاسم 4", Default = "", TextDisappear = true, Callback = function(v) Name4 = v end})
+RbgTab:AddTextBox({Name = "الاسم 5", Default = "", TextDisappear = true, Callback = function(v) Name5 = v end})
+
+RbgTab:AddSlider({
+	Name = "سرعة سبام الاسماء",
+	Min = 1,
+	Max = 150,
+	Default = 5,
+	Increment = 1,
+	Callback = function(v)
+		SpamSpeed = v
+	end
+})
+RbgTab:AddToggle({
+    Name = "تشغيل سبام الاسماء",
+    Default = false,
+    Callback = function(state)
+        NameSpamActive = state
+        if NameSpamActive then
+            task.spawn(function()
+                while NameSpamActive do
+                    local names = {Name1, Name2, Name3, Name4, Name5}
+                    for _, name in ipairs(names) do
+                        if not NameSpamActive then break end
+                        if name ~= "" then
+                            ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer("RolePlayName", name)
+                            task.wait(1 / SpamSpeed)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+RbgTab:AddSection({ Name = "سبام بايو          ", Icon = "rbxassetid://10734933966" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local BioSpamActive = false
+local Bio1, Bio2, Bio3, Bio4, Bio5 = "", "", "", "", ""
+local SpamSpeed = 1
+
+RbgTab:AddTextBox({Name = "البايو 1", Default = "", TextDisappear = true, Callback = function(v) Bio1 = v end})
+RbgTab:AddTextBox({Name = "البايو 2", Default = "", TextDisappear = true, Callback = function(v) Bio2 = v end})
+RbgTab:AddTextBox({Name = "البايو 3", Default = "", TextDisappear = true, Callback = function(v) Bio3 = v end})
+RbgTab:AddTextBox({Name = "البايو 4", Default = "", TextDisappear = true, Callback = function(v) Bio4 = v end})
+RbgTab:AddTextBox({Name = "البايو 5", Default = "", TextDisappear = true, Callback = function(v) Bio5 = v end})
+
+RbgTab:AddSlider({
+    Name = "سرعة سبام البايو",
+    Min = 1,
+    Max = 150,
+    Default = 5,
+    Increase = 1,
+    Callback = function(v)
+        SpamSpeed = v
+    end
+})
+RbgTab:AddToggle({
+    Name = "تشغيل سبام البايو",
+    Default = false,
+    Callback = function(state)
+        BioSpamActive = state
+        if state then
+            task.spawn(function()
+                while BioSpamActive do
+                    for _, bio in ipairs({Bio1, Bio2, Bio3, Bio4, Bio5}) do
+                        if not BioSpamActive then break end
+                        if bio ~= "" then
+                            pcall(function()
+                                ReplicatedStorage:WaitForChild("RE")
+                                    :WaitForChild("1RPNam1eTex1t")
+                                    :FireServer("RolePlayBio", bio)
+                            end)
+                            task.wait(1 / SpamSpeed)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+
+local Section = RbgTab:AddSection({"التلوينات"})
+
+RbgTab:AddSection({ Name = "تلوين الادوات          ", Icon = "rbxassetid://10734950309" })
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local re = ReplicatedStorage:WaitForChild("RE")
+local running = false
+local ToolName = "BabyRattle"
+
+local Tools = {
+    ["حق الطلاء"] = "PaintRoller",
+    ["حمرة"] = "Lipstick",
+    ["قوس حق الاسهم"] = "Bow",
+    ["راديو الاغاني"] = "Boombox",
+    ["تارموس"] = "Thermos",
+    ["دونات"] = "Donut",
+    ["مشط حق الاحصنة"] = "HorseBrush",
+    ["عصي"] = "GlowingBatons",
+    ["مكبر صوت"] = "Megaphone",
+    ["شمعة"] = "Candle",
+    ["مشعل"] = "GuardTorch",
+    ["لعبة الاطفال"] = "BabyRattle"
+}
+
+local function equipTool(name)
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hum = char:WaitForChild("Humanoid")
+    local tool = player.Backpack:WaitForChild(name,2)
+    if tool then
+        tool.Parent = char
+        hum:EquipTool(tool)
+    end
+    return tool
+end
+
+local function hsv(t)
+    return Color3.fromHSV(t % 1, 1, 1) 
+end
+RbgTab:AddDropdown({
+    Name = "اختيار الاداة",
+    Default = "لعبة الاطفال",
+    Options = {"حق الطلاء","حمرة","قوس حق الاسهم","راديو الاغاني","تارموس","دونات","مشط حق الاحصنة","عصي","مكبر صوت","شمعة","مشعل","لعبة الاطفال"},
+    Callback = function(value)
+        ToolName = Tools[value]
+    end
+})
+RbgTab:AddToggle({
+    Name = "تلوين الاداة",
+    Default = false,
+    Callback = function(state)
+        running = state
+        if not state then return end
+
+        task.spawn(function()
+            re:WaitForChild("1Clea1rTool1s"):FireServer("ClearAllTools")
+            task.wait(0.2)
+            re:WaitForChild("1Too1l"):InvokeServer("PickingTools",ToolName)
+            task.wait(0.3)
+
+            local tool = equipTool(ToolName)
+            if not tool then return end
+
+            local setColor =
+                player.PlayerGui
+                :WaitForChild("ToolGui")
+                :WaitForChild("ToolSettings")
+                :WaitForChild("Settings")
+                :WaitForChild("PropsColor")
+                :WaitForChild("SetColor")
+
+            local hue = 0
+            local current = hsv(0)
+
+            local conn
+            conn = RunService.RenderStepped:Connect(function(dt)
+                if not running then
+                    conn:Disconnect()
+                    return
+                end
+                hue += dt * 0.3 
+                local target = hsv(hue)
+                current = current:Lerp(target, dt * 5) 
+                setColor:FireServer(current)
+            end)
+        end)
+    end
+})
+RbgTab:AddSection({ Name = "تلوين الشعر          ", Icon = "rbxassetid://10734939942" })
+local hairColors = {
+    Color3.new(1, 1, 0), Color3.new(0, 0, 1), Color3.new(1, 0, 1), Color3.new(1, 1, 1),
+    Color3.new(0, 1, 0), Color3.new(0.5, 0, 1), Color3.new(1, 0.647, 0), Color3.new(0, 1, 1)
+}
+local isActive = false
+
+local function changeHairColor()
+    local i = 1
+    while isActive do
+        if not isActive then break end
+        local args = { [1] = "ChangeHairColor2", [2] = hairColors[i] }
+        game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Max1y"):FireServer(unpack(args))
+        wait(0.1)
+        i = i % #hairColors + 1
+    end
+end
+
+RbgTab:AddToggle({
+    Name = "تلوين الشعر",
+    Description = "",
+    Default = false,
+    Callback = function(value)
+        isActive = value
+        if isActive then
+            changeHairColor()
+        end
+    end
+})
+RbgTab:AddSection({ Name = "تلوين الجسم          ", Icon = "rbxassetid://10709782758" })
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+local ChangeBodyColor = Remotes:WaitForChild("ChangeBodyColor")
+
+local colors = {
+	"Pastel brown", "Pastel yellow", "Pastel blue", "Pastel green", "Pastel pink",
+	"Really red", "Bright orange", "Bright blue", "Bright violet", "Bright green",
+	"Bright yellow", "White", "Black", "Dark stone grey", "Medium stone grey",
+	"Light stone grey", "Bright red", "Bright yellowish green", "Bright bluish green",
+	"Bright purple", "Bright pink", "Reddish brown", "Earth green", "Sand red",
+	"Sand blue", "Sand green", "Dark green", "Navy blue", "Toothpaste", "Cyan",
+	"Hot pink", "Crimson", "Royal purple", "Neon orange", "Neon green", "Neon pink",
+	"Neon blue", "Gold", "Bright gold", "New Yeller", "Dark orange", "Deep blue",
+	"Maroon", "Bright maroon"
+}
+
+local rainbowEnabled = false
+local spinEnabled = false
+
+RbgTab:AddToggle({
+	Name = "تلوين الجسم ",
+	Default = false,
+	Callback = function(v)
+		rainbowEnabled = v
+		if v then
+			task.spawn(function()
+				while rainbowEnabled do
+					for _, color in ipairs(colors) do
+						if not rainbowEnabled then break end
+						ChangeBodyColor:FireServer(color)
+						task.wait(0.3)
+					end
+				end
+			end)
+		end
+	end
+})
+local rgbSpeed = 1
+
+RbgTab:AddSlider({
+    Name = "سرعة التلوين",
+    Description = "",
+    Min = 1,
+    Max = 5,
+    Increase = 1,
+    Default = 3,
+    Callback = function(Value)
+        rgbSpeed = Value
+    end
+})
+local function getRainbowColor(speedMultiplier)
+    local h = (tick() * speedMultiplier % 5) / 5 -- gira o hue suavemente de 0 a 1
+    return Color3.fromHSV(h, 1, 1)
+end
+
+local function fireServer(eventName, args)
+    local event = game:GetService("ReplicatedStorage"):FindFirstChild("RE")
+    if event and event:FindFirstChild(eventName) then
+        pcall(function()
+            event[eventName]:FireServer(unpack(args))
+        end)
+    end
+end
+
+--[[local Section = RbgTab:AddSection({""})
+
+local nameBioRGBActive = false
+RbgTab:AddToggle({
+    Name = "",
+    Default = false,
+    Callback = function(state)
+        nameBioRGBActive = state
+        if state then
+            task.spawn(function()
+                while nameBioRGBActive and LocalPlayer.Character do
+                    local color = getRainbowColor(rgbSpeed)
+                    fireServer("1RPNam1eColo1r", { "PickingRPNameColor", color })
+                    fireServer("1RPNam1eColo1r", { "PickingRPBioColor", color })
+                    task.wait(0.03)
+                end
+            end)
+        end
+    end
+})
+
+local ToggleCorpo = RbgTab:AddToggle({
+    Name = "",
+    Description = "",
+    Default = false
+})
+ToggleCorpo:Callback(function(Value)
+    getgenv().rgbCorpo = Value
+    task.spawn(function()
+        while getgenv().rgbCorpo do
+            local remote = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+            if remote and remote:FindFirstChild("ChangeBodyColor") then
+                pcall(function()
+                    remote.ChangeBodyColor:FireServer({
+                        BrickColor.new(getRainbowColor(rgbSpeed))
+                    })
+                end)
+            end
+            task.wait(0.1)
+        end
+    end)
+end)
+local ToggleCabelo = RbgTab:AddToggle({
+    Name = "",
+    Description = "",
+    Default = false
+})
+ToggleCabelo:Callback(function(Value)
+    getgenv().rgbCabelo = Value
+    task.spawn(function()
+        while getgenv().rgbCabelo do
+            fireServer("1Max1y", {
+                "ChangeHairColor2",
+                getRainbowColor(rgbSpeed)
+            })
+            task.wait(0.5)
+        end
+    end)
+end)
+
+
+
+local Section = RbgTab:AddSection({""})
+
+
+
+local ToggleCasa = RbgTab:AddToggle({
+    Name = "",
+    Description = "",
+    Default = false
+})
+ToggleCasa:Callback(function(Value)
+    getgenv().rgbCasa = Value
+    task.spawn(function()
+        while getgenv().rgbCasa do
+            fireServer("1Player1sHous1e", {
+                "ColorPickHouse",
+                getRainbowColor(rgbSpeed)
+            })
+            task.wait(0.1)
+        end
+    end)
+end)
+ 
+local carRGBActive = false
+RbgTab:AddToggle({
+    Name = "",
+    Description = "",
+    Default = false,
+    Callback = function(state)
+        carRGBActive = state
+        if state then
+            task.spawn(function()
+                while carRGBActive and LocalPlayer.Character do
+                    local color = getRainbowColor(rgbSpeed)
+                    fireServer("1Player1sCa1r", { "PickingCarColor", color })
+                    task.wait(0.03)
+                end
+            end)
+        end
+    end
+})
+]] 
+local ToggleBicicleta = RbgTab:AddToggle({
+    Name = "تلوين سكوتر مال الاغاني او الدراجة",
+    Description = "",
+    Default = false
+})
+ToggleBicicleta:Callback(function(Value)
+    getgenv().rgbBicicleta = Value
+    task.spawn(function()
+        while getgenv().rgbBicicleta do
+            fireServer("1Player1sCa1r", {
+                "NoMotorColor",
+                getRainbowColor(rgbSpeed)
+            })
+            task.wait(0.1)
+        end
+    end)
+end)
